@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_recycling_guide">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="br.edu.ufabc.reciclabc.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_recycling_guide"
+        android:name="br.edu.ufabc.reciclabc.ui.recyclingguide.RecyclingGuideFragment"
+        android:label="@string/title_recycling_guide"
+        tools:layout="@layout/fragment_recycling_guide" />
 
     <fragment
         android:id="@+id/navigation_collection_points"

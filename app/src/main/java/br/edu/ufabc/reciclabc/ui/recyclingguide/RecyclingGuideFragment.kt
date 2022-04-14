@@ -1,4 +1,4 @@
-package br.edu.ufabc.reciclabc.ui.home
+package br.edu.ufabc.reciclabc.ui.recyclingguide
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import br.edu.ufabc.reciclabc.databinding.FragmentHomeBinding
+import br.edu.ufabc.reciclabc.databinding.FragmentRecyclingGuideBinding
 
-class HomeFragment : Fragment() {
+class RecyclingGuideFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentRecyclingGuideBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -23,9 +23,9 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this).get(RecyclingGuideViewModel::class.java)
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentRecyclingGuideBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textHome
