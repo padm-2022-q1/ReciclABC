@@ -1,6 +1,8 @@
 package br.edu.ufabc.reciclabc.ui.recyclingguide
 
 import android.os.Bundle
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,12 +24,15 @@ class RecyclingGuideFragment : Fragment() {
 
     private inner class RecyclingGuideAdapter(val recycling_info: List<RecyclingInformation>) : RecyclerView.Adapter<RecyclingGuideAdapter.RecyclingGuideHolder>() {
 
+        private val transition = AutoTransition().apply { duration = 100 }
+
         private inner class RecyclingGuideHolder(itemBinding: RecyclingGuideItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
             val title = itemBinding.recyclingGuideItemTitle
             val content = itemBinding.recyclingGuideItemContent
 
             init {
                 itemBinding.root.setOnClickListener {
+                    TransitionManager.beginDelayedTransition(binding.recyclerviewRecyclingGuide, transition)
                     viewModel.expandedPosition.let { expandedPosition ->
                         // collapse currently expanded items
                         if (expandedPosition != RecyclerView.NO_POSITION) {
