@@ -1,3 +1,22 @@
-# Default ignored files
-/shelf/
-/workspace.xml
+# from https://betterprogramming.pub/exploring-the-idea-folder-790931c19191
+
+# Discarding
+*.iml
+*.xml
+
+caches
+libraries
+modules
+
+# Retaining
+!compiler.xml
+!gradle.xml
+!runConfigurations.xml
+!vcs.xml
+
+!codeStyles/*.xml
+!dictionaries/*.xml
+!fileTemplates/*.*
+!inspectionProfiles/*.xml
+!runConfigurations/*.xml
+
