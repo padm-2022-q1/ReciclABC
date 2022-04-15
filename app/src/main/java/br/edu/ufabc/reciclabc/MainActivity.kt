@@ -7,7 +7,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import br.edu.ufabc.reciclabc.databinding.ActivityMainBinding
-import com.google.android.gms.maps.MapsInitializer
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -19,9 +18,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Enables the new map renderer
-        MapsInitializer.initialize(applicationContext, MapsInitializer.Renderer.LATEST, null)
 
         val navView: BottomNavigationView = binding.navView
 

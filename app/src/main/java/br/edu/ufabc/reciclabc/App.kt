@@ -3,6 +3,7 @@ package br.edu.ufabc.reciclabc
 import android.app.Application
 import br.edu.ufabc.reciclabc.model.AddressNotificationRepository
 import br.edu.ufabc.reciclabc.model.RecyclingInfoRepository
+import com.google.android.gms.maps.MapsInitializer
 
 class App : Application() {
 
@@ -19,6 +20,9 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // Enables the new map renderer
+        MapsInitializer.initialize(applicationContext, MapsInitializer.Renderer.LATEST, null)
 
         resources.assets.open(recyclingGuideFile).use {
             recyclingInfoRepository.loadData(it)
