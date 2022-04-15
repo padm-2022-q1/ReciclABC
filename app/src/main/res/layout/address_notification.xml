@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view"
+    android:id="@+id/cv_address_notification"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
@@ -37,12 +37,11 @@
 
             <ImageButton
                 android:id="@+id/bt_notification_item_config"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|center_horizontal"
-                android:layout_weight="1"
-                android:backgroundTint="@color/white"
-                android:src="@drawable/ic_notification_item_config"
+                android:layout_weight="0"
+                android:backgroundTint="@android:color/transparent"
+                android:src="@drawable/ic_config"
                 android:text="Settings" />
         </LinearLayout>
 
@@ -52,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Comum"
-            android:textColor="@color/common_notification_label"
+            android:textColor="@color/regular_notification_label"
             android:textSize="16sp"
             android:textStyle="bold"
             card_view:layout_constraintStart_toStartOf="parent"
