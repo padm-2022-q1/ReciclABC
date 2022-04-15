@@ -4,19 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.collection_points.CollectionPointsFragment">
+    tools:context=".ui.collectionpoints.CollectionPointsFragment">
 
-    <TextView
-        android:id="@+id/text_collection_points"
+    <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/map_fragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        map:cameraTargetLat="-23.68"
+        map:cameraTargetLng="-46.54"
+        map:cameraZoom="12"
+        map:mapType="normal"
+        map:uiCompass="false"
+        map:uiRotateGestures="false"
+        map:uiTiltGestures="false"
+        map:uiZoomControls="false" />
 </androidx.constraintlayout.widget.ConstraintLayout>
