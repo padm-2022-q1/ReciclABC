@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentCollectionPointsBinding
 import com.google.android.gms.maps.SupportMapFragment
@@ -13,7 +13,7 @@ import com.google.android.gms.maps.SupportMapFragment
 class CollectionPointsFragment : Fragment() {
 
     private lateinit var binding: FragmentCollectionPointsBinding
-    private val viewModel: CollectionPointsViewModel by activityViewModels()
+    private val viewModel: CollectionPointsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
