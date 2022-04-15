@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import br.edu.ufabc.reciclabc.databinding.FragmentNotificationsBinding
 
 class NotificationsFragment : Fragment() {
-
     private var _binding: FragmentNotificationsBinding? = null
+    private val viewModel: NotificationsViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -28,11 +28,18 @@ class NotificationsFragment : Fragment() {
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textNotifications
-        notificationsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        binding.rvNotifications.apply {
+            adapter = AddressNotificationAdapter(
+                viewModel.allAddressNotification()
+            )
+        }
+
     }
 
     override fun onDestroyView() {

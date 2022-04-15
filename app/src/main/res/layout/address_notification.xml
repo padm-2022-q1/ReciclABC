@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    card_view:cardElevation="8dp"
+    card_view:cardMaxElevation="10dp"
+    card_view:cardPreventCornerOverlap="true"
+    card_view:layout_constraintEnd_toEndOf="parent"
+    card_view:layout_constraintStart_toStartOf="parent"
+    card_view:layout_constraintTop_toTopOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+
+        <LinearLayout
+            android:id="@+id/ll_notification_item_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_notification_item_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_weight="5"
+                android:text="Av. dos Estados, 5001"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/bt_notification_item_config"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_horizontal"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/ic_notification_item_config"
+                android:text="Settings" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_notification_item_regular_options_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Comum"
+            android:textColor="@color/common_notification_label"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@id/ll_notification_item_header" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_notification_item_regular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            card_view:layout_constraintLeft_toLeftOf="parent"
+            card_view:layout_constraintRight_toRightOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@id/tv_notification_item_regular_options_label" />
+
+        <TextView
+            android:id="@+id/tv_notification_item_recyclable_options_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reciclável"
+            android:textColor="@color/recyclable_notification_label"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@id/rv_notification_item_regular" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_notification_item_recyclable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            card_view:layout_constraintLeft_toLeftOf="parent"
+            card_view:layout_constraintRight_toRightOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@id/tv_notification_item_recyclable_options_label" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+
