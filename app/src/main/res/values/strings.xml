@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">ReciclABC</string>
-    <string name="title_home">Home</string>
     <string name="title_collection_points">Pontos de coleta</string>
+    <string name="title_recycling_guide">Guia de Reciclagem</string>
     <string name="title_notifications">Notifications</string>
+    <string name="recycling_guide_title">Title</string>
+    <string name="recycling_guide_content">Content</string>
 </resources>
