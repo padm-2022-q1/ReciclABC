@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import br.edu.ufabc.reciclabc.databinding.FragmentNotificationsBinding
 
 class NotificationsFragment : Fragment() {
     private var _binding: FragmentNotificationsBinding? = null
-    private val viewModel: NotificationsViewModel by activityViewModels()
+    private val viewModel: NotificationsViewModel by viewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
