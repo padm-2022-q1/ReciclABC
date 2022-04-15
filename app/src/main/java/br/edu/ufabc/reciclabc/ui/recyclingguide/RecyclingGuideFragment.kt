@@ -16,7 +16,7 @@ class RecyclingGuideFragment : Fragment() {
     private lateinit var binding: FragmentRecyclingGuideBinding
     private val viewModel: RecyclingGuideViewModel by viewModels()
 
-    companion object {
+    private companion object {
         const val EXPAND_COLLAPSE = "EXPAND_COLLAPSE"
     }
 
