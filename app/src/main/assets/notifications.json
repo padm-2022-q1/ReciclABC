@@ -1,0 +1,80 @@
+[
+  {
+    "id": 10,
+    "address": "Av. dos Estados, 5001",
+    "regularGarbage": [
+      {
+        "id": 1,
+        "weekday": "Saturday",
+        "hours": 10,
+        "minutes": 30,
+        "isActive": true
+      },
+      {
+        "id": 2,
+        "weekday": "Tuesday",
+        "hours": 10,
+        "minutes": 30,
+        "isActive": true
+      }
+    ],
+    "recyclableGarbage": [
+      {
+        "id": 3,
+        "weekday": "Saturday",
+        "hours": 10,
+        "minutes": 30,
+        "isActive": true
+      },
+      {
+        "id": 4,
+        "weekday": "Tuesday",
+        "hours": 10,
+        "minutes": 30,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "address": "R. Abolição, 200",
+    "regularGarbage": [
+      {
+        "id": 5,
+        "weekday": "Saturday",
+        "hours": 10,
+        "minutes": 30,
+        "isActive": true
+      },
+      {
+        "id": 6,
+        "weekday": "Tuesday",
+        "hours": 10,
+        "minutes": 30,
+        "isActive": false
+      }
+    ],
+    "recyclableGarbage": []
+  },
+  {
+    "id": 30,
+    "address": "Rua dos Bobos, 100",
+    "regularGarbage": [],
+    "recyclableGarbage": [
+      {
+        "id": 7,
+        "weekday": "Saturday",
+        "hours": 10,
+        "minutes": 30,
+        "isActive": true
+      },
+      {
+        "id": 8,
+        "weekday": "Tuesday",
+        "hours": 10,
+        "minutes": 30,
+        "isActive": true
+      }
+    ]
+  }
+]
