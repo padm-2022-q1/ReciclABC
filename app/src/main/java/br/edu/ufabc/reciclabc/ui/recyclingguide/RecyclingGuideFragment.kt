@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.ufabc.reciclabc.databinding.FragmentRecyclingGuideBinding
 import br.edu.ufabc.reciclabc.databinding.RecyclingGuideItemBinding
@@ -97,9 +98,17 @@ class RecyclingGuideFragment : Fragment() {
     }
 
     override fun onStart() {
+
+        class Animator: DefaultItemAnimator() {
+            // Invalid recycler view moves items which causes flash when expanding or collapsing
+            override fun animateMove(holder: RecyclerView.ViewHolder?, fromX: Int, fromY: Int, toX: Int, toY: Int): Boolean {
+                return false
+            }
+        }
         super.onStart()
         binding.recyclerviewRecyclingGuide.apply {
             adapter = RecyclingGuideAdapter(viewModel.allRecyclingInformation())
+            itemAnimator = Animator()
         }
     }
 }
