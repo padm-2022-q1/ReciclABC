@@ -3,13 +3,16 @@ package br.edu.ufabc.reciclabc.ui.collectionpoints
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import br.edu.ufabc.reciclabc.model.CollectionPoint
+import br.edu.ufabc.reciclabc.model.CollectionPointsRepository
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
 class CollectionPointsViewModel : ViewModel() {
-    private val selectedMarker = MutableLiveData<Int?>(null)
+    val selectedMarker = MutableLiveData<Int?>(null)
+    private val repository = CollectionPointsRepository()
 
     val handleMapReady = OnMapReadyCallback { map ->
         Log.d("CollectionPoints", "Map ready")
@@ -36,6 +39,17 @@ class CollectionPointsViewModel : ViewModel() {
     }
 
     private fun addMarkers(map: GoogleMap) {
-        map.addMarker(MarkerOptions().position(LatLng(-23.644837, -46.528047)))?.tag = 1
+        for (collectionPoint in repository.getAll()) {
+            map.addMarker(
+                MarkerOptions().position(
+                    LatLng(
+                        collectionPoint.lat.toDouble(),
+                        collectionPoint.lng.toDouble()
+                    )
+                )
+            )?.tag = collectionPoint.id
+        }
     }
+
+    fun getCollectionPointById(id: Int): CollectionPoint? = repository.getById(id)
 }
