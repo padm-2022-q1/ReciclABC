@@ -1,13 +1,11 @@
 package br.edu.ufabc.reciclabc.ui.notifications
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import br.edu.ufabc.reciclabc.App
 
-class NotificationsViewModel : ViewModel() {
+class NotificationsViewModel(application: Application) : AndroidViewModel(application) {
+    val addressNotificationRepository = (application as App).addressNotificationRepository
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
-    }
-    val text: LiveData<String> = _text
+    fun allAddressNotification() = addressNotificationRepository.getAll()
 }

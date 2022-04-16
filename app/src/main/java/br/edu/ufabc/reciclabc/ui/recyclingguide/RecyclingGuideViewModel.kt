@@ -7,7 +7,7 @@ import br.edu.ufabc.reciclabc.App
 
 class RecyclingGuideViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = (application as App).repository
+    private val repository = (application as App).recyclingInfoRepository
 
     var expandedPosition = RecyclerView.NO_POSITION
 
