@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_collection_points"
-        android:name="br.edu.ufabc.reciclabc.ui.collection_points.CollectionPointsFragment"
+        android:name="br.edu.ufabc.reciclabc.ui.collectionpoints.CollectionPointsFragment"
         android:label="@string/title_collection_points"
         tools:layout="@layout/fragment_collection_points" />
 
