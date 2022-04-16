@@ -30,7 +30,7 @@ class CollectionPointsViewModel : ViewModel() {
             Log.d("CollectionPoints", "Selected marker with id $markerId")
             selectedMarker.value = markerId
         }
-        true
+        false
     }
 
     private val handleMapClick = GoogleMap.OnMapClickListener {
@@ -46,7 +46,7 @@ class CollectionPointsViewModel : ViewModel() {
                         collectionPoint.lat.toDouble(),
                         collectionPoint.lng.toDouble()
                     )
-                )
+                ).title(collectionPoint.name)
             )?.tag = collectionPoint.id
         }
     }
