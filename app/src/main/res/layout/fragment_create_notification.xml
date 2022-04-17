@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".ui.notifications.CreateNotificationFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/create_notification_time"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/time"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:inputType="time" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/create_notification_weekdays_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/create_notification_label_margin_top"
+        android:text="@string/weekdays"
+        android:textSize="@dimen/create_notification_label_text_size"
+        app:layout_constraintTop_toBottomOf="@id/create_notification_time" />
+
+    <LinearLayout
+        android:id="@+id/create_notification_weekdays_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/create_notification_weekdays_label">
+
+        <CheckBox
+            android:id="@+id/create_notification_weekdays_sunday"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/sunday_initial_letter" />
+
+        <CheckBox
+            android:id="@+id/create_notification_weekdays_monday"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/monday_initial_letter" />
+
+        <CheckBox
+            android:id="@+id/create_notification_weekdays_tuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/tuesday_initial_letter" />
+
+        <CheckBox
+            android:id="@+id/create_notification_weekdays_wednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/wednesday_initial_letter" />
+
+        <CheckBox
+            android:id="@+id/create_notification_weekdays_thursday"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/thursday_initial_letter" />
+
+        <CheckBox
+            android:id="@+id/create_notification_weekdays_friday"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/friday_initial_letter" />
+
+        <CheckBox
+            android:id="@+id/create_notification_weekdays_saturday"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/saturday_initial_letter" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/create_notification_types_of_recycling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/create_notification_label_margin_top"
+        android:text="@string/types_of_recycling"
+        android:textSize="@dimen/create_notification_label_text_size"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/create_notification_weekdays_picker" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/create_notification_regular_garbage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/regular_garbage"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/create_notification_types_of_recycling" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/create_notification_recyclable_garbage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/recyclable_garbage"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/create_notification_regular_garbage" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/create_notification_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/create_notification_button_text"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
