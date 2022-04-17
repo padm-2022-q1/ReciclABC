@@ -13,6 +13,7 @@ import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentCollectionPointsBinding
 import br.edu.ufabc.reciclabc.model.CollectionPoint
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 class CollectionPointsFragment : Fragment() {
@@ -43,6 +44,7 @@ class CollectionPointsFragment : Fragment() {
         }
 
         viewModel.selectedMarker.observe(viewLifecycleOwner) { handleSelectedMarkerChange(it) }
+        binding.collectionPointsFilterButton.setOnClickListener { handleFilterButtonClick() }
     }
 
     private fun handleSelectedMarkerChange(collectionPointId: Int?) {
@@ -87,6 +89,37 @@ class CollectionPointsFragment : Fragment() {
                 val mapIntent = Intent(Intent.ACTION_VIEW, mapIntentUri)
                 startActivity(mapIntent)
             }
+        }
+    }
+
+    private fun handleFilterButtonClick() {
+        val materials = arrayOf(
+            "Papel",
+            "Plástico",
+            "Metal",
+            "Vidro",
+            "Óleo de cozinha",
+            "Eletrônicos",
+            "Pilhas e baterias"
+        )
+        val selectedFilters = BooleanArray(materials.size) { false }
+
+        context?.let { ctx ->
+            MaterialAlertDialogBuilder(ctx)
+                .setTitle("Filtre por material")
+                .setNeutralButton("Limpar") { _, _ ->
+                    Log.d("CollectionPoints", "Filter: clear all")
+                }
+                .setNegativeButton("Cancel") { _, _ ->
+                    Log.d("CollectionPoints", "Filter: cancel")
+                }
+                .setPositiveButton("Ok") { _, _ ->
+                    Log.d("CollectionPoints", "Filter: ok")
+                }
+                .setMultiChoiceItems(materials, selectedFilters) { _, which, checked ->
+                    Log.d("CollectionPoints", "Filter: change $which $checked")
+                }
+                .show()
         }
     }
 }
