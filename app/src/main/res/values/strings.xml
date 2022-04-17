@@ -26,12 +26,12 @@
     <string name="friday_abbreviation">Sex</string>
     <string name="saturday_abbreviation">Sab</string>
     <string name="appbar_title_create_notification">Criar notificação</string>
-    <string name="create_address_notification_fab_content_description">Add notification</string>
+    <string name="create_address_notification_fab_content_description">Adicionar notificação</string>
     <string name="create_address_notification_notification_label">Notificações</string>
-    <string name="notifications_fab_content_description">Add Address Notification</string>
+    <string name="notifications_fab_content_description">Adicionar notificação por endereço</string>
     <string name="create_notification_button_text">Criar</string>
     <string name="create_notification_item_chip_text_default">Reciclável</string>
-    <string name="create_notification_button_content_description">Notification Menu</string>
+    <string name="create_notification_button_content_description">Menu da notificação</string>
     <string name="create_notification_time_text_example">16:30</string>
     <string name="menu_edit_text">Editar</string>
     <string name="menu_delete_text">Deletar</string>
