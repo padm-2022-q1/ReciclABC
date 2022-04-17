@@ -3,8 +3,8 @@
 
     <item
         android:id="@+id/navigation_recycling_guide"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_recycling_guide" />
+        android:icon="@drawable/ic_recycling_guide_24"
+        android:title="@string/menu_recycling_guide" />
 
     <item
         android:id="@+id/navigation_collection_points"
