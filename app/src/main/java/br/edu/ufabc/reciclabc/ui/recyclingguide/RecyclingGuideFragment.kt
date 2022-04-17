@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.ufabc.reciclabc.databinding.FragmentRecyclingGuideBinding
 import br.edu.ufabc.reciclabc.databinding.RecyclingGuideItemBinding
@@ -29,6 +30,8 @@ class RecyclingGuideFragment : Fragment() {
         private inner class RecyclingGuideHolder(itemBinding: RecyclingGuideItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
             val title = itemBinding.recyclingGuideItemTitle
             val content = itemBinding.recyclingGuideItemContent
+            val expandMore = itemBinding.recyclingGuideItemExpandMore
+            val expandLess = itemBinding.recyclingGuideItemExpandLess
 
             init {
                 itemBinding.root.setOnClickListener {
@@ -79,7 +82,9 @@ class RecyclingGuideFragment : Fragment() {
 
         private fun setExpanded(holder: RecyclingGuideHolder, isExpanded: Boolean) {
             holder.itemView.isActivated = isExpanded
-            holder.content.visibility =  if (isExpanded) View.VISIBLE else View.GONE
+            holder.content.visibility = if (isExpanded) View.VISIBLE else View.GONE
+            holder.expandLess.visibility = if (isExpanded) View.VISIBLE else View.INVISIBLE
+            holder.expandMore.visibility = if (isExpanded) View.INVISIBLE else View.VISIBLE
         }
 
         override fun getItemCount(): Int = recycling_info.size
@@ -100,6 +105,12 @@ class RecyclingGuideFragment : Fragment() {
         super.onStart()
         binding.recyclerviewRecyclingGuide.apply {
             adapter = RecyclingGuideAdapter(viewModel.allRecyclingInformation())
+            itemAnimator = object : DefaultItemAnimator() {
+                // Invalid recycler view moves items which causes flash when expanding or collapsing
+                override fun animateMove(holder: RecyclerView.ViewHolder?, fromX: Int, fromY: Int, toX: Int, toY: Int): Boolean {
+                    return false
+                }
+            }
         }
     }
 }

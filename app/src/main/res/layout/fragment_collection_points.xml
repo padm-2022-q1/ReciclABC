@@ -6,8 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.collectionpoints.CollectionPointsFragment">
 
+    <!-- https://issuetracker.google.com/issues/160905472 -->
     <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/map_fragment"
+        android:id="@+id/collection_points_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,5 +23,18 @@
         map:uiCompass="false"
         map:uiRotateGestures="false"
         map:uiTiltGestures="false"
-        map:uiZoomControls="false" />
+        map:uiZoomControls="false"
+        tools:ignore="FragmentTagUsage" />
+
+    <include
+        android:id="@+id/collection_points_details_card"
+        layout="@layout/card_collection_point_details"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="400dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

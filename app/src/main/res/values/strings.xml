@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">ReciclABC</string>
     <string name="title_collection_points">Pontos de coleta</string>
-    <string name="title_recycling_guide">Guia de Reciclagem</string>
-    <string name="title_notifications">Notificações</string>
+    <string name="title_recycling_guide">Como Reciclar</string>
+    <string name="title_notifications">Notifications</string>
     <string name="recycling_guide_title">Title</string>
     <string name="recycling_guide_content">Content</string>
+    <string name="menu_recycling_guide">Informações</string>
     <string name="regular_garbage">Lixo comum</string>
     <string name="recyclable_garbage">Lixo reciclável</string>
     <string name="types_of_recycling">Tipos de coleta</string>
