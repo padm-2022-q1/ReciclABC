@@ -1,33 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    card_view:cardElevation="6dp"
+    card_view:cardPreventCornerOverlap="true">
 
-    <TextView
-        android:id="@+id/recycling_guide_item_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="@string/recycling_guide_title"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
-
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp">
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/recycling_guide_item_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/recycling_guide_title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            card_view:layout_constraintLeft_toLeftOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintRight_toLeftOf="@id/recycling_guide_item_expand_more" />
+
         <TextView
             android:id="@+id/recycling_guide_item_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="14sp"
+            android:text="@string/recycling_guide_content"
+            card_view:layout_constraintLeft_toLeftOf="@id/recycling_guide_item_title"
+            card_view:layout_constraintTop_toBottomOf="@id/recycling_guide_item_title" />
+
+        <ImageView
+            android:id="@+id/recycling_guide_item_expand_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/recycling_guide_content"/>
-    </ScrollView>
+            android:padding="5dp"
+            android:src="@drawable/ic_expand_more_24"
+            card_view:layout_constraintRight_toRightOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/recycling_guide_item_content"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="60dp"-->
-<!--        android:padding="5dp"-->
-<!--        android:text="@string/recycling_guide_content"/>-->
-</LinearLayout>
+        <ImageView
+            android:id="@+id/recycling_guide_item_expand_less"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@drawable/ic_expand_less_24"
+            android:visibility="invisible"
+            card_view:layout_constraintRight_toRightOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -30,6 +30,8 @@ class RecyclingGuideFragment : Fragment() {
         private inner class RecyclingGuideHolder(itemBinding: RecyclingGuideItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
             val title = itemBinding.recyclingGuideItemTitle
             val content = itemBinding.recyclingGuideItemContent
+            val expandMore = itemBinding.recyclingGuideItemExpandMore
+            val expandLess = itemBinding.recyclingGuideItemExpandLess
 
             init {
                 itemBinding.root.setOnClickListener {
@@ -80,7 +82,9 @@ class RecyclingGuideFragment : Fragment() {
 
         private fun setExpanded(holder: RecyclingGuideHolder, isExpanded: Boolean) {
             holder.itemView.isActivated = isExpanded
-            holder.content.visibility =  if (isExpanded) View.VISIBLE else View.GONE
+            holder.content.visibility = if (isExpanded) View.VISIBLE else View.GONE
+            holder.expandLess.visibility = if (isExpanded) View.VISIBLE else View.INVISIBLE
+            holder.expandMore.visibility = if (isExpanded) View.INVISIBLE else View.VISIBLE
         }
 
         override fun getItemCount(): Int = recycling_info.size
