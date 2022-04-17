@@ -102,17 +102,15 @@ class RecyclingGuideFragment : Fragment() {
     }
 
     override fun onStart() {
-
-        class Animator: DefaultItemAnimator() {
-            // Invalid recycler view moves items which causes flash when expanding or collapsing
-            override fun animateMove(holder: RecyclerView.ViewHolder?, fromX: Int, fromY: Int, toX: Int, toY: Int): Boolean {
-                return false
-            }
-        }
         super.onStart()
         binding.recyclerviewRecyclingGuide.apply {
             adapter = RecyclingGuideAdapter(viewModel.allRecyclingInformation())
-            itemAnimator = Animator()
+            itemAnimator = object : DefaultItemAnimator() {
+                // Invalid recycler view moves items which causes flash when expanding or collapsing
+                override fun animateMove(holder: RecyclerView.ViewHolder?, fromX: Int, fromY: Int, toX: Int, toY: Int): Boolean {
+                    return false
+                }
+            }
         }
     }
 }
