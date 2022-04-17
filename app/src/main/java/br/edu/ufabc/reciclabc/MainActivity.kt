@@ -1,6 +1,7 @@
 package br.edu.ufabc.reciclabc
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -31,6 +32,15 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_notifications
             )
         )
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.create_notification_fragment -> navView.visibility = View.GONE
+                R.id.create_address_notification_fragment -> navView.visibility = View.GONE
+                else -> navView.visibility = View.VISIBLE
+            }
+        }
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
