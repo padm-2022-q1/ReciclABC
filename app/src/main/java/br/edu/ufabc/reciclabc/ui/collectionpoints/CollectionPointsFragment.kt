@@ -42,23 +42,30 @@ class CollectionPointsFragment : Fragment() {
             cpDetailsMapButton.setOnClickListener { handleCardMapButtonClick() }
         }
 
-        viewModel.selectedMarker.observe(viewLifecycleOwner) {
-            if (it == null) {
-                hideDetailsCard()
-            } else {
-                viewModel.getCollectionPointById(it)?.let { cp ->
-                    showDetailsCard(cp)
-                } ?: run {
-                    Log.e("CollectionPoints", "Could not find collection point by id $it")
+        viewModel.selectedMarker.observe(viewLifecycleOwner) { handleSelectedMarkerChange(it) }
+    }
+
+    private fun handleSelectedMarkerChange(collectionPointId: Int?) {
+        if (collectionPointId == null) {
+            hideDetailsCard()
+            return
+        }
+
+        viewModel.getCollectionPointById(collectionPointId)?.let { cp -> showDetailsCard(cp) }
+            ?: run {
+                viewModel.selectedMarker.value = null
+                Log.e(
+                    "CollectionPoints",
+                    "Could not find collection point by id $collectionPointId"
+                )
+                view?.let { view ->
                     Snackbar.make(
                         view,
                         "Could not load collection point details",
                         Snackbar.LENGTH_LONG
                     ).show()
-                    viewModel.selectedMarker.value = null
                 }
             }
-        }
     }
 
     private fun showDetailsCard(collectionPoint: CollectionPoint) {
