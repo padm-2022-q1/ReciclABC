@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentCreateNotificationBinding
 import br.edu.ufabc.reciclabc.model.GarbageType
 import br.edu.ufabc.reciclabc.model.Weekday
@@ -48,6 +49,8 @@ class CreateNotificationFragment : Fragment() {
                 viewModel.setWeekdays(weekdays)
                 setCheckedWeekdays(weekdays)
             }
+
+            binding.createNotificationButton.text = getString(R.string.edit_notification_button_text)
         }
 
         binding.createNotificationTime.editText?.setOnClickListener {

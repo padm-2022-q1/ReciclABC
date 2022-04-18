@@ -30,7 +30,7 @@
     <fragment
         android:id="@+id/create_address_notification_fragment"
         android:name="br.edu.ufabc.reciclabc.ui.notifications.CreateAddressNotificationFragment"
-        android:label="@string/appbar_title_create_notification"
+        android:label="@string/fragment_label_create_notification"
         tools:layout="@layout/fragment_create_address_notification">
         <argument
             android:name="addressNotification"
@@ -45,7 +45,7 @@
     <fragment
         android:id="@+id/create_notification_fragment"
         android:name="br.edu.ufabc.reciclabc.ui.notifications.CreateNotificationFragment"
-        android:label="@string/appbar_title_create_notification"
+        android:label="@string/fragment_label_create_notification"
         tools:layout="@layout/fragment_create_address_notification">
         <argument
             android:name="notification"

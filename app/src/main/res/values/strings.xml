@@ -2,7 +2,7 @@
     <string name="app_name">ReciclABC</string>
     <string name="title_collection_points">Pontos de coleta</string>
     <string name="title_recycling_guide">Como Reciclar</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Notificações</string>
     <string name="recycling_guide_title">Title</string>
     <string name="recycling_guide_content">Content</string>
     <string name="menu_recycling_guide">Informações</string>
@@ -26,11 +26,13 @@
     <string name="thursday_abbreviation">Qui</string>
     <string name="friday_abbreviation">Sex</string>
     <string name="saturday_abbreviation">Sab</string>
-    <string name="appbar_title_create_notification">Criar notificação</string>
+    <string name="fragment_label_create_notification">Criar notificação</string>
+    <string name="fragment_label_edit_notification">Editar notificação</string>
     <string name="create_address_notification_fab_content_description">Adicionar notificação</string>
     <string name="create_address_notification_notification_label">Notificações</string>
     <string name="notifications_fab_content_description">Adicionar notificação por endereço</string>
     <string name="create_notification_button_text">Criar</string>
+    <string name="edit_notification_button_text">Editar</string>
     <string name="create_notification_item_chip_text_default">Reciclável</string>
     <string name="create_notification_button_content_description">Menu da notificação</string>
     <string name="create_notification_time_text_example">16:30</string>
