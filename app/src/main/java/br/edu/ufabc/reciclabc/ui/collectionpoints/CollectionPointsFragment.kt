@@ -13,6 +13,7 @@ import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentCollectionPointsBinding
 import br.edu.ufabc.reciclabc.model.CollectionPoint
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 class CollectionPointsFragment : Fragment() {
@@ -43,6 +44,7 @@ class CollectionPointsFragment : Fragment() {
         }
 
         viewModel.selectedMarker.observe(viewLifecycleOwner) { handleSelectedMarkerChange(it) }
+        binding.collectionPointsFilterButton.setOnClickListener { handleFilterButtonClick() }
     }
 
     private fun handleSelectedMarkerChange(collectionPointId: Int?) {
@@ -87,6 +89,38 @@ class CollectionPointsFragment : Fragment() {
                 val mapIntent = Intent(Intent.ACTION_VIEW, mapIntentUri)
                 startActivity(mapIntent)
             }
+        }
+    }
+
+    private fun handleFilterButtonClick() {
+        val materials = arrayOf(
+            getString(R.string.material_paper),
+            getString(R.string.material_plastic),
+            getString(R.string.material_metal),
+            getString(R.string.material_glass),
+            getString(R.string.material_kitchen_oil),
+            getString(R.string.material_electronics),
+            getString(R.string.material_batteries),
+            getString(R.string.material_construction_waste),
+        )
+        val selectedFilters = BooleanArray(materials.size) { false }
+
+        context?.let { ctx ->
+            MaterialAlertDialogBuilder(ctx)
+                .setTitle(getString(R.string.filter_by_material))
+                .setNeutralButton(getString(R.string.clear_all)) { _, _ ->
+                    Log.d("CollectionPoints", "Filter: clear all")
+                }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                    Log.d("CollectionPoints", "Filter: cancel")
+                }
+                .setPositiveButton(getString(R.string.ok)) { _, _ ->
+                    Log.d("CollectionPoints", "Filter: ok")
+                }
+                .setMultiChoiceItems(materials, selectedFilters) { _, which, checked ->
+                    Log.d("CollectionPoints", "Filter: change $which $checked")
+                }
+                .show()
         }
     }
 }
