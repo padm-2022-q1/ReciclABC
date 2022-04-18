@@ -1,12 +1,11 @@
 package br.edu.ufabc.reciclabc.ui.notifications
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import br.edu.ufabc.reciclabc.databinding.FragmentCreateNotificationBinding
 import br.edu.ufabc.reciclabc.model.GarbageType
@@ -17,7 +16,7 @@ import java.util.*
 
 class CreateNotificationFragment : Fragment() {
     private lateinit var binding: FragmentCreateNotificationBinding
-    private val viewModel: CreateNotificationViewModel by activityViewModels()
+    private val viewModel: CreateNotificationViewModel by viewModels()
     private val args: CreateNotificationFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -152,7 +151,7 @@ class CreateNotificationFragment : Fragment() {
     }
 
     private fun setCheckedWeekdays(weekdays: List<Weekday>) {
-        weekdays.forEach() {
+        weekdays.forEach {
             when (it) {
                 Weekday.SUNDAY -> binding.createNotificationWeekdaysSunday.isChecked =
                     true
