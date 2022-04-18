@@ -1,6 +1,7 @@
 package br.edu.ufabc.reciclabc.ui.notifications
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,31 +33,23 @@ class CreateNotificationFragment : Fragment() {
         super.onStart()
 
         args.notification?.apply {
-            viewModel.setHour(this.hours)
-            viewModel.setMinute(this.minutes)
-            viewModel.setGarbageType(this.category)
-            viewModel.setWeekdays(this.weekdays)
+            if (viewModel.hour.value == null) {
+                viewModel.setHour(hours)
+            }
 
-            with(this.weekdays) {
-                when {
-                    Weekday.SUNDAY in this -> binding.createNotificationWeekdaysSunday.isChecked =
-                        true
-                    Weekday.MONDAY in this -> binding.createNotificationWeekdaysMonday.isChecked =
-                        true
-                    Weekday.TUESDAY in this -> binding.createNotificationWeekdaysTuesday.isChecked =
-                        true
-                    Weekday.WEDNESDAY in this -> binding.createNotificationWeekdaysWednesday.isChecked =
-                        true
-                    Weekday.THURSDAY in this -> binding.createNotificationWeekdaysThursday.isChecked =
-                        true
-                    Weekday.FRIDAY in this -> binding.createNotificationWeekdaysFriday.isChecked =
-                        true
-                    Weekday.SATURDAY in this -> binding.createNotificationWeekdaysSaturday.isChecked =
-                        true
-                }
+            if (viewModel.minute.value == null) {
+                viewModel.setMinute(minutes)
+            }
+
+            if (viewModel.garbageType.value == null) {
+                viewModel.setGarbageType(category)
+            }
+
+            if (viewModel.weekdays.value == null) {
+                viewModel.setWeekdays(weekdays)
+                setCheckedWeekdays(weekdays)
             }
         }
-
 
         binding.createNotificationTime.editText?.setOnClickListener {
             val c = Calendar.getInstance()
@@ -76,29 +69,28 @@ class CreateNotificationFragment : Fragment() {
             picker.show(this.parentFragmentManager, "picker")
         }
 
-        binding.createNotificationRecyclableGarbage.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked)
-                viewModel.setGarbageType(GarbageType.REGULAR)
-
-        }
-
-        binding.createNotificationRegularGarbage.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked)
-                viewModel.setGarbageType(GarbageType.RECYCLABLE)
-        }
-
-        viewModel.garbageType.observe(this) {
-            it?.let { type ->
-                when (type) {
-                    GarbageType.REGULAR -> binding.createNotificationRegularGarbage.isChecked =
-                        false
-                    GarbageType.RECYCLABLE -> binding.createNotificationRecyclableGarbage.isChecked =
-                        false
-                }
+        binding.createNotificationRecyclableCategoryRadioGroup.setOnCheckedChangeListener { _, id ->
+            when (id) {
+                binding.createNotificationRecyclableGarbage.id -> viewModel.setGarbageType(
+                    GarbageType.RECYCLABLE
+                )
+                binding.createNotificationRegularGarbage.id -> viewModel.setGarbageType(GarbageType.REGULAR)
             }
         }
 
-        viewModel.timeString.observe(this) {
+        viewModel.garbageType.observe(viewLifecycleOwner) {
+            when (it) {
+                GarbageType.RECYCLABLE -> binding.createNotificationRecyclableCategoryRadioGroup.check(
+                    binding.createNotificationRecyclableGarbage.id
+                )
+                GarbageType.REGULAR -> binding.createNotificationRecyclableCategoryRadioGroup.check(
+                    binding.createNotificationRegularGarbage.id
+                )
+                else -> {}
+            }
+        }
+
+        viewModel.timeString.observe(viewLifecycleOwner) {
             it?.let { binding.createNotificationTime.editText?.setText(it) }
         }
 
@@ -157,5 +149,26 @@ class CreateNotificationFragment : Fragment() {
     private fun weekdayChanged(isChecked: Boolean, weekday: Weekday) {
         if (isChecked) viewModel.addWeekday(weekday)
         else viewModel.removeWeekday(weekday)
+    }
+
+    private fun setCheckedWeekdays(weekdays: List<Weekday>) {
+        weekdays.forEach() {
+            when (it) {
+                Weekday.SUNDAY -> binding.createNotificationWeekdaysSunday.isChecked =
+                    true
+                Weekday.MONDAY -> binding.createNotificationWeekdaysMonday.isChecked =
+                    true
+                Weekday.TUESDAY -> binding.createNotificationWeekdaysTuesday.isChecked =
+                    true
+                Weekday.WEDNESDAY -> binding.createNotificationWeekdaysWednesday.isChecked =
+                    true
+                Weekday.THURSDAY -> binding.createNotificationWeekdaysThursday.isChecked =
+                    true
+                Weekday.FRIDAY -> binding.createNotificationWeekdaysFriday.isChecked =
+                    true
+                Weekday.SATURDAY -> binding.createNotificationWeekdaysSaturday.isChecked =
+                    true
+            }
+        }
     }
 }

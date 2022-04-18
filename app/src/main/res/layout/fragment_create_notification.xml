@@ -96,21 +96,27 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/create_notification_weekdays_picker" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/create_notification_regular_garbage"
+    <RadioGroup
+        android:id="@+id/create_notification_recyclable_category_radio_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/regular_garbage"
+        android:checkedButton="@id/create_notification_regular_garbage"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/create_notification_types_of_recycling" />
+        app:layout_constraintTop_toBottomOf="@id/create_notification_types_of_recycling">
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/create_notification_recyclable_garbage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/recyclable_garbage"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/create_notification_regular_garbage" />
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/create_notification_regular_garbage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/regular_garbage" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/create_notification_recyclable_garbage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/recyclable_garbage" />
+
+    </RadioGroup>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/create_notification_button"

@@ -22,19 +22,20 @@ class CreateNotificationViewModel(application: Application) : AndroidViewModel(a
     private val _address = MutableLiveData<String>()
     val address: LiveData<String> = _address
 
-    private val _weekdays = MutableLiveData<MutableSet<Weekday>>(mutableSetOf())
+    private val _weekdays = MutableLiveData<MutableSet<Weekday>>(null)
     val weekdays: LiveData<MutableSet<Weekday>> = _weekdays
 
-    private val _hour = MutableLiveData<Int>()
-    val hour: LiveData<Int> = _hour
+    private val _hour = MutableLiveData<Int?>(null)
+    val hour: LiveData<Int?> = _hour
 
-    private val _minute = MutableLiveData<Int>()
-    val minute: LiveData<Int> = _minute
+    private val _minute = MutableLiveData<Int?>(null)
+    val minute: LiveData<Int?> = _minute
 
-    private val _garbageType = MutableLiveData<GarbageType>()
-    val garbageType: LiveData<GarbageType> = _garbageType
+    private val _garbageType = MutableLiveData<GarbageType?>(null)
+    val garbageType: LiveData<GarbageType?> = _garbageType
 
-    private val _timeString = _hour.combine(_minute) { hour, minute -> "$hour:$minute" }
+    private val _timeString =
+        _hour.combine(_minute) { hour, minute -> if (hour != null && minute != null) "$hour:$minute" else "" }
     val timeString: LiveData<String> = _timeString
 
     fun setAddress(newAddress: String) {
