@@ -23,4 +23,13 @@ class AddressNotificationRepository {
             notification.id == id
         } else throw UninitializedPropertyAccessException("Load data first")
 
+    fun create(
+        address: String,
+        category: GarbageType,
+        hour: Int,
+        minute: Int,
+        weekdays: List<Weekday>,
+    ) {
+        // TODO: Create notification
+    }
 }

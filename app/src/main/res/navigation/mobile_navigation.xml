@@ -21,5 +21,36 @@
         android:id="@+id/navigation_notifications"
         android:name="br.edu.ufabc.reciclabc.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_notifications">
+        <action
+            android:id="@+id/create_address_notification_action"
+            app:destination="@id/create_address_notification_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/create_address_notification_fragment"
+        android:name="br.edu.ufabc.reciclabc.ui.notifications.CreateAddressNotificationFragment"
+        android:label="@string/fragment_label_create_notification"
+        tools:layout="@layout/fragment_create_address_notification">
+        <argument
+            android:name="addressNotification"
+            android:defaultValue="@null"
+            app:argType="br.edu.ufabc.reciclabc.model.AddressNotification"
+            app:nullable="true" />
+        <action
+            android:id="@+id/create_notification_action"
+            app:destination="@id/create_notification_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/create_notification_fragment"
+        android:name="br.edu.ufabc.reciclabc.ui.notifications.CreateNotificationFragment"
+        android:label="@string/fragment_label_create_notification"
+        tools:layout="@layout/fragment_create_address_notification">
+        <argument
+            android:name="notification"
+            android:defaultValue="@null"
+            app:argType="br.edu.ufabc.reciclabc.model.Notification"
+            app:nullable="true" />
+    </fragment>
 </navigation>

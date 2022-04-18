@@ -11,9 +11,7 @@
         android:id="@+id/rv_notifications"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -22,10 +20,10 @@
         android:layout_gravity="bottom|right"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:clickable="true"
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:tint="@color/teal_700" />
+        app:tint="@color/teal_700"
+        android:contentDescription="@string/notifications_fab_content_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
