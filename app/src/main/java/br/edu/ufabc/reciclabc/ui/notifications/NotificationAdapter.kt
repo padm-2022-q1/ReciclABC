@@ -1,6 +1,5 @@
 package br.edu.ufabc.reciclabc.ui.notifications
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -32,19 +31,18 @@ class NotificationAdapter(private val notifications: List<Notification>) :
             )
         )
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: NotificationViewHolder, position: Int) {
         val notification = notifications[position]
         val context = holder.itemView.context
 
-        holder.switch.text =
+        holder.switch.text = context.getString(
+            R.string.format_weekdays_time,
             weekdaysToAbbreviationString(
                 holder.itemView.context,
                 notification.weekdays
-            ) + " - " + context.getString(
-                R.string.format_time,
-                notification.hours,
-                notification.minutes
+            ),
+            notification.hours,
+            notification.minutes,
             )
         holder.switch.isChecked = notification.isActive
     }

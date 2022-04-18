@@ -36,5 +36,5 @@
     <string name="create_notification_time_text_example">16:30</string>
     <string name="menu_edit_text">Editar</string>
     <string name="menu_delete_text">Deletar</string>
-    <string name="format_time">%d:%d</string>
+    <string name="format_weekdays_time">%s - %d:%d</string>
 </resources>
