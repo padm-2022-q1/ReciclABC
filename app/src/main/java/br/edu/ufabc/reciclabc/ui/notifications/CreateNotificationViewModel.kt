@@ -34,6 +34,9 @@ class CreateNotificationViewModel(application: Application) : AndroidViewModel(a
     }
 
     fun addWeekday(weekday: Weekday) {
+        if (_weekdays.value == null) {
+            _weekdays.value = mutableSetOf()
+        }
         _weekdays.value?.add(weekday)
     }
 

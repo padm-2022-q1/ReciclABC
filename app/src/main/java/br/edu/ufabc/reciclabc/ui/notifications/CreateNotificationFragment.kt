@@ -43,6 +43,15 @@ class CreateNotificationFragment : Fragment() {
 
             if (viewModel.garbageType.value == null) {
                 viewModel.setGarbageType(category)
+
+                when (category) {
+                    GarbageType.RECYCLABLE -> binding.createNotificationRecyclableCategoryRadioGroup.check(
+                        binding.createNotificationRecyclableGarbage.id
+                    )
+                    GarbageType.REGULAR -> binding.createNotificationRecyclableCategoryRadioGroup.check(
+                        binding.createNotificationRegularGarbage.id
+                    )
+                }
             }
 
             if (viewModel.weekdays.value == null) {
@@ -77,18 +86,6 @@ class CreateNotificationFragment : Fragment() {
                     GarbageType.RECYCLABLE
                 )
                 binding.createNotificationRegularGarbage.id -> viewModel.setGarbageType(GarbageType.REGULAR)
-            }
-        }
-
-        viewModel.garbageType.observe(viewLifecycleOwner) {
-            when (it) {
-                GarbageType.RECYCLABLE -> binding.createNotificationRecyclableCategoryRadioGroup.check(
-                    binding.createNotificationRecyclableGarbage.id
-                )
-                GarbageType.REGULAR -> binding.createNotificationRecyclableCategoryRadioGroup.check(
-                    binding.createNotificationRegularGarbage.id
-                )
-                else -> {}
             }
         }
 

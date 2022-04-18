@@ -100,7 +100,6 @@
         android:id="@+id/create_notification_recyclable_category_radio_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:checkedButton="@id/create_notification_regular_garbage"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/create_notification_types_of_recycling">
 
