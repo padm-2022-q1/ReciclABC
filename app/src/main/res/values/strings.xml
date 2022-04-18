@@ -40,4 +40,15 @@
     <string name="menu_edit_text">Editar</string>
     <string name="menu_delete_text">Deletar</string>
     <string name="format_weekdays_time">%s - %d:%d</string>
+    <string name="material_paper">Papel</string>
+    <string name="material_plastic">Plástico</string>
+    <string name="material_metal">Metal</string>
+    <string name="material_glass">Vidro</string>
+    <string name="material_kitchen_oil">Óleo de cozinha</string>
+    <string name="material_electronics">Eletrônicos</string>
+    <string name="material_batteries">Pilhas e baterias</string>
+    <string name="filter_by_material">Filtre por material</string>
+    <string name="clear_all">Limpar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="ok">OK</string>
 </resources>

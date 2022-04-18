@@ -94,26 +94,26 @@ class CollectionPointsFragment : Fragment() {
 
     private fun handleFilterButtonClick() {
         val materials = arrayOf(
-            "Papel",
-            "Plástico",
-            "Metal",
-            "Vidro",
-            "Óleo de cozinha",
-            "Eletrônicos",
-            "Pilhas e baterias"
+            getString(R.string.material_paper),
+            getString(R.string.material_plastic),
+            getString(R.string.material_metal),
+            getString(R.string.material_glass),
+            getString(R.string.material_kitchen_oil),
+            getString(R.string.material_electronics),
+            getString(R.string.material_batteries),
         )
         val selectedFilters = BooleanArray(materials.size) { false }
 
         context?.let { ctx ->
             MaterialAlertDialogBuilder(ctx)
-                .setTitle("Filtre por material")
-                .setNeutralButton("Limpar") { _, _ ->
+                .setTitle(getString(R.string.filter_by_material))
+                .setNeutralButton(getString(R.string.clear_all)) { _, _ ->
                     Log.d("CollectionPoints", "Filter: clear all")
                 }
-                .setNegativeButton("Cancel") { _, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { _, _ ->
                     Log.d("CollectionPoints", "Filter: cancel")
                 }
-                .setPositiveButton("Ok") { _, _ ->
+                .setPositiveButton(getString(R.string.ok)) { _, _ ->
                     Log.d("CollectionPoints", "Filter: ok")
                 }
                 .setMultiChoiceItems(materials, selectedFilters) { _, which, checked ->
