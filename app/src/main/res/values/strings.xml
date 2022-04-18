@@ -53,4 +53,6 @@
     <string name="cancel">Cancelar</string>
     <string name="ok">OK</string>
     <string name="create_address_notification_button_text">Adicionar notificação</string>
+    <string name="filter_button_description">Filtrar</string>
+    <string name="my_location_button_description">Minha localização</string>
 </resources>
