@@ -33,7 +33,8 @@
     <string name="notifications_fab_content_description">Adicionar notificação por endereço</string>
     <string name="create_notification_button_text">Criar</string>
     <string name="edit_notification_button_text">Editar</string>
-    <string name="create_notification_item_chip_text_default">Reciclável</string>
+    <string name="create_notification_item_chip_text_recyclable">Reciclável</string>
+    <string name="create_notification_item_chip_text_regular">Comum</string>
     <string name="create_notification_button_content_description">Menu da notificação</string>
     <string name="create_notification_time_text_example">16:30</string>
     <string name="menu_edit_text">Editar</string>

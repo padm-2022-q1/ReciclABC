@@ -43,7 +43,10 @@ class CreateNotificationAdapter(
     override fun onBindViewHolder(holder: CreatedNotificationViewHolder, position: Int) {
         val notification = notifications[position]
 
-        holder.category.text = notification.category.name
+        holder.category.text = when(notification.category) {
+            GarbageType.RECYCLABLE -> holder.itemView.context.getString(R.string.create_notification_item_chip_text_recyclable)
+            GarbageType.REGULAR -> holder.itemView.context.getString(R.string.create_notification_item_chip_text_regular)
+        }
         when (notification.category) {
             GarbageType.RECYCLABLE -> holder.category.setChipBackgroundColorResource(R.color.teal_200)
             GarbageType.REGULAR -> holder.category.setChipBackgroundColorResource(R.color.purple_200)
