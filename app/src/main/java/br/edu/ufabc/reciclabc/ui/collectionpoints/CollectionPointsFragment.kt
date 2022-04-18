@@ -101,6 +101,7 @@ class CollectionPointsFragment : Fragment() {
             getString(R.string.material_kitchen_oil),
             getString(R.string.material_electronics),
             getString(R.string.material_batteries),
+            getString(R.string.material_construction_waste),
         )
         val selectedFilters = BooleanArray(materials.size) { false }
 

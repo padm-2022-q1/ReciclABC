@@ -47,6 +47,7 @@
     <string name="material_kitchen_oil">Óleo de cozinha</string>
     <string name="material_electronics">Eletrônicos</string>
     <string name="material_batteries">Pilhas e baterias</string>
+    <string name="material_construction_waste">Entulho</string>
     <string name="filter_by_material">Filtre por material</string>
     <string name="clear_all">Limpar</string>
     <string name="cancel">Cancelar</string>
