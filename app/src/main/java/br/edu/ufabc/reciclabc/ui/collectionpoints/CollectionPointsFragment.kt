@@ -157,7 +157,6 @@ class CollectionPointsFragment : Fragment() {
         )
     }
 
-
     private fun requestPermissionsCallback(returnedPermissions: MutableMap<String, Boolean>) {
         if (returnedPermissions[android.Manifest.permission.ACCESS_FINE_LOCATION] == true ||
             returnedPermissions[android.Manifest.permission.ACCESS_COARSE_LOCATION] == true
