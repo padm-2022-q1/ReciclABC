@@ -42,8 +42,8 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/transparent"
         android:src="@drawable/ic_add_24"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/create_address_notification_address"
+        app:layout_constraintTop_toTopOf="@id/create_address_notification_notification_label"
+        app:layout_constraintBottom_toBottomOf="@id/create_address_notification_notification_label"
         app:layout_constraintRight_toRightOf="parent"
         android:contentDescription="@string/create_address_notification_button_text" />
 
