@@ -182,7 +182,7 @@ class CollectionPointsFragment : Fragment() {
                 viewModel.lastKnownLocation = task.result ?: viewModel.lastKnownLocation
 
                 if (viewModel.lastKnownLocation != null) {
-                    moveMapToKnowLocation()
+                    moveMapToKnownLocation()
                 } else {
                     Log.d("CollectionPoints", "Location unavailable.")
                     Snackbar.make(requireView(), "Location unavailable.", Snackbar.LENGTH_SHORT)
@@ -199,7 +199,7 @@ class CollectionPointsFragment : Fragment() {
         }
     }
 
-    private fun moveMapToKnowLocation() {
+    private fun moveMapToKnownLocation() {
         val location = viewModel.lastKnownLocation ?: return
         val latLng = LatLng(location.latitude, location.longitude)
         val zoom = if (location.accuracy > 500f) DISTANT_ZOOM_LEVEL else CLOSE_ZOOM_LEVEL
