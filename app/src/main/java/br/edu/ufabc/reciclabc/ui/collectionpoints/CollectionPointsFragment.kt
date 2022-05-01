@@ -16,15 +16,18 @@ import br.edu.ufabc.reciclabc.databinding.FragmentCollectionPointsBinding
 import br.edu.ufabc.reciclabc.model.CollectionPoint
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 class CollectionPointsFragment : Fragment() {
-
     private lateinit var binding: FragmentCollectionPointsBinding
     private val viewModel: CollectionPointsViewModel by viewModels()
+    private var map: GoogleMap? = null
 
     private var requestPermissionsLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -47,7 +50,7 @@ class CollectionPointsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.collection_points_map) as SupportMapFragment?
-        mapFragment?.getMapAsync(viewModel.handleMapReady)
+        mapFragment?.getMapAsync(handleMapReady)
 
         binding.collectionPointsDetailsCard.apply {
             // to stop both click and drag events from propagating to the map underneath
@@ -59,6 +62,55 @@ class CollectionPointsFragment : Fragment() {
         viewModel.selectedMarker.observe(viewLifecycleOwner) { handleSelectedMarkerChange(it) }
         binding.collectionPointsFilterButton.setOnClickListener { handleFilterButtonClick() }
         binding.collectionPointsMyLocationButton.setOnClickListener { handleMyLocationButtonClick() }
+    }
+
+    private val handleMapReady = OnMapReadyCallback { googleMap ->
+        Log.d("CollectionPoints", "Map ready")
+        googleMap.uiSettings.isMapToolbarEnabled = false
+        googleMap.uiSettings.isMyLocationButtonEnabled = false
+
+        googleMap.setOnMarkerClickListener(handleMarkerClick)
+        googleMap.setOnMapClickListener(handleMapClick)
+
+        if (viewModel.hasLocationPermission()) {
+            @SuppressLint("MissingPermission")
+            googleMap.isMyLocationEnabled = true
+        }
+
+        addMarkers(googleMap)
+        map = googleMap
+    }
+
+    private fun addMarkers(map: GoogleMap) {
+        for (collectionPoint in viewModel.getAllCollectionPoints()) {
+            map.addMarker(
+                MarkerOptions().position(
+                    LatLng(
+                        collectionPoint.lat.toDouble(),
+                        collectionPoint.lng.toDouble()
+                    )
+                ).title(collectionPoint.name)
+            )?.tag = collectionPoint.id
+        }
+    }
+
+    private val handleMarkerClick = GoogleMap.OnMarkerClickListener {
+        val markerId = it.tag
+        if (markerId is Int) {
+            Log.d("CollectionPoints", "Selected marker with id $markerId")
+            viewModel.selectedMarker.value = markerId
+        }
+
+        /*
+         * Returns false to allow the default behaviour of moving
+         * the map to center the marker and show its title
+         */
+        false
+    }
+
+    private val handleMapClick = GoogleMap.OnMapClickListener {
+        Log.d("CollectionPoints", "Cleared selected marker")
+        viewModel.selectedMarker.value = null
     }
 
     private fun handleSelectedMarkerChange(collectionPointId: Int?) {
@@ -162,7 +214,7 @@ class CollectionPointsFragment : Fragment() {
             returnedPermissions[android.Manifest.permission.ACCESS_COARSE_LOCATION] == true
         ) {
             @SuppressLint("MissingPermission")
-            viewModel.map?.isMyLocationEnabled = true
+            map?.isMyLocationEnabled = true
             getLocationAndMoveMap()
         } else {
             Log.d("CollectionPoints", "Location permission denied.")
@@ -204,7 +256,7 @@ class CollectionPointsFragment : Fragment() {
         val latLng = LatLng(location.latitude, location.longitude)
         val zoom = if (location.accuracy > 500f) DISTANT_ZOOM_LEVEL else CLOSE_ZOOM_LEVEL
 
-        viewModel.map?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+        map?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
     }
 
     companion object {
