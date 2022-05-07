@@ -96,10 +96,9 @@ class MapManager(
         getLocationAndMoveMap()
     }
 
+    @SuppressLint("MissingPermission")
     private fun getLocationAndMoveMap() {
-        @SuppressLint("MissingPermission")
-        val locationResult = fusedLocationProviderClient.lastLocation
-        locationResult.addOnCompleteListener { task ->
+        fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 viewModel.lastKnownLocation = task.result ?: viewModel.lastKnownLocation
 
