@@ -56,15 +56,14 @@ class NotificationsFragment : Fragment() {
         inflater.inflate(R.menu.add_notification_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             R.id.add_address_notification -> {
                 val action = NotificationsFragmentDirections.createAddressNotificationAction()
-                this.view?.findNavController()?.navigate(action)
+                view?.findNavController()?.navigate(action)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
 
 }
