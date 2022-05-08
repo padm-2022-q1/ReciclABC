@@ -105,11 +105,11 @@ class MapManager(
                 if (viewModel.lastKnownLocation != null) {
                     moveMapToKnownLocation()
                 } else {
-                    Log.d("CollectionPoints", "Location unavailable.")
+                    Log.d("MapManager", "Location unavailable.")
                     notifyUser("Location unavailable.")
                 }
             } else {
-                Log.d("CollectionPoints", "Could not get device location.")
+                Log.d("MapManager", "Could not get device location.")
                 notifyUser("Could not get device location.")
             }
         }
@@ -139,7 +139,7 @@ class MapManager(
     private val handleMarkerClick = GoogleMap.OnMarkerClickListener {
         val markerId = it.tag
         if (markerId is Int) {
-            Log.d("CollectionPoints", "Selected marker with id $markerId")
+            Log.d("MapManager", "Selected marker with id $markerId")
             viewModel.selectedMarker.value = markerId
         }
 
@@ -151,7 +151,7 @@ class MapManager(
     }
 
     private val handleMapClick = GoogleMap.OnMapClickListener {
-        Log.d("CollectionPoints", "Cleared selected marker")
+        Log.d("MapManager", "Cleared selected marker")
         viewModel.selectedMarker.value = null
     }
 }
