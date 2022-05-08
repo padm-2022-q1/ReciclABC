@@ -4,10 +4,10 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class AddressWithNotifications(
-    @Embedded val address: Address,
+    @Embedded val addressEntity: AddressEntity,
     @Relation(
         parentColumn = "id",
         entityColumn = "addressId"
     )
-    val notifications: List<Notification>,
+    val notificationEntities: List<NotificationEntity>,
 )

@@ -6,11 +6,11 @@ import androidx.room.PrimaryKey
 import br.edu.ufabc.reciclabc.model.GarbageType
 import br.edu.ufabc.reciclabc.model.Weekday
 
-@Entity(foreignKeys = [ForeignKey(entity = Address::class,
+@Entity(foreignKeys = [ForeignKey(entity = AddressEntity::class,
     parentColumns = ["id"],
     childColumns = ["addressId"],
     onDelete = ForeignKey.CASCADE)])
-data class Notification(
+data class NotificationEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val addressId: Long,
     val category: GarbageType,
