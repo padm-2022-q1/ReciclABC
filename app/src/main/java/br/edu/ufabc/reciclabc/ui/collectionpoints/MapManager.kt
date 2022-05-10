@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresPermission
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -63,6 +64,7 @@ class MapManager(
     /**
      * Requests location permission if not granted and moves map to device's last known location.
      */
+    @SuppressLint("MissingPermission")
     fun goToCurrentLocation() {
         if (viewModel.hasLocationPermission()) {
             getLocationAndMoveMap()
@@ -82,6 +84,7 @@ class MapManager(
         )
     }
 
+    @SuppressLint("MissingPermission")
     private fun requestPermissionsCallback(returnedPermissions: MutableMap<String, Boolean>) {
         if (returnedPermissions[android.Manifest.permission.ACCESS_FINE_LOCATION] == false &&
             returnedPermissions[android.Manifest.permission.ACCESS_COARSE_LOCATION] == false
@@ -91,12 +94,11 @@ class MapManager(
             return
         }
 
-        @SuppressLint("MissingPermission")
         map?.isMyLocationEnabled = true
         getLocationAndMoveMap()
     }
 
-    @SuppressLint("MissingPermission")
+    @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
     private fun getLocationAndMoveMap() {
         fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
             if (task.isSuccessful) {
