@@ -8,14 +8,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import java.util.*
+import java.util.Calendar
 
 class ReminderReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        var builder = NotificationCompat.Builder(context!!, "POCNotification")
+        var builder = NotificationCompat.Builder(context!!, "GarbageReminder")
             .setSmallIcon(R.drawable.ic_notification_icon)
             .setContentTitle("Seu Lembrete de retirar o lixo!")
             .setContentText("O horário de coleta está próximo.")
