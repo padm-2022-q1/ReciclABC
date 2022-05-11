@@ -11,8 +11,8 @@ data class AddressEntity(
 ) {
     companion object {
         fun fromAddressNotification(addressNotification: AddressNotification) = AddressEntity(
-            id = addressNotification.id,
-            address = addressNotification.address,
+            addressNotification.id,
+            addressNotification.address,
         )
     }
 }

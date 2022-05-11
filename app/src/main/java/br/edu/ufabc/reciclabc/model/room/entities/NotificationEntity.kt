@@ -21,22 +21,22 @@ data class NotificationEntity(
     val isActive: Boolean,
 ) {
     fun toNotification() = Notification(
-        id = id,
-        category = category,
-        weekdays = weekdays,
-        hours = hours,
-        minutes = minutes,
-        isActive = isActive,
+        id,
+        category,
+        weekdays,
+        hours,
+        minutes,
+        isActive,
     )
     companion object {
         fun fromNotification(notification: Notification, addressId: Long) = NotificationEntity(
-            id = notification.id,
-            addressId = addressId,
-            category = notification.category,
-            weekdays = notification.weekdays,
-            hours = notification.hours,
-            minutes = notification.minutes,
-            isActive = notification.isActive,
+            notification.id,
+            addressId,
+            notification.category,
+            notification.weekdays,
+            notification.hours,
+            notification.minutes,
+            notification.isActive,
         )
     }
 }

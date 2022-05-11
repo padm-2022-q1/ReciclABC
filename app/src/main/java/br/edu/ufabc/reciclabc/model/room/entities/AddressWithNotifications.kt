@@ -13,8 +13,8 @@ data class AddressWithNotifications(
     val notificationEntities: List<NotificationEntity>,
 ) {
     fun toAddressNotification() = AddressNotification(
-        id = addressEntity.id,
-        address = addressEntity.address,
-        notifications = notificationEntities.map { it.toNotification() }
+        addressEntity.id,
+        addressEntity.address,
+        notificationEntities.map { it.toNotification() }
     )
 }
