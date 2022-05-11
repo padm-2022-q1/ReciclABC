@@ -8,23 +8,10 @@ import br.edu.ufabc.reciclabc.model.Weekday
  */
 class Converters {
     @TypeConverter
-    fun storedStringToWeekdayList(str: String): List<Weekday> {
-        val dbValues = str.split("\\s*,\\s*".toRegex()).dropLastWhile { it.isEmpty() }
-        val enums: MutableList<Weekday> = ArrayList()
-
-        for (s in dbValues)
-            enums.add(Weekday.valueOf(s))
-
-        return enums
-    }
+    fun storedStringToWeekdayList(str: String) =
+        str.split(",").map { Weekday.valueOf(it.trim()) }
 
     @TypeConverter
-    fun weekdayListToStoredString(weekdays: List<Weekday>): String {
-        var str = ""
-
-        for (weekday in weekdays)
-            str += weekday.name + ","
-
-        return str
-    }
+    fun weekdayListToStoredString(weekdays: List<Weekday>) =
+        weekdays.joinToString(",") { weekday -> weekday.name }
 }
