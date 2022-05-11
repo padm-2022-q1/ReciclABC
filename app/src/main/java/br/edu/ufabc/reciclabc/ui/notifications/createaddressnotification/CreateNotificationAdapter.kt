@@ -1,8 +1,7 @@
-package br.edu.ufabc.reciclabc.ui.notifications
+package br.edu.ufabc.reciclabc.ui.notifications.createaddressnotification
 
 import android.view.LayoutInflater
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView

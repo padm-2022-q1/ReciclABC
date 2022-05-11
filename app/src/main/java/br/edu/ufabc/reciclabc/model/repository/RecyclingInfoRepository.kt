@@ -1,5 +1,6 @@
-package br.edu.ufabc.reciclabc.model
+package br.edu.ufabc.reciclabc.model.repository
 
+import br.edu.ufabc.reciclabc.model.RecyclingInformation
 import com.beust.klaxon.Klaxon
 import java.io.InputStream
 

@@ -10,8 +10,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import br.edu.ufabc.reciclabc.databinding.ActivityMainBinding
-import br.edu.ufabc.reciclabc.ui.notifications.CreateAddressNotificationFragmentArgs
-import br.edu.ufabc.reciclabc.ui.notifications.CreateNotificationFragmentArgs
+import br.edu.ufabc.reciclabc.ui.notifications.createaddressnotification.CreateAddressNotificationFragmentArgs
+import br.edu.ufabc.reciclabc.ui.notifications.createnotification.CreateNotificationFragmentArgs
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {

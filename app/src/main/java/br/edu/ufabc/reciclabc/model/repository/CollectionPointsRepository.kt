@@ -1,4 +1,6 @@
-package br.edu.ufabc.reciclabc.model
+package br.edu.ufabc.reciclabc.model.repository
+
+import br.edu.ufabc.reciclabc.model.CollectionPoint
 
 class CollectionPointsRepository {
     private val collectionPoints: List<CollectionPoint> = listOf(

@@ -1,9 +1,10 @@
-package br.edu.ufabc.reciclabc.model.room
+package br.edu.ufabc.reciclabc.model.repository
 
 import android.app.Application
 import androidx.room.Room
 import androidx.room.withTransaction
 import br.edu.ufabc.reciclabc.model.AddressNotification
+import br.edu.ufabc.reciclabc.model.room.AppDatabase
 import br.edu.ufabc.reciclabc.model.room.entities.AddressEntity
 import br.edu.ufabc.reciclabc.model.room.entities.NotificationEntity
 import kotlinx.coroutines.Dispatchers

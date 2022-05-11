@@ -1,8 +1,8 @@
 package br.edu.ufabc.reciclabc
 
 import android.app.Application
-import br.edu.ufabc.reciclabc.model.AddressNotificationRepository
-import br.edu.ufabc.reciclabc.model.RecyclingInfoRepository
+import br.edu.ufabc.reciclabc.model.repository.AddressNotificationRepository
+import br.edu.ufabc.reciclabc.model.repository.RecyclingInfoRepository
 import com.google.android.gms.maps.MapsInitializer
 
 class App : Application() {
