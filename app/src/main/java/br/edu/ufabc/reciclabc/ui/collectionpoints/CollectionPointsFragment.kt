@@ -12,14 +12,32 @@ import androidx.fragment.app.viewModels
 import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentCollectionPointsBinding
 import br.edu.ufabc.reciclabc.model.CollectionPoint
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 class CollectionPointsFragment : Fragment() {
-
     private lateinit var binding: FragmentCollectionPointsBinding
     private val viewModel: CollectionPointsViewModel by viewModels()
+    private lateinit var mapManager: MapManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mapManager = MapManager(
+            viewModel,
+            requireActivity().activityResultRegistry,
+            LocationServices.getFusedLocationProviderClient(requireContext())
+        ) { message ->
+            Snackbar.make(
+                binding.root,
+                message,
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+        lifecycle.addObserver(mapManager)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +52,7 @@ class CollectionPointsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.collection_points_map) as SupportMapFragment?
-        mapFragment?.getMapAsync(viewModel.handleMapReady)
+        mapFragment?.getMapAsync(handleMapReady)
 
         binding.collectionPointsDetailsCard.apply {
             // to stop both click and drag events from propagating to the map underneath
@@ -45,6 +63,11 @@ class CollectionPointsFragment : Fragment() {
 
         viewModel.selectedMarker.observe(viewLifecycleOwner) { handleSelectedMarkerChange(it) }
         binding.collectionPointsFilterButton.setOnClickListener { handleFilterButtonClick() }
+        binding.collectionPointsMyLocationButton.setOnClickListener { mapManager.goToCurrentLocation() }
+    }
+
+    private val handleMapReady = OnMapReadyCallback { googleMap ->
+        mapManager.mapReady(googleMap)
     }
 
     private fun handleSelectedMarkerChange(collectionPointId: Int?) {
