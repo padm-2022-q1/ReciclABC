@@ -12,12 +12,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import java.util.Calendar
 
-class ReminderReceiver: BroadcastReceiver() {
+class ReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         var builder = NotificationCompat.Builder(context!!, "GarbageReminder")
             .setSmallIcon(R.drawable.ic_notification_icon)
-            .setContentTitle("Seu Lembrete de retirar o lixo!")
-            .setContentText("O horário de coleta está próximo.")
+            .setContentTitle(context.getString(R.string.broadcast_receiver_notification_title))
+            .setContentText(context.getString(R.string.broadcast_receiver_notification_content))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         var notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(context)
@@ -25,16 +25,19 @@ class ReminderReceiver: BroadcastReceiver() {
         notificationManager.notify(1, builder.build())
     }
 
-    fun setAlarm (context: Context, scheduledDateInMillis: Long, pendingIntent: PendingIntent) {
-        val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    fun setAlarm(context: Context, scheduledDateInMillis: Long, pendingIntent: PendingIntent) {
+        val alarmManager: AlarmManager =
+            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
-            scheduledDateInMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent)
+            scheduledDateInMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent
+        )
     }
 
-    fun cancelAlarm (context: Context, pendingIntent: PendingIntent) {
-        val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    fun cancelAlarm(context: Context, pendingIntent: PendingIntent) {
+        val alarmManager: AlarmManager =
+            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
     }
 
@@ -57,15 +60,22 @@ class ReminderReceiver: BroadcastReceiver() {
             }
         }
 
-        fun calculateNextTriggerDateInMillis (weekday: Int, hour: Int, minutes: Int ): Long {
+        fun calculateNextTriggerDateInMillis(weekday: Int, hour: Int, minutes: Int): Long {
             val scheduledDate = Calendar.getInstance() //Today
             if (scheduledDate.get(Calendar.DAY_OF_WEEK) != weekday) {
-                scheduledDate.add(Calendar.DAY_OF_MONTH, (weekday + 7 - scheduledDate.get(Calendar.DAY_OF_WEEK))% 7)
+                scheduledDate.add(
+                    Calendar.DAY_OF_MONTH,
+                    (weekday + 7 - scheduledDate.get(Calendar.DAY_OF_WEEK)) % 7
+                )
             } else {
-                val minOfDay = scheduledDate.get(Calendar.HOUR_OF_DAY) * 60 + scheduledDate.get(Calendar.MINUTE)
-                if (minOfDay >= (hour + 3) * 60 + minutes) scheduledDate.add(Calendar.DAY_OF_MONTH, 7) //Next week
+                val minOfDay =
+                    scheduledDate.get(Calendar.HOUR_OF_DAY) * 60 + scheduledDate.get(Calendar.MINUTE)
+                if (minOfDay >= (hour + 3) * 60 + minutes) scheduledDate.add(
+                    Calendar.DAY_OF_MONTH,
+                    7
+                ) //Next week
             }
-            scheduledDate.set(Calendar.HOUR_OF_DAY, hour+3) //To local time
+            scheduledDate.set(Calendar.HOUR_OF_DAY, hour + 3) //To local time
             scheduledDate.set(Calendar.MINUTE, minutes)
 
             return scheduledDate.timeInMillis

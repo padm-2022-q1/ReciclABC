@@ -55,5 +55,7 @@
     <string name="create_address_notification_button_text">Adicionar notificação</string>
     <string name="filter_button_description">Filtrar</string>
     <string name="my_location_button_description">Minha localização</string>
-    <string name="channel_description">Garbage Reminder</string>
+    <string name="channel_description">Notificao Reciclabc</string>
+    <string name="broadcast_receiver_notification_title">Seu Lembrete de retirar o lixo!</string>
+    <string name="broadcast_receiver_notification_content">O horário de coleta está próximo.</string>
 </resources>
