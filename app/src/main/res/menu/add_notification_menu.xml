@@ -1,0 +1,11 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/add_address_notification"
+        android:icon="@drawable/ic_add_24"
+        android:title="@string/add_notification_menu_add_notification"
+        app:showAsAction="always"/>
+
+</menu>
