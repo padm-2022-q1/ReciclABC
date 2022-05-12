@@ -9,7 +9,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import br.edu.ufabc.reciclabc.ReminderReceiver.Companion.createNotificationChannel
 import br.edu.ufabc.reciclabc.databinding.ActivityMainBinding
 import br.edu.ufabc.reciclabc.ui.notifications.CreateAddressNotificationFragmentArgs
 import br.edu.ufabc.reciclabc.ui.notifications.CreateNotificationFragmentArgs
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        createNotificationChannel(this)
+        ReminderReceiver.createNotificationChannel(this)
 
         val navView: BottomNavigationView = binding.navView
 
