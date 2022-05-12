@@ -1,4 +1,4 @@
-package br.edu.ufabc.reciclabc.ui.notifications
+package br.edu.ufabc.reciclabc.ui.notifications.createaddressnotification
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

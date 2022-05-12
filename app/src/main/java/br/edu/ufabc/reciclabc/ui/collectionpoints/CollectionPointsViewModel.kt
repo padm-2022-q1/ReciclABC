@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import br.edu.ufabc.reciclabc.model.CollectionPoint
-import br.edu.ufabc.reciclabc.model.CollectionPointsRepository
+import br.edu.ufabc.reciclabc.model.repository.CollectionPointsRepository
 
 class CollectionPointsViewModel(application: Application) : AndroidViewModel(application) {
     val selectedMarker = MutableLiveData<Int?>(null)

@@ -1,4 +1,4 @@
-package br.edu.ufabc.reciclabc.ui.notifications
+package br.edu.ufabc.reciclabc.ui.notifications.createnotification
 
 import android.os.Bundle
 import android.view.LayoutInflater
