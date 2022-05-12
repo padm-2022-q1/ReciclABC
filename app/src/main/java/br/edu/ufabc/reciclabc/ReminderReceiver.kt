@@ -13,16 +13,20 @@ import androidx.core.app.NotificationManagerCompat
 import java.util.Calendar
 
 class ReminderReceiver : BroadcastReceiver() {
+    private val NOTIFICATIONID = 1
+
     override fun onReceive(context: Context?, intent: Intent?) {
-        var builder = NotificationCompat.Builder(context!!, "GarbageReminder")
-            .setSmallIcon(R.drawable.ic_notification_icon)
-            .setContentTitle(context.getString(R.string.broadcast_receiver_notification_title))
-            .setContentText(context.getString(R.string.broadcast_receiver_notification_content))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+        context?.let {
+            var builder = NotificationCompat.Builder(it, "GarbageReminder")
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setContentTitle(it.getString(R.string.broadcast_receiver_notification_title))
+                .setContentText(it.getString(R.string.broadcast_receiver_notification_content))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-        var notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(context)
+            var notificationManager = NotificationManagerCompat.from(it)
 
-        notificationManager.notify(1, builder.build())
+            notificationManager.notify(NOTIFICATIONID, builder.build())
+        }
     }
 
     fun setAlarm(context: Context, scheduledDateInMillis: Long, pendingIntent: PendingIntent) {
