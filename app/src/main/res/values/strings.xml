@@ -58,4 +58,5 @@
     <string name="channel_description">Notificao Reciclabc</string>
     <string name="broadcast_receiver_notification_title">Seu Lembrete de retirar o lixo!</string>
     <string name="broadcast_receiver_notification_content">O horário de coleta está próximo.</string>
+    <string name="notification_channel_id">notificacao_reciclabc</string>
 </resources>
