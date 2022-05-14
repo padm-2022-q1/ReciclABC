@@ -4,9 +4,9 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class AddressNotification(
+data class Address(
     val id: Long,
-    val address: String,
+    val name: String,
     val notifications: List<Notification>,
 ) : Parcelable {
 

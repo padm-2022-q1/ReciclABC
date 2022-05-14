@@ -1,6 +1,7 @@
 package br.edu.ufabc.reciclabc.ui.collectionpoints
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -39,9 +40,11 @@ class CollectionPointsFragment : Fragment() {
             ).show()
         }
         lifecycle.addObserver(mapManager)
-        requireContext().applicationInfo.metaData.getString("com.google.android.geo.API_KEY")?.let {
-            Places.initialize(requireContext(), it)
-        }
+        requireContext().packageManager.
+        getApplicationInfo(requireContext().packageName, PackageManager.GET_META_DATA)
+            .metaData.getString("com.google.android.geo.API_KEY")?.let {
+                Places.initialize(requireContext(), it)
+            }
     }
 
     override fun onCreateView(

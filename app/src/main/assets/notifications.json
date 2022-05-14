@@ -1,7 +1,7 @@
 [
   {
     "id": 10,
-    "address": "Av. dos Estados, 5001",
+    "name": "Av. dos Estados, 5001",
     "notifications": [
       {
         "id": 1,
@@ -23,7 +23,7 @@
   },
   {
     "id": 20,
-    "address": "R. Abolição, 200",
+    "name": "R. Abolição, 200",
     "notifications": [
       {
         "id": 3,
@@ -37,7 +37,7 @@
   },
   {
     "id": 30,
-    "address": "Rua dos Bobos, 100",
+    "name": "Rua dos Bobos, 100",
     "notifications": [
       {
         "id": 4,

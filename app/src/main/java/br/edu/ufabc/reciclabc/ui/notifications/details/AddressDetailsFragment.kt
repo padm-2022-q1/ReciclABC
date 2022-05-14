@@ -13,22 +13,22 @@ import androidx.navigation.navGraphViewModels
 import br.edu.ufabc.reciclabc.databinding.FragmentNotificationGroupDetailsBinding
 import br.edu.ufabc.reciclabc.model.Notification
 
-class NotificationGroupDetailsFragment : Fragment() {
+class AddressDetailsFragment : Fragment() {
     private lateinit var binding: FragmentNotificationGroupDetailsBinding
-    private val args: NotificationGroupDetailsFragmentArgs by navArgs()
+    private val args: AddressDetailsFragmentArgs by navArgs()
 
     /*
      * The viewModel is scoped to the navigation graph.
      */
-    private val viewModel: NotificationDetailsViewModel by navGraphViewModels(R.id.navigation_notifications)
+    private val viewModel: AddressDetailsViewModel by navGraphViewModels(R.id.navigation_notifications)
 
     override fun onStart() {
         super.onStart()
 
         if (args.notificationGroupId > 0) {
-            findNavController().currentDestination?.label = "Criar notificação"
+            viewModel.currentAddressId = args.notificationGroupId
         } else {
-            findNavController().currentDestination?.label = "Editar notificação"
+            viewModel.currentAddressId = null
         }
     }
 
@@ -53,8 +53,8 @@ class NotificationGroupDetailsFragment : Fragment() {
     }
 
     private fun setupFields() {
-        binding.createAddressNotificationAddress.editText?.setText(viewModel.currentAddress)
-        binding.createAddressNotificationAddress.editText?.setSelection(viewModel.currentAddress.length)
+        binding.createAddressNotificationAddress.editText?.setText(viewModel.currentAddressName)
+        binding.createAddressNotificationAddress.editText?.setSelection(viewModel.currentAddressName.length)
         binding.createAddressNotificationAddress.editText?.doOnTextChanged { _, _, _, count ->
             if (count == 0) {
                 // TODO: extract to resources
@@ -66,7 +66,7 @@ class NotificationGroupDetailsFragment : Fragment() {
 
         binding.createAddressNotificationNotificationList.apply {
             adapter = CreateNotificationAdapter(
-                emptyList(),
+                viewModel.currentNotificationList,
                 { handleEditNotificationClick(it) },
                 { handleDeleteNotificationClick(it) },
             )
@@ -74,7 +74,7 @@ class NotificationGroupDetailsFragment : Fragment() {
     }
 
     private fun backupFields() {
-        viewModel.currentAddress =
+        viewModel.currentAddressName =
             binding.createAddressNotificationAddress.editText?.text.toString()
     }
 
@@ -82,16 +82,20 @@ class NotificationGroupDetailsFragment : Fragment() {
         binding.createAddressNotificationAddNotificationButton.setOnClickListener {
             handleAddNotificationClick()
         }
+        binding.createAddressNotificationSaveNotificationButton.setOnClickListener {
+            viewModel.currentAddressName = binding.createAddressNotificationAddress.editText?.text.toString()
+            viewModel.saveAddress()
+        }
     }
 
     private fun handleAddNotificationClick() {
-        val action = NotificationGroupDetailsFragmentDirections.createNotificationAction()
+        val action = AddressDetailsFragmentDirections.createNotificationAction(-1)
         findNavController().navigate(action)
     }
 
     private fun handleEditNotificationClick(notification: Notification) {
-        val action = NotificationGroupDetailsFragmentDirections.createNotificationAction(
-            notification
+        val action = AddressDetailsFragmentDirections.createNotificationAction(
+            notification.id
         )
         this.findNavController().navigate(action)
     }

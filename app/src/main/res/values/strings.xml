@@ -37,6 +37,7 @@
     <string name="create_notification_item_chip_text_regular">Comum</string>
     <string name="create_notification_button_content_description">Menu da notificação</string>
     <string name="create_notification_time_text_example">16:30</string>
+    <string name="create_notification_time_format">%02d:%02d</string>
     <string name="menu_edit_text">Editar</string>
     <string name="menu_delete_text">Deletar</string>
     <string name="format_weekdays_time">%s - %d:%d</string>
