@@ -2,7 +2,7 @@ package br.edu.ufabc.reciclabc.model.room.entities
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import br.edu.ufabc.reciclabc.model.AddressNotification
+import br.edu.ufabc.reciclabc.model.Address
 
 data class AddressWithNotifications(
     @Embedded val addressEntity: AddressEntity,
@@ -12,7 +12,7 @@ data class AddressWithNotifications(
     )
     val notificationEntities: List<NotificationEntity>,
 ) {
-    fun toAddressNotification() = AddressNotification(
+    fun toAddressNotification() = Address(
         addressEntity.id,
         addressEntity.address,
         notificationEntities.map { it.toNotification() }

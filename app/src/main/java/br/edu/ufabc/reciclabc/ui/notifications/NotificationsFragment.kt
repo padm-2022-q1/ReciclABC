@@ -7,7 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentNotificationsBinding
-import br.edu.ufabc.reciclabc.model.AddressNotification
+import br.edu.ufabc.reciclabc.model.Address
 
 class NotificationsFragment : Fragment() {
     private lateinit var binding: FragmentNotificationsBinding
@@ -32,9 +32,9 @@ class NotificationsFragment : Fragment() {
         super.onStart()
 
         binding.rvNotifications.apply {
-            val onEditAddressNotificationClicked = { addressNotification: AddressNotification ->
+            val onEditAddressNotificationClicked = { address: Address ->
                 val action = NotificationsFragmentDirections.notificationGroupDetailsAction(
-                    addressNotification.id
+                    address.id
                 )
                 this.findNavController().navigate(action)
             }

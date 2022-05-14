@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/notification_group_details_screen"
-        android:name="br.edu.ufabc.reciclabc.ui.notifications.details.NotificationGroupDetailsFragment"
+        android:name="br.edu.ufabc.reciclabc.ui.notifications.details.AddressDetailsFragment"
         android:label="@string/fragment_label_create_notification"
         tools:layout="@layout/fragment_notification_group_details">
         <argument
@@ -21,13 +21,11 @@
 
     <fragment
         android:id="@+id/create_notification_screen"
-        android:name="br.edu.ufabc.reciclabc.ui.notifications.createnotification.CreateNotificationFragment"
+        android:name="br.edu.ufabc.reciclabc.ui.notifications.details.NotificationDetailsFragment"
         android:label="@string/fragment_label_create_notification"
         tools:layout="@layout/fragment_create_notification">
         <argument
-            android:name="notification"
-            android:defaultValue="@null"
-            app:argType="br.edu.ufabc.reciclabc.model.Notification"
-            app:nullable="true" />
+            android:name="notificationId"
+            app:argType="long" />
     </fragment>
 </navigation>

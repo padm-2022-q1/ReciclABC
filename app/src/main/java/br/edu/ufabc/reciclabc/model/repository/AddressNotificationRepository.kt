@@ -1,38 +1,58 @@
 package br.edu.ufabc.reciclabc.model.repository
 
-import br.edu.ufabc.reciclabc.model.AddressNotification
+import android.util.Log
+import br.edu.ufabc.reciclabc.model.Address
 import br.edu.ufabc.reciclabc.model.GarbageType
+import br.edu.ufabc.reciclabc.model.Notification
 import br.edu.ufabc.reciclabc.model.Weekday
 import com.beust.klaxon.Klaxon
 import java.io.InputStream
 
 class AddressNotificationRepository {
-    private lateinit var addressNotifications: List<AddressNotification>
+    private lateinit var addresses: List<Address>
 
     /**
      * Read Json File.
      */
     fun loadData(inputStream: InputStream) {
-        addressNotifications = Klaxon().parseArray(inputStream) ?: emptyList()
-        addressNotifications =
-            addressNotifications.sortedBy { notification -> notification.address }
+        addresses = Klaxon().parseArray(inputStream) ?: emptyList()
+        addresses =
+            addresses.sortedBy { notification -> notification.name }
     }
 
-    fun getAll() = if (this::addressNotifications.isInitialized) addressNotifications
+    fun getAll() = if (this::addresses.isInitialized) addresses
     else throw UninitializedPropertyAccessException("Load data first")
 
     fun getById(id: Long) =
-        if (this::addressNotifications.isInitialized) addressNotifications.find { notification ->
+        if (this::addresses.isInitialized) addresses.find { notification ->
             notification.id == id
         } else throw UninitializedPropertyAccessException("Load data first")
 
-    fun create(
-        address: String,
-        category: GarbageType,
-        hour: Int,
-        minute: Int,
-        weekdays: List<Weekday>,
+    fun createAddress(
+        address: Address,
+    ): Long {
+        TODO("Create address")
+    }
+
+    fun updateAddress(
+        address: Address,
     ) {
-        // TODO: Create notification
+        TODO("Update address")
+    }
+
+    fun getNotification(id: Long) : Notification {
+        return Notification(id, GarbageType.REGULAR, listOf(Weekday.FRIDAY), 15, 0, true)
+    }
+
+    fun createNotification(notification: Notification, addressId: Long): Long {
+        Log.d("REPO", notification.toString())
+        return 0
+        TODO("Create notification")
+    }
+
+    fun updateNotification(notification: Notification, addressId: Long) {
+        Log.d("REPO", notification.toString())
+        return
+        TODO("Update notification")
     }
 }
