@@ -1,6 +1,7 @@
 package br.edu.ufabc.reciclabc.ui.notifications.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,24 +23,6 @@ class NotificationDetailsFragment : Fragment() {
     private val viewModel: AddressDetailsViewModel by navGraphViewModels(R.id.navigation_notifications)
     private val args: NotificationDetailsFragmentArgs by navArgs()
 
-    override fun onStart() {
-        super.onStart()
-        if (args.notificationId > 0) {
-            // TODO: load notification
-            viewModel.loadNotification(args.notificationId)
-            /*
-             * Esbarrei num problema agora. Atualizar a tela com os dados depois
-             * que carregar. Vamos ter que colocar tudo em fucking live data, ou
-             * passar a notificação interira como parâmetro, o que eu acho zuado
-             * também, mas é o que tava e funcionava. android podia ter rerender
-             * saudades react e seus hooks
-             * outra ideia agora: carregar na tela anterior, antes da navegacao
-             */
-        } else {
-            viewModel.currentNotificationId = null
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,6 +34,17 @@ class NotificationDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (true) {
+            if (viewModel.currentNotificationId.value == null) {
+                viewModel.loadNotification(args.notificationId).observe(viewLifecycleOwner) {
+                    if (it.status is AddressDetailsViewModel.Status.Error) {
+                        // TODO: notify user
+                    }
+                }
+            }
+        } else {
+            viewModel.currentNotificationId.value = null
+        }
         setupFields()
         setupHandlers()
     }
@@ -61,14 +55,14 @@ class NotificationDetailsFragment : Fragment() {
 
             val picker = MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_24H)
-                .setHour(viewModel.currentNotificationHour ?: c.get(Calendar.HOUR))
-                .setMinute(viewModel.currentNotificationMinute ?: c.get(Calendar.MINUTE))
+                .setHour(viewModel.currentNotificationHour.value ?: c.get(Calendar.HOUR))
+                .setMinute(viewModel.currentNotificationMinute.value ?: c.get(Calendar.MINUTE))
                 .setTitleText("Select notification time")
                 .build()
 
             picker.addOnPositiveButtonClickListener {
-                viewModel.currentNotificationHour = picker.hour
-                viewModel.currentNotificationMinute = picker.minute
+                viewModel.currentNotificationHour.value = picker.hour
+                viewModel.currentNotificationMinute.value = picker.minute
                 fillTimeField()
             }
 
@@ -77,9 +71,9 @@ class NotificationDetailsFragment : Fragment() {
 
         binding.createNotificationRecyclableCategoryRadioGroup.setOnCheckedChangeListener { _, id ->
             when (id) {
-                binding.createNotificationRegularGarbage.id -> viewModel.currentNotificationGarbageType =
+                binding.createNotificationRegularGarbage.id -> viewModel.currentNotificationGarbageType.value =
                     GarbageType.REGULAR
-                binding.createNotificationRecyclableGarbage.id -> viewModel.currentNotificationGarbageType =
+                binding.createNotificationRecyclableGarbage.id -> viewModel.currentNotificationGarbageType.value =
                     GarbageType.RECYCLABLE
             }
         }
@@ -90,31 +84,45 @@ class NotificationDetailsFragment : Fragment() {
     }
 
     private fun setupFields() {
-        setCheckedWeekdays(viewModel.currentNotificationWeekdays.toList())
-
-        if (viewModel.currentNotificationId != null) {
+        if (viewModel.currentNotificationId.value != null) {
             binding.createNotificationButton.text =
                 getString(R.string.edit_notification_button_text)
         }
 
-        if (viewModel.currentNotificationGarbageType == GarbageType.REGULAR) {
-            binding.createNotificationRegularGarbage.isChecked = true
-        } else {
-            binding.createNotificationRecyclableGarbage.isChecked = true
+        viewModel.currentNotificationWeekdays.observe(viewLifecycleOwner) {
+            Log.d("BATATA", "observe weekdays")
+            setCheckedWeekdays(it.toList())
         }
 
-        fillTimeField()
+        viewModel.currentNotificationGarbageType.observe(viewLifecycleOwner) {
+            Log.d("BATATA", "observe garbage type")
+            when (it) {
+                GarbageType.REGULAR -> binding.createNotificationRegularGarbage.isChecked = true
+                GarbageType.RECYCLABLE -> binding.createNotificationRecyclableGarbage.isChecked =
+                    true
+                null -> {}
+            }
+        }
+
+        viewModel.currentNotificationHour.observe(viewLifecycleOwner) {
+            Log.d("BATATA", "observe hour")
+            fillTimeField()
+        }
+        viewModel.currentNotificationMinute.observe(viewLifecycleOwner) {
+            Log.d("BATATA", "observe minute")
+            fillTimeField()
+        }
     }
 
     private fun fillTimeField() {
-        if (viewModel.currentNotificationHour == null || viewModel.currentNotificationMinute == null) {
+        if (viewModel.currentNotificationHour.value == null || viewModel.currentNotificationMinute.value == null) {
             return
         }
         binding.createNotificationTime.editText?.setText(
             getString(
                 R.string.create_notification_time_format,
-                viewModel.currentNotificationHour,
-                viewModel.currentNotificationMinute,
+                viewModel.currentNotificationHour.value,
+                viewModel.currentNotificationMinute.value,
             )
         )
     }
@@ -144,35 +152,33 @@ class NotificationDetailsFragment : Fragment() {
     }
 
     private fun setCheckedWeekdays(weekdays: List<Weekday>) {
-        weekdays.forEach {
-            when (it) {
-                Weekday.SUNDAY -> binding.createNotificationWeekdaysSunday.isChecked =
-                    true
-                Weekday.MONDAY -> binding.createNotificationWeekdaysMonday.isChecked =
-                    true
-                Weekday.TUESDAY -> binding.createNotificationWeekdaysTuesday.isChecked =
-                    true
-                Weekday.WEDNESDAY -> binding.createNotificationWeekdaysWednesday.isChecked =
-                    true
-                Weekday.THURSDAY -> binding.createNotificationWeekdaysThursday.isChecked =
-                    true
-                Weekday.FRIDAY -> binding.createNotificationWeekdaysFriday.isChecked =
-                    true
-                Weekday.SATURDAY -> binding.createNotificationWeekdaysSaturday.isChecked =
-                    true
-            }
-        }
+        binding.createNotificationWeekdaysSunday.isChecked = weekdays.contains(Weekday.SUNDAY)
+        binding.createNotificationWeekdaysMonday.isChecked = weekdays.contains(Weekday.MONDAY)
+        binding.createNotificationWeekdaysTuesday.isChecked = weekdays.contains(Weekday.TUESDAY)
+        binding.createNotificationWeekdaysWednesday.isChecked = weekdays.contains(Weekday.WEDNESDAY)
+        binding.createNotificationWeekdaysThursday.isChecked = weekdays.contains(Weekday.THURSDAY)
+        binding.createNotificationWeekdaysFriday.isChecked = weekdays.contains(Weekday.FRIDAY)
+        binding.createNotificationWeekdaysSaturday.isChecked = weekdays.contains(Weekday.SATURDAY)
     }
 
     private fun weekdayChanged(isChecked: Boolean, weekday: Weekday) {
-        if (isChecked) viewModel.currentNotificationWeekdays.add(weekday)
-        else if (isChecked) viewModel.currentNotificationWeekdays.remove(weekday)
+        if (isChecked) {
+            Log.d("BATATA", "check $weekday")
+            viewModel.currentNotificationWeekdays.value?.add(weekday)
+
+        } else {
+            Log.d("BATATA", "uncheck $weekday")
+            viewModel.currentNotificationWeekdays.value?.remove(weekday)
+        }
+        // notify observers
+        viewModel.currentNotificationWeekdays.value = viewModel.currentNotificationWeekdays.value
+        Log.d("BATATA", viewModel.currentNotificationWeekdays.value.toString())
     }
 
     private fun validate(): Boolean {
-        if (viewModel.currentNotificationHour == null
-            || viewModel.currentNotificationMinute == null
-            || viewModel.currentNotificationWeekdays.isEmpty()
+        if (viewModel.currentNotificationHour.value == null
+            || viewModel.currentNotificationMinute.value == null
+            || viewModel.currentNotificationWeekdays.value?.isEmpty() == true
         ) {
             // TODO: better error message
             Snackbar.make(binding.root, "INCOMPLETO", Snackbar.LENGTH_LONG).show()

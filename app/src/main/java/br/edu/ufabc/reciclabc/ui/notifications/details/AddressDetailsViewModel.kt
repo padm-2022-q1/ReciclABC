@@ -2,6 +2,7 @@ package br.edu.ufabc.reciclabc.ui.notifications.details
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import br.edu.ufabc.reciclabc.App
 import br.edu.ufabc.reciclabc.model.Address
@@ -27,11 +28,11 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
     var currentAddressName = ""
     var currentNotificationList: List<Notification> = mutableListOf()
 
-    var currentNotificationId: Long? = null
-    var currentNotificationWeekdays = mutableSetOf<Weekday>()
-    var currentNotificationHour: Int? = null
-    var currentNotificationMinute: Int? = null
-    var currentNotificationGarbageType = GarbageType.REGULAR
+    var currentNotificationId = MutableLiveData<Long?>(null)
+    var currentNotificationWeekdays = MutableLiveData<MutableSet<Weekday>>(mutableSetOf())
+    var currentNotificationHour = MutableLiveData<Int?>(null)
+    var currentNotificationMinute = MutableLiveData<Int?>(null)
+    var currentNotificationGarbageType = MutableLiveData(GarbageType.REGULAR)
 
     fun saveAddress() = liveData {
         try {
@@ -56,15 +57,15 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     fun saveNotification() = liveData {
         val notification = Notification(
-            currentNotificationId ?: 0,
-            currentNotificationGarbageType,
-            currentNotificationWeekdays.toList(),
-            currentNotificationHour ?: 0,
-            currentNotificationMinute ?: 0,
+            currentNotificationId.value ?: 0,
+            currentNotificationGarbageType.value ?: GarbageType.REGULAR,
+            currentNotificationWeekdays.value?.toList() ?: emptyList(),
+            currentNotificationHour.value ?: 0,
+            currentNotificationMinute.value ?: 0,
             true,
         )
 
-        if (currentNotificationId == null) {
+        if (currentNotificationId.value == null) {
             addressNotificationRepository.createNotification(notification, currentAddressId ?: 0)
         } else {
             addressNotificationRepository.updateNotification(notification, currentAddressId ?: 0)
@@ -74,21 +75,22 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
         clearCurrentNotification()
     }
 
-    fun loadNotification(id: Long) {
+    fun loadNotification(id: Long) = liveData {
         val notification = addressNotificationRepository.getNotification(id)
-        currentNotificationId = notification.id
-        currentNotificationGarbageType = notification.category
-        currentNotificationHour = notification.hours
-        currentNotificationMinute = notification.minutes
-        currentNotificationWeekdays = notification.weekdays.toMutableSet()
+        currentNotificationId.value = notification.id
+        currentNotificationGarbageType.value = notification.category
+        currentNotificationHour.value = notification.hours
+        currentNotificationMinute.value = notification.minutes
+        currentNotificationWeekdays.value = notification.weekdays.toMutableSet()
+        emit(Result(Unit, Status.Success))
     }
 
     private fun clearCurrentNotification() {
-        currentNotificationId = null
-        currentNotificationWeekdays = mutableSetOf()
-        currentNotificationHour = null
-        currentNotificationMinute = null
-        currentNotificationGarbageType = GarbageType.REGULAR
+        currentNotificationId.value = null
+        currentNotificationWeekdays.value = mutableSetOf()
+        currentNotificationHour.value = null
+        currentNotificationMinute.value = null
+        currentNotificationGarbageType.value = GarbageType.REGULAR
     }
 
     fun deleteNotification(notificationId: Long) {
