@@ -33,8 +33,6 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener(destinationChangedListener)
-
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
@@ -46,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         navController.addOnDestinationChangedListener { _, destination, args ->
+            closeKeyboard()
             when (destination.id) {
                 R.id.create_notification_screen -> {
                     navView.visibility = View.GONE
@@ -76,19 +75,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        findNavController(R.id.nav_host_fragment_activity_main).removeOnDestinationChangedListener(
-            destinationChangedListener
-        )
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-    private val destinationChangedListener = NavController.OnDestinationChangedListener { _, _, _ ->
-        closeKeyboard()
     }
 
     private fun closeKeyboard() {
