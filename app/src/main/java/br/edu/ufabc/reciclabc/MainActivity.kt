@@ -1,7 +1,9 @@
 package br.edu.ufabc.reciclabc
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -42,12 +44,14 @@ class MainActivity : AppCompatActivity() {
         )
 
         navController.addOnDestinationChangedListener { _, destination, args ->
+            closeKeyboard()
             when (destination.id) {
                 R.id.create_notification_screen -> {
                     navView.visibility = View.GONE
                     args?.apply {
                         if (CreateNotificationFragmentArgs.fromBundle(this).notification == null) {
-                            destination.label = getString(R.string.fragment_label_create_notification)
+                            destination.label =
+                                getString(R.string.fragment_label_create_notification)
                         } else {
                             destination.label = getString(R.string.fragment_label_edit_notification)
                         }
@@ -57,7 +61,8 @@ class MainActivity : AppCompatActivity() {
                     navView.visibility = View.GONE
                     args?.apply {
                         if (CreateAddressNotificationFragmentArgs.fromBundle(this).addressNotification == null) {
-                            destination.label = getString(R.string.fragment_label_create_notification)
+                            destination.label =
+                                getString(R.string.fragment_label_create_notification)
                         } else {
                             destination.label = getString(R.string.fragment_label_edit_notification)
                         }
@@ -72,5 +77,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun closeKeyboard() {
+        val inputMethodManager =
+            applicationContext.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 }

@@ -39,6 +39,18 @@
         app:layout_constraintWidth_max="400dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/collection_points_search_button"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/search_button_description"
+        app:fabSize="mini"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_search_24" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/collection_points_filter_button"
         style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
@@ -47,7 +59,7 @@
         android:contentDescription="@string/filter_button_description"
         app:fabSize="mini"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/collection_points_search_button"
         app:srcCompat="@drawable/ic_filter_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

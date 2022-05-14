@@ -17,6 +17,7 @@ import br.edu.ufabc.reciclabc.utils.materialTypeToString
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.libraries.places.api.Places
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
@@ -28,6 +29,7 @@ class CollectionPointsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mapManager = MapManager(
+            requireContext(),
             viewModel,
             requireActivity().activityResultRegistry,
             LocationServices.getFusedLocationProviderClient(requireContext())
@@ -39,6 +41,9 @@ class CollectionPointsFragment : Fragment() {
             ).show()
         }
         lifecycle.addObserver(mapManager)
+        requireContext().applicationInfo.metaData.getString("com.google.android.geo.API_KEY")?.let {
+            Places.initialize(requireContext(), it)
+        }
     }
 
     override fun onCreateView(
@@ -75,6 +80,7 @@ class CollectionPointsFragment : Fragment() {
             }
         }
         viewModel.selectedMarker.observe(viewLifecycleOwner) { handleSelectedMarkerChange(it) }
+        binding.collectionPointsSearchButton.setOnClickListener { mapManager.openPlaceSearch() }
         binding.collectionPointsFilterButton.setOnClickListener { handleFilterButtonClick() }
         binding.collectionPointsMyLocationButton.setOnClickListener { mapManager.goToCurrentLocation() }
     }
