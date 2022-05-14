@@ -125,8 +125,8 @@ class MapManager(
             Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldsToReturn)
                 .setTypeFilter(TypeFilter.ADDRESS)
                 .let {
-                    viewModel.placeFromSearch.value?.address.let { address ->
-                        it.setInitialQuery(address)
+                    viewModel.placeFromSearch.value?.address.let { previousAddress ->
+                        it.setInitialQuery(previousAddress)
                     }
                 }
                 .setLocationBias(
