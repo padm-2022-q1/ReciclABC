@@ -8,10 +8,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import br.edu.ufabc.reciclabc.model.CollectionPoint
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MapManager(
@@ -22,6 +24,7 @@ class MapManager(
 ) : DefaultLifecycleObserver {
 
     private var map: GoogleMap? = null
+    private val markers = mutableListOf<Marker>()
     private lateinit var requestPermissionsLauncher: ActivityResultLauncher<Array<String>>
 
     companion object {
@@ -57,7 +60,6 @@ class MapManager(
             receivedMap.isMyLocationEnabled = true
         }
 
-        addMarkers(receivedMap)
         map = receivedMap
     }
 
@@ -125,18 +127,32 @@ class MapManager(
         map?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
     }
 
-    private fun addMarkers(map: GoogleMap) {
-        for (collectionPoint in viewModel.getAllCollectionPoints()) {
-            map.addMarker(
-                MarkerOptions().position(
-                    LatLng(
-                        collectionPoint.lat.toDouble(),
-                        collectionPoint.lng.toDouble()
-                    )
-                ).title(collectionPoint.name)
-            )?.tag = collectionPoint.id
+
+    fun addMarker(collectionPoint: CollectionPoint) {
+        map?.let {
+            val marker = it.addMarker(collectionPointToMarkerOption(collectionPoint))
+            if (marker != null) {
+                marker.tag = collectionPoint.id
+                markers += marker
+            }
         }
     }
+
+    fun removeMarker(markerTag: Int) {
+        val marker = markers.find { it.tag == markerTag }
+        if (marker != null) {
+            marker.remove()
+            markers.remove(marker)
+        }
+    }
+
+    private fun collectionPointToMarkerOption(collectionPoint: CollectionPoint) =
+        MarkerOptions().position(
+            LatLng(
+                collectionPoint.lat.toDouble(),
+                collectionPoint.lng.toDouble()
+            )
+        ).title(collectionPoint.name)
 
     private val handleMarkerClick = GoogleMap.OnMarkerClickListener {
         val markerId = it.tag
