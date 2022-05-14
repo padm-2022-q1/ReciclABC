@@ -15,9 +15,10 @@ import java.util.*
 class ReminderReceiver : BroadcastReceiver() {
     private val NOTIFICATIONID = 1
 
+
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let {
-            var builder = NotificationCompat.Builder(it, "GarbageReminder")
+            var builder = NotificationCompat.Builder(it, NOTIFICATIONCHANNELID)
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setContentTitle(it.getString(R.string.broadcast_receiver_notification_title))
                 .setContentText(it.getString(R.string.broadcast_receiver_notification_content))
@@ -29,7 +30,9 @@ class ReminderReceiver : BroadcastReceiver() {
         }
     }
 
-    fun setAlarm(context: Context, scheduledDateInMillis: Long, pendingIntent: PendingIntent) {
+    fun setAlarm(context: Context,
+                 scheduledDateInMillis: Long,
+                 pendingIntent: PendingIntent) {
         val alarmManager: AlarmManager =
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -45,19 +48,21 @@ class ReminderReceiver : BroadcastReceiver() {
     }
 
     companion object {
+        const val NOTIFICATIONCHANNELID = "notificacao_reciclabc"
+
         fun createNotificationChannel(context: Context) {
             // Create the NotificationChannel, but only on API 26+ because
             // the NotificationChannel class is new and not in the support library
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val name = context.getString(R.string.notification_channel_id)
-                val descriptionText = context.getString(R.string.channel_description)
+                val name = context.getString(R.string.notification_channel_name)
+                val descriptionText = context.getString(R.string.notification_channel_description)
                 val importance = NotificationManager.IMPORTANCE_DEFAULT
-                val channel = NotificationChannel(context.getString(R.string.notification_channel_id), name, importance).apply {
+                val channel = NotificationChannel(NOTIFICATIONCHANNELID, name, importance).apply {
                     description = descriptionText
                 }
 
                 // Register the channel with the system
-                val notificationManager: NotificationManager =
+                val notificationManager =
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.createNotificationChannel(channel)
             }
@@ -68,7 +73,7 @@ class ReminderReceiver : BroadcastReceiver() {
             if (scheduledDate.get(Calendar.DAY_OF_WEEK) != weekday) {
                 scheduledDate.add(
                     Calendar.DAY_OF_MONTH,
-                    (weekday + 7 - scheduledDate.get(Calendar.DAY_OF_WEEK)) % 7
+                    (weekday - scheduledDate.get(Calendar.DAY_OF_WEEK)) % 7
                 )
 
             } else {
@@ -86,5 +91,4 @@ class ReminderReceiver : BroadcastReceiver() {
             return scheduledDate.timeInMillis
         }
     }
-
 }
