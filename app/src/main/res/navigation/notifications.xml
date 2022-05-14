@@ -4,28 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_notifications"
-    app:startDestination="@+id/notifications_screen">
+    app:startDestination="@+id/notification_group_details_screen">
 
     <fragment
-        android:id="@+id/notifications_screen"
-        android:name="br.edu.ufabc.reciclabc.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications">
-        <action
-            android:id="@+id/create_address_notification_action"
-            app:destination="@id/create_address_notification_screen" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/create_address_notification_screen"
-        android:name="br.edu.ufabc.reciclabc.ui.notifications.createaddressnotification.CreateAddressNotificationFragment"
+        android:id="@+id/notification_group_details_screen"
+        android:name="br.edu.ufabc.reciclabc.ui.notifications.details.NotificationGroupDetailsFragment"
         android:label="@string/fragment_label_create_notification"
-        tools:layout="@layout/fragment_create_address_notification">
+        tools:layout="@layout/fragment_notification_group_details">
         <argument
-            android:name="addressNotification"
-            android:defaultValue="@null"
-            app:argType="br.edu.ufabc.reciclabc.model.AddressNotification"
-            app:nullable="true" />
+            android:name="notificationGroupId"
+            app:argType="long" />
         <action
             android:id="@+id/create_notification_action"
             app:destination="@id/create_notification_screen" />
