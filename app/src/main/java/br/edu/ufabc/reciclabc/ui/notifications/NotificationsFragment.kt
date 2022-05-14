@@ -33,8 +33,8 @@ class NotificationsFragment : Fragment() {
 
         binding.rvNotifications.apply {
             val onEditAddressNotificationClicked = { addressNotification: AddressNotification ->
-                val action = NotificationsFragmentDirections.createAddressNotificationAction(
-                    addressNotification
+                val action = NotificationsFragmentDirections.notificationGroupDetailsAction(
+                    addressNotification.id
                 )
                 this.findNavController().navigate(action)
             }
@@ -59,7 +59,7 @@ class NotificationsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             R.id.add_address_notification -> {
-                val action = NotificationsFragmentDirections.createAddressNotificationAction()
+                val action = NotificationsFragmentDirections.notificationGroupDetailsAction(-1)
                 view?.findNavController()?.navigate(action)
                 true
             }

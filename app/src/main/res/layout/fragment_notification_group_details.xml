@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".ui.notifications.createaddressnotification.CreateAddressNotificationFragment">
+    tools:context=".ui.notifications.details.NotificationGroupDetailsFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/create_address_notification_address"

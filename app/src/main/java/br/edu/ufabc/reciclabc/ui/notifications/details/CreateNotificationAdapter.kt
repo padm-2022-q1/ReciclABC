@@ -1,4 +1,4 @@
-package br.edu.ufabc.reciclabc.ui.notifications.createaddressnotification
+package br.edu.ufabc.reciclabc.ui.notifications.details
 
 import android.view.LayoutInflater
 import android.view.MenuInflater
@@ -51,6 +51,7 @@ class CreateNotificationAdapter(
             GarbageType.REGULAR -> holder.category.setChipBackgroundColorResource(R.color.purple_200)
         }
 
+        // TODO: extract to resources? format! 00:00
         holder.time.text = "${notification.hours}:${notification.minutes}"
 
         holder.switch.isChecked = notification.isActive
