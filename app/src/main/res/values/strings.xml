@@ -56,7 +56,7 @@
     <string name="filter_button_description">Filtrar</string>
     <string name="my_location_button_description">Minha localização</string>
     <string name="broadcast_receiver_notification_title">Seu lembrete de retirar o lixo!</string>
-    <string name="broadcast_receiver_notification_content">O horário de coleta está próximo.</string>
+    <string name="broadcast_receiver_notification_content">O horário da coleta de lixo %1$s está próximo.</string>
     <string name="notification_channel_name">Notificação ReciclABC</string>
     <string name="notification_channel_description">Lembrete de coleta de lixo</string>
 </resources>

@@ -16,12 +16,12 @@ class ReminderReceiver : BroadcastReceiver() {
     private val NOTIFICATIONID = 1
 
 
-    override fun onReceive(context: Context?, intent: Intent?) {
+    override fun onReceive(context: Context?, intent: Intent) {
         context?.let {
             var builder = NotificationCompat.Builder(it, NOTIFICATIONCHANNELID)
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setContentTitle(it.getString(R.string.broadcast_receiver_notification_title))
-                .setContentText(it.getString(R.string.broadcast_receiver_notification_content))
+                .setContentText(it.getString(R.string.broadcast_receiver_notification_content, intent.getStringExtra("garbageType").toString()))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
 
             var notificationManager = NotificationManagerCompat.from(it)
