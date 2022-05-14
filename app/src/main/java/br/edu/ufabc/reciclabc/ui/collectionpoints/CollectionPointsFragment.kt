@@ -112,6 +112,7 @@ class CollectionPointsFragment : Fragment() {
             cpDetailsTitle.text = collectionPoint.name
             cpDetailsAddress.text = collectionPoint.address
             root.visibility = View.VISIBLE
+            recyclerviewMaterials.adapter = MaterialTypeChipsAdapter(collectionPoint.materials.toList())
         }
     }
 
@@ -135,7 +136,6 @@ class CollectionPointsFragment : Fragment() {
                 MaterialType.values().associateBy { materialTypeToString(ctx, it) }
             val materialsKeys = materials.keys.toTypedArray()
             val selectedFilters = materials.values.map { viewModel.materialFilter.value?.contains(it) ?: false }.toBooleanArray()
-//            val selectedFilters = BooleanArray(MaterialType.values().size) {false}
 
             MaterialAlertDialogBuilder(ctx)
                 .setTitle(getString(R.string.filter_by_material))
