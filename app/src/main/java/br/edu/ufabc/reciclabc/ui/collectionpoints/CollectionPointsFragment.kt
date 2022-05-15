@@ -76,7 +76,7 @@ class CollectionPointsFragment : Fragment() {
                     view,
                     "Não há pontos de coleta que aceitam os materiais selecionados",
                     Snackbar.LENGTH_LONG
-                ).show()
+                ).setAction("Editar filtro") { handleFilterButtonClick() }.show()
             }
         }
         viewModel.selectedMarker.observe(viewLifecycleOwner) { handleSelectedMarkerChange(it) }
