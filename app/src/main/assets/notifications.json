@@ -1,6 +1,6 @@
 [
   {
-    "id": 10,
+    "id": 1,
     "name": "Av. dos Estados, 5001",
     "notifications": [
       {
@@ -22,7 +22,7 @@
     ]
   },
   {
-    "id": 20,
+    "id": 2,
     "name": "R. Abolição, 200",
     "notifications": [
       {
@@ -36,7 +36,7 @@
     ]
   },
   {
-    "id": 30,
+    "id": 3,
     "name": "Rua dos Bobos, 100",
     "notifications": [
       {

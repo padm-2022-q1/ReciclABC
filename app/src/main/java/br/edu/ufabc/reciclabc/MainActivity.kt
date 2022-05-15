@@ -61,9 +61,9 @@ class MainActivity : AppCompatActivity() {
                     navView.visibility = View.GONE
                     args?.apply {
                         if (AddressDetailsFragmentArgs.fromBundle(this).notificationGroupId < 0) {
-                            destination.label = getString(R.string.fragment_label_create_notification)
+                            destination.label = getString(R.string.notifications_add_address)
                         } else {
-                            destination.label = getString(R.string.fragment_label_edit_notification)
+                            destination.label = getString(R.string.notifications_edit_address)
                         }
                     }
                 }

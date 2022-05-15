@@ -1,7 +1,6 @@
 package br.edu.ufabc.reciclabc.ui.notifications.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,11 +33,16 @@ class NotificationDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (true) {
+        if (args.notificationId > 0) {
             if (viewModel.currentNotificationId.value == null) {
                 viewModel.loadNotification(args.notificationId).observe(viewLifecycleOwner) {
                     if (it.status is AddressDetailsViewModel.Status.Error) {
-                        // TODO: notify user
+                        Snackbar.make(
+                            binding.root,
+                            getString(R.string.notifications_error_load_notification),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                        findNavController().navigateUp()
                     }
                 }
             }
@@ -57,7 +61,7 @@ class NotificationDetailsFragment : Fragment() {
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .setHour(viewModel.currentNotificationHour.value ?: c.get(Calendar.HOUR))
                 .setMinute(viewModel.currentNotificationMinute.value ?: c.get(Calendar.MINUTE))
-                .setTitleText("Select notification time")
+                .setTitleText(getString(R.string.notifications_pick_hour))
                 .build()
 
             picker.addOnPositiveButtonClickListener {
@@ -90,12 +94,10 @@ class NotificationDetailsFragment : Fragment() {
         }
 
         viewModel.currentNotificationWeekdays.observe(viewLifecycleOwner) {
-            Log.d("BATATA", "observe weekdays")
             setCheckedWeekdays(it.toList())
         }
 
         viewModel.currentNotificationGarbageType.observe(viewLifecycleOwner) {
-            Log.d("BATATA", "observe garbage type")
             when (it) {
                 GarbageType.REGULAR -> binding.createNotificationRegularGarbage.isChecked = true
                 GarbageType.RECYCLABLE -> binding.createNotificationRecyclableGarbage.isChecked =
@@ -104,14 +106,8 @@ class NotificationDetailsFragment : Fragment() {
             }
         }
 
-        viewModel.currentNotificationHour.observe(viewLifecycleOwner) {
-            Log.d("BATATA", "observe hour")
-            fillTimeField()
-        }
-        viewModel.currentNotificationMinute.observe(viewLifecycleOwner) {
-            Log.d("BATATA", "observe minute")
-            fillTimeField()
-        }
+        viewModel.currentNotificationHour.observe(viewLifecycleOwner) { fillTimeField() }
+        viewModel.currentNotificationMinute.observe(viewLifecycleOwner) { fillTimeField() }
     }
 
     private fun fillTimeField() {
@@ -162,17 +158,10 @@ class NotificationDetailsFragment : Fragment() {
     }
 
     private fun weekdayChanged(isChecked: Boolean, weekday: Weekday) {
-        if (isChecked) {
-            Log.d("BATATA", "check $weekday")
-            viewModel.currentNotificationWeekdays.value?.add(weekday)
-
-        } else {
-            Log.d("BATATA", "uncheck $weekday")
-            viewModel.currentNotificationWeekdays.value?.remove(weekday)
-        }
+        if (isChecked) viewModel.currentNotificationWeekdays.value?.add(weekday)
+        else viewModel.currentNotificationWeekdays.value?.remove(weekday)
         // notify observers
         viewModel.currentNotificationWeekdays.value = viewModel.currentNotificationWeekdays.value
-        Log.d("BATATA", viewModel.currentNotificationWeekdays.value.toString())
     }
 
     private fun validate(): Boolean {
@@ -180,8 +169,7 @@ class NotificationDetailsFragment : Fragment() {
             || viewModel.currentNotificationMinute.value == null
             || viewModel.currentNotificationWeekdays.value?.isEmpty() == true
         ) {
-            // TODO: better error message
-            Snackbar.make(binding.root, "INCOMPLETO", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.root, getString(R.string.notifications_missing_fields), Snackbar.LENGTH_LONG).show()
             return false
         }
         return true
@@ -193,7 +181,11 @@ class NotificationDetailsFragment : Fragment() {
             if (it.status == AddressDetailsViewModel.Status.Success) {
                 findNavController().navigateUp()
             } else {
-                // TODO: notify user
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.notifications_error_save_notification),
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
         }
     }

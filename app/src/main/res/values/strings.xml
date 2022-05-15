@@ -28,6 +28,8 @@
     <string name="saturday_abbreviation">Sab</string>
     <string name="fragment_label_create_notification">Criar notificação</string>
     <string name="fragment_label_edit_notification">Editar notificação</string>
+    <string name="notifications_add_address">Adicionar endereço</string>
+    <string name="notifications_edit_address">Editar endereço</string>
     <string name="create_address_notification_fab_content_description">Adicionar notificação</string>
     <string name="create_address_notification_notification_label">Notificações</string>
     <string name="notifications_fab_content_description">Adicionar notificação por endereço</string>
@@ -38,6 +40,13 @@
     <string name="create_notification_button_content_description">Menu da notificação</string>
     <string name="create_notification_time_text_example">16:30</string>
     <string name="create_notification_time_format">%02d:%02d</string>
+    <string name="notifications_error_load_address">Não foi possível carregar o endereço.</string>
+    <string name="notifications_required_address">Endereço obrigatório</string>
+    <string name="notifications_missing_fields">Campos incompletos</string>
+    <string name="notifications_error_save_address">Não foi possível salvar o endereço.</string>
+    <string name="notifications_error_load_notification">Não foi possível carregar a notificação.</string>
+    <string name="notifications_pick_hour">Selecione o horário da notificação</string>
+    <string name="notifications_error_save_notification">Não foi possível salvar a notificação.</string>
     <string name="menu_edit_text">Editar</string>
     <string name="menu_delete_text">Deletar</string>
     <string name="format_weekdays_time">%s - %d:%d</string>

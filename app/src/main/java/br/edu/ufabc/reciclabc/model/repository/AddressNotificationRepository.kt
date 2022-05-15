@@ -1,60 +1,50 @@
 package br.edu.ufabc.reciclabc.model.repository
 
-import android.util.Log
 import br.edu.ufabc.reciclabc.model.Address
-import br.edu.ufabc.reciclabc.model.GarbageType
 import br.edu.ufabc.reciclabc.model.Notification
-import br.edu.ufabc.reciclabc.model.Weekday
 import com.beust.klaxon.Klaxon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.InputStream
 
 class AddressNotificationRepository {
-    private lateinit var addresses: List<Address>
+    private lateinit var addresses: MutableList<Address>
 
     /**
      * Read Json File.
      */
     fun loadData(inputStream: InputStream) {
-        addresses = Klaxon().parseArray(inputStream) ?: emptyList()
+        val parsedAddress: List<Address> = Klaxon().parseArray(inputStream) ?: emptyList()
         addresses =
-            addresses.sortedBy { notification -> notification.name }
+            parsedAddress.sortedBy { notification -> notification.name }.toMutableList()
     }
 
     fun getAll() = if (this::addresses.isInitialized) addresses
     else throw UninitializedPropertyAccessException("Load data first")
 
-    suspend fun getById(id: Long) =
-        if (this::addresses.isInitialized) addresses.find { notification ->
-            notification.id == id
-        } else throw UninitializedPropertyAccessException("Load data first")
-
     suspend fun createAddress(
         address: Address,
-    ): Long {
-        TODO("Create address")
+    ): Long  = withContext(Dispatchers.IO) {
+        val newId = addresses.size.toLong() + 1
+        addresses.add(Address(newId, address.name, address.notifications))
+        newId
     }
 
     suspend fun updateAddress(
         address: Address,
     ) {
-        TODO("Update address")
+        // TODO: Update address
+        /*
+         * Create notifications which id is 0
+         * Remove the missing notifications
+         */
     }
 
-    suspend fun getNotification(id: Long) : Notification = withContext(Dispatchers.IO) {
-        Notification(id, GarbageType.RECYCLABLE, listOf(Weekday.FRIDAY), 15, 0, true)
+    suspend fun getAddressById(id: Long) : Address = withContext(Dispatchers.IO) {
+        addresses.find { it.id == id } ?: throw Exception("Not found")
     }
 
-    suspend fun createNotification(notification: Notification, addressId: Long): Long {
-        Log.d("REPO", notification.toString())
-        return 0
-        TODO("Create notification")
-    }
-
-    suspend fun updateNotification(notification: Notification, addressId: Long) {
-        Log.d("REPO", notification.toString())
-        return
-        TODO("Update notification")
+    suspend fun getNotificationById(id: Long) : Notification = withContext(Dispatchers.IO) {
+        addresses.flatMap { it.notifications }.find { it.id == id } ?: throw Exception("Not found")
     }
 }

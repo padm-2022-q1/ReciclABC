@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import br.edu.ufabc.reciclabc.R
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
+import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentNotificationGroupDetailsBinding
 import br.edu.ufabc.reciclabc.model.Notification
+import com.google.android.material.snackbar.Snackbar
 
 class AddressDetailsFragment : Fragment() {
     private lateinit var binding: FragmentNotificationGroupDetailsBinding
@@ -21,16 +22,6 @@ class AddressDetailsFragment : Fragment() {
      * The viewModel is scoped to the navigation graph.
      */
     private val viewModel: AddressDetailsViewModel by navGraphViewModels(R.id.navigation_notifications)
-
-    override fun onStart() {
-        super.onStart()
-
-        if (args.notificationGroupId > 0) {
-            viewModel.currentAddressId = args.notificationGroupId
-        } else {
-            viewModel.currentAddressId = null
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +34,22 @@ class AddressDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (args.notificationGroupId > 0) {
+            if (viewModel.currentAddressId.value == null) {
+                viewModel.loadAddress(args.notificationGroupId).observe(viewLifecycleOwner) {
+                    if (it.status is AddressDetailsViewModel.Status.Error) {
+                        Snackbar.make(
+                            binding.root,
+                            getString(R.string.notifications_error_load_address),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+            viewModel.currentAddressId.value = args.notificationGroupId
+        } else {
+            viewModel.currentAddressId.value = null
+        }
         setupFields()
         setupHandlers()
     }
@@ -53,28 +60,32 @@ class AddressDetailsFragment : Fragment() {
     }
 
     private fun setupFields() {
-        binding.createAddressNotificationAddress.editText?.setText(viewModel.currentAddressName)
-        binding.createAddressNotificationAddress.editText?.setSelection(viewModel.currentAddressName.length)
-        binding.createAddressNotificationAddress.editText?.doOnTextChanged { _, _, _, count ->
-            if (count == 0) {
-                // TODO: extract to resources
-                binding.createAddressNotificationAddress.error = "Endereço obrigatório"
+        viewModel.currentAddressName.observe(viewLifecycleOwner) {
+            binding.createAddressNotificationAddress.editText?.setText(it)
+            binding.createAddressNotificationAddress.editText?.setSelection(it.length)
+        }
+
+        binding.createAddressNotificationAddress.editText?.doOnTextChanged { _, start, before, count ->
+            if (count == 0 && start == 0 && before > 0) {
+                binding.createAddressNotificationAddress.error = getString(R.string.notifications_required_address)
             } else {
                 binding.createAddressNotificationAddress.error = null
             }
         }
 
-        binding.createAddressNotificationNotificationList.apply {
-            adapter = CreateNotificationAdapter(
-                viewModel.currentNotificationList,
-                { handleEditNotificationClick(it) },
-                { handleDeleteNotificationClick(it) },
-            )
+        viewModel.currentNotificationList.observe(viewLifecycleOwner) { notifications ->
+            binding.createAddressNotificationNotificationList.apply {
+                adapter = CreateNotificationAdapter(
+                    notifications,
+                    { handleEditNotificationClick(it) },
+                    { handleDeleteNotificationClick(it) },
+                )
+            }
         }
     }
 
     private fun backupFields() {
-        viewModel.currentAddressName =
+        viewModel.currentAddressName.value =
             binding.createAddressNotificationAddress.editText?.text.toString()
     }
 
@@ -82,10 +93,7 @@ class AddressDetailsFragment : Fragment() {
         binding.createAddressNotificationAddNotificationButton.setOnClickListener {
             handleAddNotificationClick()
         }
-        binding.createAddressNotificationSaveNotificationButton.setOnClickListener {
-            viewModel.currentAddressName = binding.createAddressNotificationAddress.editText?.text.toString()
-            viewModel.saveAddress()
-        }
+        binding.createAddressNotificationSaveNotificationButton.setOnClickListener { handleSaveAddress() }
     }
 
     private fun handleAddNotificationClick() {
@@ -102,5 +110,35 @@ class AddressDetailsFragment : Fragment() {
 
     private fun handleDeleteNotificationClick(notificationId: Long) {
         viewModel.deleteNotification(notificationId)
+    }
+
+    private fun validate(): Boolean {
+        if (binding.createAddressNotificationAddress.editText?.text?.length == 0
+            || viewModel.currentNotificationList.value?.size == 0
+        ) {
+            Snackbar.make(binding.root, getString(R.string.notifications_missing_fields), Snackbar.LENGTH_LONG).show()
+            return false
+        }
+        return true
+    }
+
+    private fun handleSaveAddress() {
+        validate() || return
+        viewModel.currentAddressName.value =
+            binding.createAddressNotificationAddress.editText?.text.toString()
+        viewModel.saveAddress().observe(viewLifecycleOwner) {
+            when (it.status) {
+                is AddressDetailsViewModel.Status.Error -> {
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.notifications_error_save_address),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+                is AddressDetailsViewModel.Status.Success -> {
+                    findNavController().navigateUp()
+                }
+            }
+        }
     }
 }
