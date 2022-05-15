@@ -6,4 +6,5 @@ data class CollectionPoint(
     val lng: Float,
     val name: String,
     val address: String,
+    val materials: Set<MaterialType>,
 )

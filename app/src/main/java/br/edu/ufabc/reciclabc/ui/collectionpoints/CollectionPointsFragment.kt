@@ -12,6 +12,8 @@ import androidx.fragment.app.viewModels
 import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentCollectionPointsBinding
 import br.edu.ufabc.reciclabc.model.CollectionPoint
+import br.edu.ufabc.reciclabc.model.MaterialType
+import br.edu.ufabc.reciclabc.utils.materialTypeToString
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -66,6 +68,17 @@ class CollectionPointsFragment : Fragment() {
             cpDetailsMapButton.setOnClickListener { handleCardMapButtonClick() }
         }
 
+        viewModel.collectionPoints.observe(viewLifecycleOwner) { collectionPoints ->
+            collectionPoints.forEach { mapManager.addMarker(it) }
+
+            if (collectionPoints.isEmpty() && !viewModel.materialFilter.value.isNullOrEmpty()) {
+                Snackbar.make(
+                    view,
+                    "Não há pontos de coleta que aceitam os materiais selecionados",
+                    Snackbar.LENGTH_LONG
+                ).setAction("Editar filtro") { handleFilterButtonClick() }.show()
+            }
+        }
         viewModel.selectedMarker.observe(viewLifecycleOwner) { handleSelectedMarkerChange(it) }
         binding.collectionPointsSearchButton.setOnClickListener { mapManager.openPlaceSearch() }
         binding.collectionPointsFilterButton.setOnClickListener { handleFilterButtonClick() }
@@ -74,6 +87,7 @@ class CollectionPointsFragment : Fragment() {
 
     private val handleMapReady = OnMapReadyCallback { googleMap ->
         mapManager.mapReady(googleMap)
+        viewModel.filterCollectionPoints()
     }
 
     private fun handleSelectedMarkerChange(collectionPointId: Int?) {
@@ -104,6 +118,7 @@ class CollectionPointsFragment : Fragment() {
             cpDetailsTitle.text = collectionPoint.name
             cpDetailsAddress.text = collectionPoint.address
             root.visibility = View.VISIBLE
+            recyclerviewMaterials.adapter = MaterialTypeChipsAdapter(collectionPoint.materials.toList())
         }
     }
 
@@ -122,34 +137,44 @@ class CollectionPointsFragment : Fragment() {
     }
 
     private fun handleFilterButtonClick() {
-        val materials = arrayOf(
-            getString(R.string.material_paper),
-            getString(R.string.material_plastic),
-            getString(R.string.material_metal),
-            getString(R.string.material_glass),
-            getString(R.string.material_kitchen_oil),
-            getString(R.string.material_electronics),
-            getString(R.string.material_batteries),
-            getString(R.string.material_construction_waste),
-        )
-        val selectedFilters = BooleanArray(materials.size) { false }
-
         context?.let { ctx ->
+            val materials =
+                MaterialType.values().associateBy { materialTypeToString(ctx, it) }
+            val materialsKeys = materials.keys.toTypedArray()
+            val selectedFilters = materials.values.map { viewModel.materialFilter.value?.contains(it) ?: false }.toBooleanArray()
+
             MaterialAlertDialogBuilder(ctx)
                 .setTitle(getString(R.string.filter_by_material))
                 .setNeutralButton(getString(R.string.clear_all)) { _, _ ->
                     Log.d("CollectionPoints", "Filter: clear all")
+                    viewModel.clearMaterialFilter()
+                    removeOldCollectionPointsMarkers()
+                    viewModel.filterCollectionPoints()
                 }
                 .setNegativeButton(getString(R.string.cancel)) { _, _ ->
                     Log.d("CollectionPoints", "Filter: cancel")
                 }
                 .setPositiveButton(getString(R.string.ok)) { _, _ ->
                     Log.d("CollectionPoints", "Filter: ok")
+                    removeOldCollectionPointsMarkers()
+                    viewModel.filterCollectionPoints()
                 }
-                .setMultiChoiceItems(materials, selectedFilters) { _, which, checked ->
+                .setMultiChoiceItems(materialsKeys, selectedFilters) { _, which, checked ->
                     Log.d("CollectionPoints", "Filter: change $which $checked")
+                    materials[materialsKeys[which]]?.let {
+                        if (checked) {
+                            viewModel.addMaterialFilterOption(it)
+                        } else {
+                            viewModel.removeMaterialFilterOption(it)
+                        }
+                    }
                 }
                 .show()
         }
+    }
+
+    private fun removeOldCollectionPointsMarkers() {
+        val collectionPointsIds = viewModel.collectionPoints.value?.map { it.id } ?: listOf()
+        collectionPointsIds.forEach { mapManager.removeMarker(it) }
     }
 }
