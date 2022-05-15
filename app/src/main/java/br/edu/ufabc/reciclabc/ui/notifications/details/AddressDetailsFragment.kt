@@ -79,6 +79,7 @@ class AddressDetailsFragment : Fragment() {
                     notifications,
                     { handleEditNotificationClick(it) },
                     { handleDeleteNotificationClick(it) },
+                    { id, enabled -> viewModel.setNotificationEnabled(id, enabled) }
                 )
             }
         }

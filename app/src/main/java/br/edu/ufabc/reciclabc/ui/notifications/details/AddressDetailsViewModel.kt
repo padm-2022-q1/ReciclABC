@@ -96,6 +96,10 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
         currentAddressId.value?.let { loadAddress(it) }
     }
 
+    fun setNotificationEnabled(notificationId: Long, enabled: Boolean) {
+        // TODO: edit notification
+    }
+
     fun deleteNotification(notificationId: Long) {
         currentNotificationList.value =
             currentNotificationList.value?.filter { it.id != notificationId }?.toMutableList()

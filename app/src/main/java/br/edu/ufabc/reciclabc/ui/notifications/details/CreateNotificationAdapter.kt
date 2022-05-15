@@ -15,6 +15,7 @@ class CreateNotificationAdapter(
     private val notifications: List<Notification>,
     private val onEditNotificationClicked: ((notification: Notification) -> Unit),
     private val onDeleteNotificationClicked: ((notificationId: Long) -> Unit),
+    private val onEnabledSwitchChange: ((notificationId: Long, checked: Boolean) -> Unit),
 ) :
     RecyclerView.Adapter<CreateNotificationAdapter.CreatedNotificationViewHolder>() {
 
@@ -51,12 +52,17 @@ class CreateNotificationAdapter(
             GarbageType.REGULAR -> holder.category.setChipBackgroundColorResource(R.color.recyclable_notification_label)
         }
 
-        // TODO: extract to resources? format! 00:00
-        holder.time.text = "${notification.hours}:${notification.minutes}"
+        holder.time.text = holder.itemView.context?.getString(
+            R.string.create_notification_time_format,
+            notification.hours,
+            notification.minutes,
+        )
 
         holder.switch.isChecked = notification.isActive
 
         holder.weekdays.text = weekdaysToAbbreviationString(holder.itemView.context, notification.weekdays)
+
+        holder.switch.setOnCheckedChangeListener { _, checked -> onEnabledSwitchChange(notification.id, checked)}
 
         holder.menu.setOnClickListener {
             val popup = PopupMenu(it.context, it)
