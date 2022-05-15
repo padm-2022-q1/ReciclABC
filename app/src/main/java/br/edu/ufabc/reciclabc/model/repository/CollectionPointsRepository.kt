@@ -11,7 +11,7 @@ class CollectionPointsRepository {
             -46.528047f,
             "UFABC SA",
             "Av. dos Estados, 5001 - Santo André - SP",
-            setOf(MaterialType.BATTERIES, MaterialType.PLASTIC),
+            MaterialType.values().toSet(),
         ),
         CollectionPoint(
             2,
