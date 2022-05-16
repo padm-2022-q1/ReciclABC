@@ -7,23 +7,6 @@ import java.io.InputStream
 
 class CollectionPointsRepository {
     private lateinit var collectionPoints: List<CollectionPoint>
-//        CollectionPoint(
-//            1,
-//            -23.644837f,
-//            -46.528047f,
-//            "UFABC SA",
-//            "Av. dos Estados, 5001 - Santo André - SP",
-//            MaterialType.values().toSet(),
-//        ),
-//        CollectionPoint(
-//            2,
-//            -23.678312f,
-//            -46.563312f,
-//            "UFABC SBC",
-//            "Alameda da Universidade, s/n - São Bernardo do Campo - SP",
-//            setOf(MaterialType.GLASS, MaterialType.METAL),
-//        ),
-//    )
 
     private data class CollectionPointJson(
         val id: Int,
