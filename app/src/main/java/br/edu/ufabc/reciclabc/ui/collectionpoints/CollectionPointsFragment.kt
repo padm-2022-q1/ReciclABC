@@ -1,6 +1,7 @@
 package br.edu.ufabc.reciclabc.ui.collectionpoints
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -41,9 +42,13 @@ class CollectionPointsFragment : Fragment() {
             ).show()
         }
         lifecycle.addObserver(mapManager)
-        requireContext().applicationInfo.metaData.getString("com.google.android.geo.API_KEY")?.let {
-            Places.initialize(requireContext(), it)
-        }
+
+        // https://www.gsrikar.com/2018/12/read-metadata-from-andriod-manifest.html
+        requireContext().packageManager
+            .getApplicationInfo(requireContext().packageName, PackageManager.GET_META_DATA)
+            .metaData.getString("com.google.android.geo.API_KEY")?.let {
+                Places.initialize(requireContext(), it)
+            }
     }
 
     override fun onCreateView(
