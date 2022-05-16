@@ -1,22 +1,23 @@
 [
   {
     "id": 0,
-    "title": "nulla. In tincidunt",
-    "content": "eget, volutpat ornare, facilisis eget, ipsum."
+    "title": "O que é Reciclagem?",
+    "content": "  Reciclagem é o ato de reaproveitar materiais descartados, de forma a torná-los úteis novamente e assim reduzindo a produção de lixo. \n Esse processo interfere no impacto ambiental em diversos aspectos pois reduz a necessidade de descarte de materiais, que por muito tempo ficariam em aterros. Além disso também minimiza o desperdício de materiais que podem resultar na redução de novas produções de produtos."
   },
   {
     "id": 1,
-    "title": "enim commodo hendrerit. Donec porttitor tellus non",
-    "content": "enim, gravida sit amet, dapibus id, blandit at, nisi."
+    "title": "Reciclagem de Plásticos",
+    "content": "  Plásticos em geral compõem cerca de 12% de resíduos sólidos gerados no mundo. Além de ser um material que levará anos para se decompor naturalmente, plásticos que são despejados em aterros e oceanos podem trazer diversos riscos a biodiversidade, uma vez que o ambiente pode ser contaminado por esses descartes.\n\n  Existe diversos tipos de plásticos que podem ser encontrados nos produtos do dia a dia, algumas sendo mais fáceis e outra mais difíceis de reciclar.\n\nPricipalmente existem 7 tipos de plásticos:\n\n1. Tereftalato de polietileno (PET);\n2. Polietileno de alta densidade (HDP);\n3. Cloreto de polivinila (PVC);\n4. Polietileno de baixa densidade (LDP);\n5. Polipropileno;\n6. Poliestireno;\n7. Outros plásticos incluem acrílico, policarbonato, etc.;\n\n PET e HDP podem ser reciclados, já PVC, LDP e polipropileno não são recomendados a reciclagem, porém é possível a reutilização desses materiais com a devida segurança. O sexto, poliestireno e o sétimo também é difícil a sua reciclagem, além de que são materiais cancerígenos ou que contém resíduos tóxicos.\n\n Algumas dicas para reciclagem mais comuns:\n\n1. Esmague embalagens plásticas, a fim de reduzirem o volume que ocupam;\n2. Limpe resíduos orgânicos dos plásticos que está reciclando;\n3. Jogue até pequenos pedaços de plástico. Nos processos de reciclagem industriais é possível juntá-los para formarem um único material."
+
   },
   {
     "id": 2,
-    "title": "nisl. Maecenas malesuada",
-    "content": "facilisis vitae, orci."
+    "title": "Reciclagem de Pilhas e Baterias",
+    "content": "Baterias e pilhas são objetos que fazem parte do dia a dia de qualquer um e também são materiais que quando não têm mais utilidade, devem ser recicladas de forma correta pois podem contaminar o meio ambiente por conter substâncias tóxicas e cancerígenas em sua composição.\n\n  Sua reciclagem não deve ser feita em casa, então a melhor maneira é realizar o seu descarte corretamente. Não devem ser jogadas em lixos comuns, uma vez que é possível encontrar pontos de descartes próprios pra esses materiais, comumente em locais públicos como prefeituras, postos de saúde, shoppings etc."
   },
   {
     "id": 3,
-    "title": "nisl. Maecenas malesuada enim commodo hendrerit. Donec porttitor tellus non nulla. In tincidunt",
-    "content": "facilisis vitae, orci. eget, volutpat ornare, facilisis eget, ipsum. enim, gravida sit amet, dapibus id, blandit at, nisi."
+    "title": "Reciclagem de Lâmpadas Fluorescentes",
+    "content": "  Lâmpadas fluorescentes são produtos muito comuns que possuem uma vida útil e que após isso deve ser descartada de forma correta, uma vez que sua composição pode apresentar substâncias tóxicas ou cancerígenas. Assim como pilhas e baterias, lâmpadas fluorescentes também possuem locais de descarte que aceitam esses materiais.\n\n  O seu armazenamento para levar até o local é de extrema importância, já que são objetos frágeis, portanto é recomendado o armazenamento delas em suas embalagens originais, mantendo-as protegidas de choques. Caso não tenha mais a embalagem original, pode enrolá-las em papelão, de forma também a manter protegidas contra eventuais choques.\n\n  Evite quebrar a lâmpada pois isso pode contaminar o ambiente, assim como também evite varrer ou aspirar os resíduos da lâmpada, caso quebrada. Isso espalhará substâncias que a compõem e são nocivas a sáude. A fim de não invaliabilizar o processo de reciclagem devido a cola, também não é recomendado o uso de fita adesiva para seu embrulho."
   }
 ]
