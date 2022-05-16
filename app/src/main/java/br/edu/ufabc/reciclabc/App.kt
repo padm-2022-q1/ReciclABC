@@ -1,7 +1,7 @@
 package br.edu.ufabc.reciclabc
 
 import android.app.Application
-import br.edu.ufabc.reciclabc.model.repository.AddressNotificationRepository
+import br.edu.ufabc.reciclabc.model.repository.AddressNotificationRepositoryRoom
 import br.edu.ufabc.reciclabc.model.repository.RecyclingInfoRepository
 import com.google.android.gms.maps.MapsInitializer
 
@@ -11,11 +11,10 @@ class App : Application() {
      * Access to Repository instance.
      */
     val recyclingInfoRepository = RecyclingInfoRepository()
-    val addressNotificationRepository = AddressNotificationRepository()
+    val addressNotificationRepository = AddressNotificationRepositoryRoom(this)
 
     companion object {
         private var recyclingGuideFile = "recycling_info.json"
-        private var addressNotificationFile = "notifications.json"
     }
 
     override fun onCreate() {
@@ -26,10 +25,6 @@ class App : Application() {
 
         resources.assets.open(recyclingGuideFile).use {
             recyclingInfoRepository.loadData(it)
-        }
-
-        resources.assets.open(addressNotificationFile).use {
-            addressNotificationRepository.loadData(it)
         }
     }
 }
