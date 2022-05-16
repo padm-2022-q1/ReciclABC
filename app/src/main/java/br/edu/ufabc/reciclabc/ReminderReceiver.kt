@@ -8,37 +8,42 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import br.edu.ufabc.reciclabc.model.Notification
 import java.util.*
 
 class ReminderReceiver : BroadcastReceiver() {
-    private val NOTIFICATIONID = 1
-
 
     override fun onReceive(context: Context?, intent: Intent) {
         context?.let {
-            var builder = NotificationCompat.Builder(it, NOTIFICATIONCHANNELID)
+            val garbageType = intent.getStringExtra("garbageType")
+            val addressId = intent.getIntExtra("addressId", -1)
+
+            val builder = NotificationCompat.Builder(it, NOTIFICATIONCHANNELID)
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setContentTitle(it.getString(R.string.broadcast_receiver_notification_title))
-                .setContentText(it.getString(R.string.broadcast_receiver_notification_content, intent.getStringExtra("garbageType").toString()))
+                .setContentText(it.getString(R.string.broadcast_receiver_notification_content, garbageType.toString()))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-            var notificationManager = NotificationManagerCompat.from(it)
+            val notificationManager = NotificationManagerCompat.from(it)
 
-            notificationManager.notify(NOTIFICATIONID, builder.build())
+            notificationManager.notify(addressId, builder.build())
         }
     }
 
     fun setAlarm(context: Context,
-                 scheduledDateInMillis: Long,
+                 notification: Notification,
+                 weekday: Int,
                  pendingIntent: PendingIntent) {
-        val alarmManager: AlarmManager =
-            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val scheduleDateMillis = calculateNextTriggerDateInMillis(weekday, notification.hours, notification.minutes)
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
-            scheduledDateInMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent
+            scheduleDateMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent
         )
     }
 
@@ -67,28 +72,28 @@ class ReminderReceiver : BroadcastReceiver() {
                 notificationManager.createNotificationChannel(channel)
             }
         }
+    }
 
-        fun calculateNextTriggerDateInMillis(weekday: Int, hour: Int, minutes: Int): Long {
-            val scheduledDate = Calendar.getInstance(TimeZone.getTimeZone("GMT-3")) //Today, GMT-3 (Brasilia)
-            if (scheduledDate.get(Calendar.DAY_OF_WEEK) != weekday) {
-                scheduledDate.add(
-                    Calendar.DAY_OF_MONTH,
-                    (weekday - scheduledDate.get(Calendar.DAY_OF_WEEK)) % 7
-                )
+    private fun calculateNextTriggerDateInMillis(weekday: Int, hour: Int, minutes: Int): Long {
+        val scheduledDate = Calendar.getInstance(TimeZone.getTimeZone("GMT-3")) //Today, GMT-3 (Brasilia)
+        if (scheduledDate.get(Calendar.DAY_OF_WEEK) != weekday) {
+            scheduledDate.add(
+                Calendar.DAY_OF_MONTH,
+                (weekday - scheduledDate.get(Calendar.DAY_OF_WEEK)) % 7
+            )
 
-            } else {
-                val minOfDay =
-                    scheduledDate.get(Calendar.HOUR_OF_DAY) * 60 + scheduledDate.get(Calendar.MINUTE)
-                if ( minOfDay >= (hour * 60 + minutes) ) scheduledDate.add(
-                    Calendar.DAY_OF_MONTH,
-                    7
-                ) //Next week
-            }
-            scheduledDate.set(Calendar.HOUR_OF_DAY, hour)
-            scheduledDate.set(Calendar.MINUTE, minutes)
-            scheduledDate.timeZone.rawOffset
-
-            return scheduledDate.timeInMillis
+        } else {
+            val minOfDay =
+                scheduledDate.get(Calendar.HOUR_OF_DAY) * 60 + scheduledDate.get(Calendar.MINUTE)
+            if ( minOfDay >= (hour * 60 + minutes) ) scheduledDate.add(
+                Calendar.DAY_OF_MONTH,
+                7
+            ) //Next week
         }
+        scheduledDate.set(Calendar.HOUR_OF_DAY, hour)
+        scheduledDate.set(Calendar.MINUTE, minutes)
+        scheduledDate.timeZone.rawOffset
+
+        return scheduledDate.timeInMillis
     }
 }
