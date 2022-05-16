@@ -13,4 +13,7 @@ interface NotificationDao {
 
     @Update
     fun update(notificationEntity: NotificationEntity)
+
+    @Query("UPDATE NotificationEntity SET isActive = :active WHERE id = :id")
+    fun toggleActive(id: Long, active: Boolean)
 }
