@@ -12,6 +12,7 @@ import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentCreateNotificationBinding
 import br.edu.ufabc.reciclabc.model.GarbageType
 import br.edu.ufabc.reciclabc.model.Weekday
+import br.edu.ufabc.reciclabc.ui.shared.Status
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -36,7 +37,7 @@ class NotificationDetailsFragment : Fragment() {
         if (args.notificationId > 0) {
             if (viewModel.currentNotificationId.value == null) {
                 viewModel.loadNotification(args.notificationId).observe(viewLifecycleOwner) {
-                    if (it.status is AddressDetailsViewModel.Status.Error) {
+                    if (it.status is Status.Error) {
                         Snackbar.make(
                             binding.root,
                             getString(R.string.notifications_error_load_notification),
@@ -178,7 +179,7 @@ class NotificationDetailsFragment : Fragment() {
     private fun handleSaveClick() {
         validate() || return
         viewModel.saveNotification().observe(viewLifecycleOwner) {
-            if (it.status == AddressDetailsViewModel.Status.Success) {
+            if (it.status == Status.Success) {
                 findNavController().navigateUp()
             } else {
                 Snackbar.make(
