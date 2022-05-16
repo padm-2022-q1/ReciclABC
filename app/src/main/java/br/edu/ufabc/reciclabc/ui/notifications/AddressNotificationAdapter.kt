@@ -14,6 +14,7 @@ class AddressNotificationAdapter(
     private val addresses: List<Address>,
     private val onEditAddressNotificationClicked: ((address: Address) -> Unit),
     private val onDeleteAddressNotificationClicked: ((addressNotificationId: Long) -> Unit),
+    private val onToggleNotification: ((notificationId: Long, isChecked: Boolean) -> Unit),
     ) :
     RecyclerView.Adapter<AddressNotificationAdapter.AddressNotificationViewHolder>() {
 
@@ -48,7 +49,8 @@ class AddressNotificationAdapter(
         if (addressNotification.regularGarbage.isNotEmpty()) {
             holder.regularGarbageNotifications.apply {
                 adapter = NotificationAdapter(
-                    addressNotification.regularGarbage
+                    addressNotification.regularGarbage,
+                    onToggleNotification,
                 )
             }
         } else {
@@ -58,7 +60,8 @@ class AddressNotificationAdapter(
         if (addressNotification.recyclableGarbage.isNotEmpty()) {
             holder.recyclableGarbageNotifications.apply {
                 adapter = NotificationAdapter(
-                    addressNotification.recyclableGarbage
+                    addressNotification.recyclableGarbage,
+                    onToggleNotification,
                 )
             }
         } else {
@@ -88,6 +91,4 @@ class AddressNotificationAdapter(
     }
 
     override fun getItemCount(): Int = addresses.size
-
-    override fun getItemId(position: Int): Long = addresses[position].id
 }
