@@ -1,6 +1,7 @@
 package br.edu.ufabc.reciclabc.ui.notifications.details
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -9,19 +10,10 @@ import br.edu.ufabc.reciclabc.model.Address
 import br.edu.ufabc.reciclabc.model.GarbageType
 import br.edu.ufabc.reciclabc.model.Notification
 import br.edu.ufabc.reciclabc.model.Weekday
+import br.edu.ufabc.reciclabc.ui.shared.Status
+import br.edu.ufabc.reciclabc.ui.shared.Result
 
 class AddressDetailsViewModel(application: Application) : AndroidViewModel(application) {
-
-    sealed class Status {
-        class Error(val e: Exception) : Status()
-        object Success : Status()
-    }
-
-    data class Result<T>(
-        val result: T?,
-        val status: Status,
-    )
-
     private val addressNotificationRepository = (application as App).addressNotificationRepository
 
     var currentAddressId = MutableLiveData<Long?>(null)
@@ -35,11 +27,17 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
     var currentNotificationGarbageType = MutableLiveData(GarbageType.REGULAR)
 
     fun loadAddress(id: Long) = liveData {
-        val address = addressNotificationRepository.getAddressById(id)
-        currentAddressId.value = address.id
-        currentAddressName.value = address.name
-        currentNotificationList.value = address.notifications.toMutableList()
-        emit(Result(Unit, Status.Success))
+        if (currentAddressId.value == null) {
+            try {
+                val address = addressNotificationRepository.getById(id)
+                currentAddressId.value = address.id
+                currentAddressName.value = address.name
+                currentNotificationList.value = address.notifications.toMutableList()
+                emit(Result(Unit, Status.Success))
+            } catch (e: Exception) {
+                emit(Result(Unit, Status.Error(Exception("failed to load address notification"))))
+            }
+        }
     }
 
     fun saveAddress() = liveData {
@@ -51,25 +49,32 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
             )
 
             if (currentAddressId.value == null) {
-                addressNotificationRepository.createAddress(address)
+                addressNotificationRepository.add(address)
             } else {
-                addressNotificationRepository.updateAddress(address)
+                addressNotificationRepository.save(address)
             }
 
             emit(Result(Unit, Status.Success))
         } catch (e: Exception) {
-            emit(Result(Unit, Status.Error(Exception("something went wrong"))))
+            emit(Result(Unit, Status.Error(Exception("failed to save address notification"))))
         }
     }
 
     fun loadNotification(id: Long) = liveData {
-        val notification = addressNotificationRepository.getNotificationById(id)
-        currentNotificationId.value = notification.id
-        currentNotificationGarbageType.value = notification.category
-        currentNotificationHour.value = notification.hours
-        currentNotificationMinute.value = notification.minutes
-        currentNotificationWeekdays.value = notification.weekdays.toMutableSet()
-        emit(Result(Unit, Status.Success))
+        try {
+            currentNotificationList.value?.let {
+                it.find { notification -> notification.id == id }?.let { notification ->
+                    currentNotificationId.value = notification.id
+                    currentNotificationGarbageType.value = notification.category
+                    currentNotificationHour.value = notification.hours
+                    currentNotificationMinute.value = notification.minutes
+                    currentNotificationWeekdays.value = notification.weekdays.toMutableSet()
+                    emit(Result(Unit, Status.Success))
+                }
+            }
+        } catch (e: Exception) {
+            emit(Result(Unit, Status.Error(Exception("failed to load notification"))))
+        }
     }
 
     fun saveNotification() = liveData {

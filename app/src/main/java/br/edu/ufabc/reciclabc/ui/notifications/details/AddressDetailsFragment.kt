@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,8 @@ import androidx.navigation.navGraphViewModels
 import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentNotificationGroupDetailsBinding
 import br.edu.ufabc.reciclabc.model.Notification
+import br.edu.ufabc.reciclabc.ui.shared.Status
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 class AddressDetailsFragment : Fragment() {
@@ -22,6 +25,25 @@ class AddressDetailsFragment : Fragment() {
      * The viewModel is scoped to the navigation graph.
      */
     private val viewModel: AddressDetailsViewModel by navGraphViewModels(R.id.navigation_notifications)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // TODO: Dialog para confirmar sair da tela sem salvar
+//        requireActivity().onBackPressedDispatcher.addCallback(this) {
+//            isEnabled = true
+//            MaterialAlertDialogBuilder(requireContext())
+//                .setTitle("Tem certeza que deseja sair sem salvar as alterações?")
+//                .setNegativeButton("Não") { dialog, which ->
+//                    val hasChange = viewModel
+//                    isEnabled = false
+//                }
+//                .setPositiveButton("Sim") { dialog, which ->
+//                    isEnabled = false
+//                    handleOnBackPressed()
+//                }
+//                .show()
+//        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +59,7 @@ class AddressDetailsFragment : Fragment() {
         if (args.notificationGroupId > 0) {
             if (viewModel.currentAddressId.value == null) {
                 viewModel.loadAddress(args.notificationGroupId).observe(viewLifecycleOwner) {
-                    if (it.status is AddressDetailsViewModel.Status.Error) {
+                    if (it.status is Status.Error) {
                         Snackbar.make(
                             binding.root,
                             getString(R.string.notifications_error_load_address),
@@ -46,9 +68,6 @@ class AddressDetailsFragment : Fragment() {
                     }
                 }
             }
-            viewModel.currentAddressId.value = args.notificationGroupId
-        } else {
-            viewModel.currentAddressId.value = null
         }
         setupFields()
         setupHandlers()
@@ -129,14 +148,14 @@ class AddressDetailsFragment : Fragment() {
             binding.createAddressNotificationAddress.editText?.text.toString()
         viewModel.saveAddress().observe(viewLifecycleOwner) {
             when (it.status) {
-                is AddressDetailsViewModel.Status.Error -> {
+                is Status.Error -> {
                     Snackbar.make(
                         binding.root,
                         getString(R.string.notifications_error_save_address),
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
-                is AddressDetailsViewModel.Status.Success -> {
+                is Status.Success -> {
                     findNavController().navigateUp()
                 }
             }
