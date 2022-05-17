@@ -24,7 +24,7 @@ class NotificationsViewModel(application: Application) : AndroidViewModel(applic
         try {
             emit(Result(addressNotificationRepository.delete(id), Status.Success))
         } catch (e: Exception) {
-            emit(Result(Unit, Status.Error(Exception("Failed to load address notifications", e))))
+            emit(Result(Unit, Status.Error(Exception("Failed to delete address notification", e))))
         }
     }
 
@@ -32,7 +32,7 @@ class NotificationsViewModel(application: Application) : AndroidViewModel(applic
         try {
             emit(Result(addressNotificationRepository.toggleNotification(id, isActive), Status.Success))
         } catch (e: Exception) {
-            emit(Result(Unit, Status.Error(Exception("Failed to load address notifications", e))))
+            emit(Result(Unit, Status.Error(Exception("Failed to toggle notification", e))))
         }
     }
 }
