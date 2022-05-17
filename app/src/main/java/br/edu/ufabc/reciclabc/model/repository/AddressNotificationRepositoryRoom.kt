@@ -63,15 +63,10 @@ class AddressNotificationRepositoryRoom(application: Application) {
         val address = db.AddressDao().getById(addressId).toAddressNotification()
         db.withTransaction {
             db.AddressDao().delete(AddressEntity.fromAddressNotification(address))
-            address.notifications.forEach {
-                db.NotificationDao().delete(NotificationEntity.fromNotification(it, addressId))
-            }
         }
     }
 
-    suspend fun toggleNotification(notificationId: Long, isActive: Boolean) {
-        db.withTransaction {
-            db.NotificationDao().toggleActive(notificationId, isActive)
-        }
+    fun toggleNotification(notificationId: Long, isActive: Boolean) {
+        db.NotificationDao().toggleActive(notificationId, isActive)
     }
 }
