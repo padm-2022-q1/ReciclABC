@@ -11,7 +11,7 @@ class App : Application() {
      * Access to Repository instance.
      */
     val recyclingInfoRepository = RecyclingInfoRepository()
-    val addressNotificationRepository = AddressNotificationRepositoryRoom(this)
+    lateinit var addressNotificationRepository: AddressNotificationRepositoryRoom
 
     companion object {
         private var recyclingGuideFile = "recycling_info.json"
@@ -19,6 +19,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        addressNotificationRepository = AddressNotificationRepositoryRoom(this)
 
         // Enables the new map renderer
         MapsInitializer.initialize(applicationContext, MapsInitializer.Renderer.LATEST, null)
