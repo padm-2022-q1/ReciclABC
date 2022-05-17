@@ -7,8 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="regular_notification_label">#006d3d</color>
-    <color name="recyclable_notification_label">#857371</color>
+    <color name="regular_notification_label">#680003</color>
+    <color name="recyclable_notification_label">#006d3d</color>
     <color name="md_theme_light_primary">#3C6A00</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
     <color name="md_theme_light_primaryContainer">#B9F475</color>
