@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "lat": "-23.638306522457274f",
+    "lng": "-46.50115852921259f",
+    "name": "Estação de Coleta Erechim",
+    "address": "R. Erechim, 635 - Parque Erasmo Assunção",
+    "materials": "CONSTRUCTION_WASTE,ELECTRONICS,GLASS,COOKING_OIL,METAL,PAPER,PLASTIC"
+  },
+  {
+    "id": 2,
+    "lat": "-23.6739417360345f",
+    "lng": "-46.5417938827901f",
+    "name": "Estação de Coleta Caminho do Pilar",
+    "address": "R. Caminho do Pilar, 1541 - Vila Gilda",
+    "materials": "CONSTRUCTION_WASTE,ELECTRONICS,GLASS,COOKING_OIL,METAL,PAPER,PLASTIC"
+  },
+  {
+    "id": 3,
+    "lat": "-23.6794880847884f",
+    "lng": "-46.532204861933f",
+    "name": "Estação de Coleta Paraíso",
+    "address": "R. Juquiá, 200 - Jardim Cristiane",
+    "materials": "CONSTRUCTION_WASTE,ELECTRONICS,GLASS,COOKING_OIL,METAL,PAPER,PLASTIC"
+  },
+  {
+    "id": 4,
+    "lat":"-23.6486271636162f",
+    "lng": "-46.5319914410878",
+    "name": "MotoStore Santo André - Grand Plaza Shopping",
+    "address": "Av. Industrial, 600 - Jardim, Santo André - SP, 09080-500",
+    "materials": "BATTERIES,ELECTRONICS"
+  },
+  {
+    "id": 5,
+    "lat": "-23.6924068162205F",
+    "lng": "-46.550497659614",
+    "name": "Fast Shop São Bernardo do Campo - Shopping Metrópole",
+    "address": "Praça Samuel Sabatini, 200 Shopping Metrópole, São Bernardo do Campo - SP, 09750-902",
+    "materials": "CONSTRUCTION_WASTE,ELECTRONICS,GLASS,COOKING_OIL,METAL,PAPER,PLASTIC"
+  },
+  {
+    "id": 6,
+    "lat": "-23.6093212797779f",
+    "lng": "-46.5643477815646f",
+    "name": "Leroy Merlin São Caetano do Sul",
+    "address": "Avenida do Estado, 1750. Fundação. . CEP: 09550-400. São Caetano do Sul-SP",
+    "materials": "BATTERIES,ELECTRONICS,COOKING_OIL"
+  },
+  {
+    "id": 7,
+    "lat": "-23.6103544377306f",
+    "lng": "-46.5649636170253f",
+    "name": "Carrefour Hipermercado São Caetano do Sul",
+    "address": "R. Aquidaban, s/n - Fundação, São Caetano do Sul - SP, 09520-180",
+    "materials": "BATTERIES,ELECTRONICS"
+  },
+  {
+    "id": 8,
+    "lat": "-23.6556271381697f",
+    "lng": "-46.5630894172862f",
+    "name": "Ecoponto Vila Vivaldi",
+    "address": "R. Guilherme de Almeida, 86 - Jardim Orlandina, São Bernardo do Campo - SP, 09632-050",
+    "materials": "CONSTRUCTION_WASTE,GLASS,METAL,PAPER,PLASTIC"
+  }
+]
