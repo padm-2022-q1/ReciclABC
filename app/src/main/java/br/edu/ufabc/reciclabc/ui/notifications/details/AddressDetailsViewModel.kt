@@ -5,10 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import br.edu.ufabc.reciclabc.App
-import br.edu.ufabc.reciclabc.model.Address
-import br.edu.ufabc.reciclabc.model.GarbageType
-import br.edu.ufabc.reciclabc.model.Notification
-import br.edu.ufabc.reciclabc.model.Weekday
+import br.edu.ufabc.reciclabc.model.*
 import br.edu.ufabc.reciclabc.ui.shared.Result
 import br.edu.ufabc.reciclabc.ui.shared.Status
 
@@ -17,13 +14,14 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     var currentAddressId = MutableLiveData<Long?>(null)
     var currentAddressName = MutableLiveData("")
-    var currentNotificationList = MutableLiveData<MutableList<Notification>>(mutableListOf())
+    var currentNotificationGroupList = MutableLiveData<MutableList<NotificationGroup>>(mutableListOf())
 
-    var currentNotificationId = MutableLiveData<Long?>(null)
-    var currentNotificationWeekdays = MutableLiveData<MutableSet<Weekday>>(mutableSetOf())
-    var currentNotificationHour = MutableLiveData<Int?>(null)
-    var currentNotificationMinute = MutableLiveData<Int?>(null)
-    var currentNotificationGarbageType = MutableLiveData(GarbageType.REGULAR)
+    var currentNotificationGroupId = MutableLiveData<Long?>(null)
+    var currentNotificationGroupWeekdays = MutableLiveData<MutableSet<Weekday>>(mutableSetOf())
+    var currentNotificationGroupHour = MutableLiveData<Int?>(null)
+    var currentNotificationGroupMinute = MutableLiveData<Int?>(null)
+    var currentNotificationGroupGarbageType = MutableLiveData(GarbageType.REGULAR)
+    var currentNotificationGroupNotifications = MutableLiveData<MutableList<Notification>>(mutableListOf())
 
     var generatedId = 0L
 
@@ -33,7 +31,7 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
                 val address = addressNotificationRepository.getById(id)
                 currentAddressId.value = address.id
                 currentAddressName.value = address.name
-                currentNotificationList.value = address.notifications.toMutableList()
+                currentNotificationGroupList.value = address.notifications.toMutableList()
                 emit(Result(Unit, Status.Success))
             } catch (e: Exception) {
                 emit(Result(Unit, Status.Error(Exception("failed to load address notification"))))
@@ -46,9 +44,8 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
             val address = Address(
                 currentAddressId.value ?: 0,
                 currentAddressName.value ?: "",
-                currentNotificationList.value ?: emptyList()
+                currentNotificationGroupList.value ?: emptyList()
             )
-
             if (currentAddressId.value == null) {
                 addressNotificationRepository.add(address)
             } else {
@@ -61,15 +58,16 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 
-    fun loadNotification(id: Long) = liveData {
+    fun loadNotificationGroup(id: Long) = liveData {
         try {
-            currentNotificationList.value?.let {
-                it.find { notification -> notification.id == id }?.let { notification ->
-                    currentNotificationId.value = notification.id
-                    currentNotificationGarbageType.value = notification.category
-                    currentNotificationHour.value = notification.hours
-                    currentNotificationMinute.value = notification.minutes
-                    currentNotificationWeekdays.value = notification.weekdays.toMutableSet()
+            currentNotificationGroupList.value?.let {
+                it.find { notificationGroup -> notificationGroup.id == id }?.let { notificationGroup ->
+                    currentNotificationGroupId.value = notificationGroup.id
+                    currentNotificationGroupGarbageType.value = notificationGroup.category
+                    currentNotificationGroupHour.value = notificationGroup.hours
+                    currentNotificationGroupMinute.value = notificationGroup.minutes
+                    currentNotificationGroupWeekdays.value = notificationGroup.getWeekDays().toMutableSet()
+                    currentNotificationGroupNotifications.value = notificationGroup.notifications.toMutableList()
                     emit(Result(Unit, Status.Success))
                 }
             }
@@ -78,50 +76,56 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 
-    fun saveNotification() = liveData {
-        val notification = Notification(
-            currentNotificationId.value ?: --generatedId,
-            currentNotificationGarbageType.value ?: GarbageType.REGULAR,
-            currentNotificationWeekdays.value?.toList() ?: emptyList(),
-            currentNotificationHour.value ?: 0,
-            currentNotificationMinute.value ?: 0,
+    fun saveNotificationGroup() = liveData {
+        val notificationList = currentNotificationGroupWeekdays.value?.map { weekday ->
+            if (currentNotificationGroupNotifications.value?.map { it.weekday }!!.contains(weekday))
+                currentNotificationGroupNotifications.value?.find { notification -> notification.weekday == weekday }!!
+            else
+                Notification(0, weekday)
+        } ?:emptyList()
+        val notificationGroup = NotificationGroup(
+            currentNotificationGroupId.value ?: --generatedId,
+            currentNotificationGroupGarbageType.value ?: GarbageType.REGULAR,
+            currentNotificationGroupHour.value ?: 0,
+            currentNotificationGroupMinute.value ?: 0,
             true,
+            notificationList,
         )
 
-        if (currentNotificationId.value == null) {
-            currentNotificationList.value?.add(notification)
+        if (currentNotificationGroupId.value == null) {
+            currentNotificationGroupList.value?.add(notificationGroup)
         } else {
-            currentNotificationList.value =
-                currentNotificationList.value?.map {
-                    if (it.id == currentNotificationId.value) notification else it
+            currentNotificationGroupList.value =
+                currentNotificationGroupList.value?.map {
+                    if (it.id == currentNotificationGroupId.value) notificationGroup else it
                 }?.toMutableList()
         }
 
         emit(Result(Unit, Status.Success))
-        clearCurrentNotification()
+        clearCurrentNotificationGroup()
         currentAddressId.value?.let { loadAddress(it) }
     }
 
-    fun toggleNotification(notificationId: Long, isActive: Boolean) {
-        currentNotificationList.value?.first { it.id == notificationId }?.let {
-            val notification = Notification(it.id, it.category, it.weekdays, it.hours, it.minutes, isActive)
+    fun toggleNotification(notificationGroupId: Long, isActive: Boolean) {
+        currentNotificationGroupList.value?.first { it.id == notificationGroupId }?.let {
+            val notification = NotificationGroup(it.id, it.category, it.hours, it.minutes, isActive, it.notifications)
 
-            currentNotificationList.value = currentNotificationList.value?.map { n ->
-                if (n.id == notificationId) notification else n
+            currentNotificationGroupList.value = currentNotificationGroupList.value?.map { n ->
+                if (n.id == notificationGroupId) notification else n
             }?.toMutableList()
         }
     }
 
-    fun deleteNotification(notificationId: Long) {
-        currentNotificationList.value =
-            currentNotificationList.value?.filter { it.id != notificationId }?.toMutableList()
+    fun deleteNotificationGroup(notificationGroupId: Long) {
+        currentNotificationGroupList.value =
+            currentNotificationGroupList.value?.filter { it.id != notificationGroupId }?.toMutableList()
     }
 
-    fun clearCurrentNotification() {
-        currentNotificationId.value = null
-        currentNotificationWeekdays.value = mutableSetOf()
-        currentNotificationHour.value = null
-        currentNotificationMinute.value = null
-        currentNotificationGarbageType.value = GarbageType.REGULAR
+    fun clearCurrentNotificationGroup() {
+        currentNotificationGroupId.value = null
+        currentNotificationGroupWeekdays.value = mutableSetOf()
+        currentNotificationGroupHour.value = null
+        currentNotificationGroupMinute.value = null
+        currentNotificationGroupGarbageType.value = GarbageType.REGULAR
     }
 }

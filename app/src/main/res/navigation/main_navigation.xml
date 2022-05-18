@@ -35,7 +35,7 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications">
         <action
-            android:id="@+id/notification_group_details_action"
+            android:id="@+id/address_details_action"
             app:destination="@id/navigation_notifications">
             <argument
                 android:name="addressId"
