@@ -31,7 +31,7 @@ class AddressNotificationRepositoryRoom(application: Application) {
         }
     }
 
-    suspend fun save(address: Address) = withContext(Dispatchers.IO) {
+    suspend fun update(address: Address) = withContext(Dispatchers.IO) {
         val dbAddress = db.AddressDao().getById(address.id).toAddressNotification()
         val dbNotificationsIds = dbAddress.notifications.map { it.id }.toSet()
         val notificationIds = address.notifications.map { it.id }.toSet()

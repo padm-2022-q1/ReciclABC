@@ -1,7 +1,6 @@
 package br.edu.ufabc.reciclabc.ui.notifications.details
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -51,7 +50,7 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
             if (currentAddressId.value == null) {
                 addressNotificationRepository.add(address)
             } else {
-                addressNotificationRepository.save(address)
+                addressNotificationRepository.update(address)
             }
 
             emit(Result(Unit, Status.Success))
