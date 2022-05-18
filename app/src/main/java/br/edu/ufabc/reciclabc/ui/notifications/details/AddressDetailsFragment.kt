@@ -80,20 +80,20 @@ class AddressDetailsFragment : Fragment() {
 
     private fun setupFields() {
         viewModel.currentAddressName.observe(viewLifecycleOwner) {
-            binding.createAddressNotificationAddress.editText?.setText(it)
-            binding.createAddressNotificationAddress.editText?.setSelection(it.length)
+            binding.edittextAddress.editText?.setText(it)
+            binding.edittextAddress.editText?.setSelection(it.length)
         }
 
-        binding.createAddressNotificationAddress.editText?.doOnTextChanged { _, start, before, count ->
+        binding.edittextAddress.editText?.doOnTextChanged { _, start, before, count ->
             if (count == 0 && start == 0 && before > 0) {
-                binding.createAddressNotificationAddress.error = getString(R.string.notifications_required_address)
+                binding.edittextAddress.error = getString(R.string.notifications_required_address)
             } else {
-                binding.createAddressNotificationAddress.error = null
+                binding.edittextAddress.error = null
             }
         }
 
         viewModel.currentNotificationList.observe(viewLifecycleOwner) { notifications ->
-            binding.createAddressNotificationNotificationList.apply {
+            binding.recyclerviewNotifications.apply {
                 adapter = CreateNotificationAdapter(
                     notifications,
                     { handleEditNotificationClick(it) },
@@ -106,14 +106,14 @@ class AddressDetailsFragment : Fragment() {
 
     private fun backupFields() {
         viewModel.currentAddressName.value =
-            binding.createAddressNotificationAddress.editText?.text.toString()
+            binding.edittextAddress.editText?.text.toString()
     }
 
     private fun setupHandlers() {
-        binding.createAddressNotificationAddNotificationButton.setOnClickListener {
+        binding.buttonAddNotification.setOnClickListener {
             handleAddNotificationClick()
         }
-        binding.createAddressNotificationSaveNotificationButton.setOnClickListener { handleSaveAddress() }
+        binding.buttonSaveNotificationGroup.setOnClickListener { handleSaveAddress() }
     }
 
     private fun handleAddNotificationClick() {
@@ -133,7 +133,7 @@ class AddressDetailsFragment : Fragment() {
     }
 
     private fun validate(): Boolean {
-        if (binding.createAddressNotificationAddress.editText?.text?.length == 0
+        if (binding.edittextAddress.editText?.text?.trim()?.isEmpty() != false
             || viewModel.currentNotificationList.value?.size == 0
         ) {
             Snackbar.make(binding.root, getString(R.string.notifications_missing_fields), Snackbar.LENGTH_LONG).show()
@@ -145,7 +145,7 @@ class AddressDetailsFragment : Fragment() {
     private fun handleSaveAddress() {
         validate() || return
         viewModel.currentAddressName.value =
-            binding.createAddressNotificationAddress.editText?.text.toString()
+            binding.edittextAddress.editText?.text.toString()
         viewModel.saveAddress().observe(viewLifecycleOwner) {
             when (it.status) {
                 is Status.Error -> {
