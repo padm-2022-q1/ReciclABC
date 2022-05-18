@@ -1,5 +1,8 @@
-package br.edu.ufabc.reciclabc.model
+package br.edu.ufabc.reciclabc.model.repository
 
+import br.edu.ufabc.reciclabc.model.AddressNotification
+import br.edu.ufabc.reciclabc.model.GarbageType
+import br.edu.ufabc.reciclabc.model.Weekday
 import com.beust.klaxon.Klaxon
 import java.io.InputStream
 

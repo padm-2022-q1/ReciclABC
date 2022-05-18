@@ -59,4 +59,10 @@
     <string name="broadcast_receiver_notification_content">O horário da coleta de lixo %1$s está próximo.</string>
     <string name="notification_channel_name">Notificação ReciclABC</string>
     <string name="notification_channel_description">Lembrete de coleta de lixo</string>
+    <string name="add_notification_menu_add_notification">Adicionar notificação</string>
+    <string name="search_button_description">Pesquisar endereço</string>
+    <string name="error_location_access_required">"Você precisa permitir acesso à localização do dispositivo para usar esta funcionalidade."</string>
+    <string name="error_location_unavailable">"Localização indisponível."</string>
+    <string name="error_could_not_get_location">"Não foi possível obter a localização do dispositivo."</string>
+    <string name="error_place_search">"Erro na busca por endereço."</string>
 </resources>

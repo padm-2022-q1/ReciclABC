@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".ui.notifications.CreateAddressNotificationFragment">
+    tools:context=".ui.notifications.createaddressnotification.CreateAddressNotificationFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/create_address_notification_address"
@@ -22,15 +22,31 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <TextView
         android:id="@+id/create_address_notification_notification_label"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="22dp"
         android:text="@string/create_address_notification_notification_label"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/create_address_notification_add_notification_button"
         app:layout_constraintTop_toBottomOf="@id/create_address_notification_address" />
+
+    <ImageButton
+        android:id="@+id/create_address_notification_add_notification_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        android:src="@drawable/ic_add_24"
+        app:layout_constraintTop_toTopOf="@id/create_address_notification_notification_label"
+        app:layout_constraintBottom_toBottomOf="@id/create_address_notification_notification_label"
+        app:layout_constraintRight_toRightOf="parent"
+        android:contentDescription="@string/create_address_notification_button_text" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/create_address_notification_notification_list"
@@ -38,8 +54,8 @@
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/create_address_notification_add_notification_button"
-        app:layout_constraintTop_toBottomOf="@id/create_address_notification_notification_label"
+        app:layout_constraintBottom_toTopOf="@id/create_address_notification_save_notification_button"
+        app:layout_constraintTop_toBottomOf="@id/create_address_notification_add_notification_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -47,10 +63,10 @@
         tools:itemCount="2"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/create_address_notification_add_notification_button"
+        android:id="@+id/create_address_notification_save_notification_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/create_address_notification_button_text"
+        android:text="Salvar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />

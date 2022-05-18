@@ -1,8 +1,7 @@
-package br.edu.ufabc.reciclabc.ui.notifications
+package br.edu.ufabc.reciclabc.ui.notifications.createaddressnotification
 
 import android.view.LayoutInflater
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
@@ -48,8 +47,8 @@ class CreateNotificationAdapter(
             GarbageType.REGULAR -> holder.itemView.context.getString(R.string.create_notification_item_chip_text_regular)
         }
         when (notification.category) {
-            GarbageType.RECYCLABLE -> holder.category.setChipBackgroundColorResource(R.color.teal_200)
-            GarbageType.REGULAR -> holder.category.setChipBackgroundColorResource(R.color.purple_200)
+            GarbageType.RECYCLABLE -> holder.category.setChipBackgroundColorResource(R.color.recyclable_notification_label)
+            GarbageType.REGULAR -> holder.category.setChipBackgroundColorResource(R.color.regular_notification_label)
         }
 
         holder.time.text = "${notification.hours}:${notification.minutes}"

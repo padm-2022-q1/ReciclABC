@@ -1,55 +1,63 @@
 package br.edu.ufabc.reciclabc.ui.collectionpoints
 
-import android.util.Log
+import android.app.Application
+import android.content.pm.PackageManager
+import android.location.Location
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import br.edu.ufabc.reciclabc.App
 import br.edu.ufabc.reciclabc.model.CollectionPoint
-import br.edu.ufabc.reciclabc.model.CollectionPointsRepository
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import br.edu.ufabc.reciclabc.model.MaterialType
+import br.edu.ufabc.reciclabc.model.repository.CollectionPointsRepository
 
-class CollectionPointsViewModel : ViewModel() {
+class CollectionPointsViewModel(application: Application) : AndroidViewModel(application) {
     val selectedMarker = MutableLiveData<Int?>(null)
-    private val repository = CollectionPointsRepository()
+    val placeFromSearch = MutableLiveData<PlaceFromSearch?>(null)
+    var lastKnownLocation: Location? = null
+    private val repository = (application as App).collectionPointsRepository
 
-    val handleMapReady = OnMapReadyCallback { map ->
-        Log.d("CollectionPoints", "Map ready")
-        map.uiSettings.isMapToolbarEnabled = false
+    private val _collectionPoints = MutableLiveData(repository.getAll())
+    val collectionPoints: LiveData<List<CollectionPoint>> = _collectionPoints
 
-        map.setOnMarkerClickListener(handleMarkerClick)
-        map.setOnMapClickListener(handleMapClick)
+    private val _materialFilter = MutableLiveData<MutableSet<MaterialType>>(mutableSetOf())
+    val materialFilter: LiveData<MutableSet<MaterialType>> = _materialFilter
 
-        addMarkers(map)
+    fun clearMaterialFilter() {
+        _materialFilter.value = mutableSetOf()
     }
 
-    private val handleMarkerClick = GoogleMap.OnMarkerClickListener {
-        val markerId = it.tag
-        if (markerId is Int) {
-            Log.d("CollectionPoints", "Selected marker with id $markerId")
-            selectedMarker.value = markerId
-        }
-        false
+    fun addMaterialFilterOption(material: MaterialType) {
+        _materialFilter.value?.add(material)
     }
 
-    private val handleMapClick = GoogleMap.OnMapClickListener {
-        Log.d("CollectionPoints", "Cleared selected marker")
-        selectedMarker.value = null
+    fun removeMaterialFilterOption(material: MaterialType) {
+        _materialFilter.value?.remove(material)
     }
 
-    private fun addMarkers(map: GoogleMap) {
-        for (collectionPoint in repository.getAll()) {
-            map.addMarker(
-                MarkerOptions().position(
-                    LatLng(
-                        collectionPoint.lat.toDouble(),
-                        collectionPoint.lng.toDouble()
-                    )
-                ).title(collectionPoint.name)
-            )?.tag = collectionPoint.id
+    fun filterCollectionPoints() {
+        _materialFilter.value?.let { materials ->
+            _collectionPoints.value = repository.getAll().filter { collectionPoint ->
+                collectionPoint.materials.containsAll(materials)
+            }
         }
     }
 
     fun getCollectionPointById(id: Int): CollectionPoint? = repository.getById(id)
+
+    fun hasLocationPermission(): Boolean {
+        val preciseLocationPermission = ContextCompat.checkSelfPermission(
+            getApplication<Application>().applicationContext,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        )
+
+        val approximateLocationPermission = ContextCompat.checkSelfPermission(
+            getApplication<Application>().applicationContext,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+
+        return preciseLocationPermission == PackageManager.PERMISSION_GRANTED ||
+                approximateLocationPermission == PackageManager.PERMISSION_GRANTED
+    }
 }

@@ -1,12 +1,11 @@
 package br.edu.ufabc.reciclabc.ui.notifications
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentNotificationsBinding
 import br.edu.ufabc.reciclabc.model.AddressNotification
 
@@ -14,6 +13,10 @@ class NotificationsFragment : Fragment() {
     private lateinit var binding: FragmentNotificationsBinding
     private val viewModel: NotificationsViewModel by viewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,10 +50,20 @@ class NotificationsFragment : Fragment() {
                 onDeleteAddressNotificationClicked,
             )
         }
-
-        binding.floatingActionButton.setOnClickListener {
-            val action = NotificationsFragmentDirections.createAddressNotificationAction()
-            it.findNavController().navigate(action)
-        }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.add_notification_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
+            R.id.add_address_notification -> {
+                val action = NotificationsFragmentDirections.createAddressNotificationAction()
+                view?.findNavController()?.navigate(action)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
 }
