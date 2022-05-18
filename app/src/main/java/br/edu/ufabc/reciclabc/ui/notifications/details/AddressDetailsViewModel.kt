@@ -100,8 +100,14 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
         currentAddressId.value?.let { loadAddress(it) }
     }
 
-    fun setNotificationEnabled(notificationId: Long, enabled: Boolean) {
-        // TODO: edit notification
+    fun toggleNotification(notificationId: Long, isActive: Boolean) {
+        currentNotificationList.value?.first { it.id == notificationId }?.let {
+            val notification = Notification(it.id, it.category, it.weekdays, it.hours, it.minutes, isActive)
+
+            currentNotificationList.value = currentNotificationList.value?.map { n ->
+                if (n.id == notificationId) notification else n
+            }?.toMutableList()
+        }
     }
 
     fun deleteNotification(notificationId: Long) {

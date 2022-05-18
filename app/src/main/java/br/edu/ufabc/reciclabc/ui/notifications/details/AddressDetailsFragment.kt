@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,7 +13,6 @@ import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentNotificationGroupDetailsBinding
 import br.edu.ufabc.reciclabc.model.Notification
 import br.edu.ufabc.reciclabc.ui.shared.Status
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 class AddressDetailsFragment : Fragment() {
@@ -98,7 +96,7 @@ class AddressDetailsFragment : Fragment() {
                     notifications,
                     { handleEditNotificationClick(it) },
                     { handleDeleteNotificationClick(it) },
-                    { id, enabled -> viewModel.setNotificationEnabled(id, enabled) }
+                    { id, isActive -> viewModel.toggleNotification(id, isActive) }
                 )
             }
         }
