@@ -13,8 +13,8 @@ interface NotificationDao {
 
     @Update
     fun update(notificationEntity: NotificationEntity)
-
-    @Update
+    
+    @Transaction
     fun upsert(notificationEntity: NotificationEntity) {
         val id = insert(notificationEntity)
         if (id == -1L) {
