@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
+    android:id="@+id/main_navigation"
     app:startDestination="@+id/navigation_recycling_guide">
 
     <fragment
@@ -17,5 +17,20 @@
         android:label="@string/title_collection_points"
         tools:layout="@layout/fragment_collection_points" />
 
-    <include app:graph="@navigation/notifications" />
+    <fragment
+        android:id="@+id/notifications_screen"
+        android:name="br.edu.ufabc.reciclabc.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications">
+        <action
+            android:id="@+id/notification_group_details_action"
+            app:destination="@id/navigation_notifications">
+            <argument
+                android:name="notificationGroupId"
+                android:defaultValue="0L"
+                app:argType="long" />
+        </action>
+    </fragment>
+
+    <include app:graph="@navigation/notifications_navigation" />
 </navigation>

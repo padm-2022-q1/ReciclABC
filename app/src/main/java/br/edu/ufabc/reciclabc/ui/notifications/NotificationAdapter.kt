@@ -8,18 +8,15 @@ import br.edu.ufabc.reciclabc.databinding.NotificationItemBinding
 import br.edu.ufabc.reciclabc.model.Notification
 import br.edu.ufabc.reciclabc.utils.extensions.weekdaysToAbbreviationString
 
-class NotificationAdapter(private val notifications: List<Notification>) :
+class NotificationAdapter(
+    private val notifications: List<Notification>,
+    private val onToggleNotification: ((notificationId: Long, isChecked: Boolean) -> Unit),
+    ) :
     RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
 
-    class NotificationViewHolder(itemBinding: NotificationItemBinding) :
+    inner class NotificationViewHolder(itemBinding: NotificationItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         val switch = itemBinding.notificationItemSwitch
-
-        init {
-            switch.setOnCheckedChangeListener { buttonView, isChecked ->
-                //TODO Change notification isActive value.
-            }
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationViewHolder =
@@ -45,10 +42,8 @@ class NotificationAdapter(private val notifications: List<Notification>) :
             notification.minutes,
             )
         holder.switch.isChecked = notification.isActive
+        holder.switch.setOnCheckedChangeListener { _, isChecked -> onToggleNotification(notification.id, isChecked) }
     }
 
     override fun getItemCount(): Int = notifications.size
-
-    override fun getItemId(position: Int): Long = notifications[position].id
-
 }

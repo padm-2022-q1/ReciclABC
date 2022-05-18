@@ -8,12 +8,13 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.AddressNotificationBinding
-import br.edu.ufabc.reciclabc.model.AddressNotification
+import br.edu.ufabc.reciclabc.model.Address
 
 class AddressNotificationAdapter(
-    private val addressNotifications: List<AddressNotification>,
-    private val onEditAddressNotificationClicked: ((addressNotification: AddressNotification) -> Unit),
+    private val addresses: List<Address>,
+    private val onEditAddressNotificationClicked: ((address: Address) -> Unit),
     private val onDeleteAddressNotificationClicked: ((addressNotificationId: Long) -> Unit),
+    private val onToggleNotification: ((notificationId: Long, isChecked: Boolean) -> Unit),
     ) :
     RecyclerView.Adapter<AddressNotificationAdapter.AddressNotificationViewHolder>() {
 
@@ -41,14 +42,15 @@ class AddressNotificationAdapter(
         )
 
     override fun onBindViewHolder(holder: AddressNotificationViewHolder, position: Int) {
-        val addressNotification = addressNotifications[position]
+        val addressNotification = addresses[position]
 
-        holder.address.text = addressNotification.address
+        holder.address.text = addressNotification.name
 
         if (addressNotification.regularGarbage.isNotEmpty()) {
             holder.regularGarbageNotifications.apply {
                 adapter = NotificationAdapter(
-                    addressNotification.regularGarbage
+                    addressNotification.regularGarbage,
+                    onToggleNotification,
                 )
             }
         } else {
@@ -58,7 +60,8 @@ class AddressNotificationAdapter(
         if (addressNotification.recyclableGarbage.isNotEmpty()) {
             holder.recyclableGarbageNotifications.apply {
                 adapter = NotificationAdapter(
-                    addressNotification.recyclableGarbage
+                    addressNotification.recyclableGarbage,
+                    onToggleNotification,
                 )
             }
         } else {
@@ -87,7 +90,5 @@ class AddressNotificationAdapter(
         }
     }
 
-    override fun getItemCount(): Int = addressNotifications.size
-
-    override fun getItemId(position: Int): Long = addressNotifications[position].id
+    override fun getItemCount(): Int = addresses.size
 }

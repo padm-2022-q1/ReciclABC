@@ -2,7 +2,7 @@ package br.edu.ufabc.reciclabc.model.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import br.edu.ufabc.reciclabc.model.AddressNotification
+import br.edu.ufabc.reciclabc.model.Address
 
 @Entity
 data class AddressEntity(
@@ -10,9 +10,9 @@ data class AddressEntity(
     val address: String,
 ) {
     companion object {
-        fun fromAddressNotification(addressNotification: AddressNotification) = AddressEntity(
-            addressNotification.id,
-            addressNotification.address,
+        fun fromAddressNotification(address: Address) = AddressEntity(
+            address.id,
+            address.name,
         )
     }
 }

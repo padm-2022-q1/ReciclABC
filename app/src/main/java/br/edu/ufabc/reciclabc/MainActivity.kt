@@ -12,8 +12,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import br.edu.ufabc.reciclabc.databinding.ActivityMainBinding
-import br.edu.ufabc.reciclabc.ui.notifications.createaddressnotification.CreateAddressNotificationFragmentArgs
-import br.edu.ufabc.reciclabc.ui.notifications.createnotification.CreateNotificationFragmentArgs
+import br.edu.ufabc.reciclabc.ui.notifications.details.AddressDetailsFragmentArgs
+import br.edu.ufabc.reciclabc.ui.notifications.details.NotificationDetailsFragmentArgs
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.create_notification_screen -> {
                     navView.visibility = View.GONE
                     args?.apply {
-                        if (CreateNotificationFragmentArgs.fromBundle(this).notification == null) {
+                        if (NotificationDetailsFragmentArgs.fromBundle(this).notificationId < 0) {
                             destination.label =
                                 getString(R.string.fragment_label_create_notification)
                         } else {
@@ -59,14 +59,13 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                R.id.create_address_notification_screen -> {
+                R.id.notification_group_details_screen -> {
                     navView.visibility = View.GONE
                     args?.apply {
-                        if (CreateAddressNotificationFragmentArgs.fromBundle(this).addressNotification == null) {
-                            destination.label =
-                                getString(R.string.fragment_label_create_notification)
+                        if (AddressDetailsFragmentArgs.fromBundle(this).notificationGroupId < 0) {
+                            destination.label = getString(R.string.notifications_add_address)
                         } else {
-                            destination.label = getString(R.string.fragment_label_edit_notification)
+                            destination.label = getString(R.string.notifications_edit_address)
                         }
                     }
                 }

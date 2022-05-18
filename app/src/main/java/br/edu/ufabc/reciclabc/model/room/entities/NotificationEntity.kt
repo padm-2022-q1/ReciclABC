@@ -30,7 +30,7 @@ data class NotificationEntity(
     )
     companion object {
         fun fromNotification(notification: Notification, addressId: Long) = NotificationEntity(
-            notification.id,
+            if (notification.id < 0) 0 else notification.id,
             addressId,
             notification.category,
             notification.weekdays,
