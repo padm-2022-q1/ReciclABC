@@ -15,7 +15,19 @@
         android:id="@+id/navigation_collection_points"
         android:name="br.edu.ufabc.reciclabc.ui.collectionpoints.CollectionPointsFragment"
         android:label="@string/title_collection_points"
-        tools:layout="@layout/fragment_collection_points" />
+        tools:layout="@layout/fragment_collection_points">
+        <action
+            android:id="@+id/create_filled_address_notification_action"
+            app:destination="@id/navigation_notifications">
+            <argument
+                android:name="addressId"
+                android:defaultValue="0L"
+                app:argType="long" />
+            <argument
+                android:name="address"
+                app:argType="string" />
+        </action>
+    </fragment>
 
     <fragment
         android:id="@+id/notifications_screen"
@@ -26,7 +38,7 @@
             android:id="@+id/notification_group_details_action"
             app:destination="@id/navigation_notifications">
             <argument
-                android:name="notificationGroupId"
+                android:name="addressId"
                 android:defaultValue="0L"
                 app:argType="long" />
         </action>
