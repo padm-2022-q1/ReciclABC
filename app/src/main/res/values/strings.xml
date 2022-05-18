@@ -76,5 +76,5 @@
     <string name="error_could_not_get_location">"Não foi possível obter a localização do dispositivo."</string>
     <string name="error_place_search">"Erro na busca por endereço."</string>
     <string name="cp_details_notification_button_description">Nova Notificação</string>
-    <string name="cp_details_map_button_description">Abrir no Google Maps</string>
+    <string name="cp_details_map_button_description">Abrir endereço</string>
 </resources>
