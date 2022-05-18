@@ -109,7 +109,7 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
             currentNotificationList.value?.filter { it.id != notificationId }?.toMutableList()
     }
 
-    private fun clearCurrentNotification() {
+    fun clearCurrentNotification() {
         currentNotificationId.value = null
         currentNotificationWeekdays.value = mutableSetOf()
         currentNotificationHour.value = null
