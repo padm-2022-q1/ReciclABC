@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.CreateNotificationItemBinding
 import br.edu.ufabc.reciclabc.model.GarbageType
-import br.edu.ufabc.reciclabc.model.Notification
+import br.edu.ufabc.reciclabc.model.NotificationGroup
 import br.edu.ufabc.reciclabc.utils.extensions.weekdaysToAbbreviationString
 
 class CreateNotificationAdapter(
-    private val notifications: List<Notification>,
-    private val onEditNotificationClicked: ((notification: Notification) -> Unit),
-    private val onDeleteNotificationClicked: ((notificationId: Long) -> Unit),
-    private val onEnabledSwitchChange: ((notificationId: Long, checked: Boolean) -> Unit),
+    private val notificationGroups: List<NotificationGroup>,
+    private val onEditNotificationClicked: ((notificationGroup: NotificationGroup) -> Unit),
+    private val onDeleteNotificationClicked: ((notificationGroupId: Long) -> Unit),
+    private val onEnabledSwitchChange: ((notificationGroupId: Long, checked: Boolean) -> Unit),
 ) :
     RecyclerView.Adapter<CreateNotificationAdapter.CreatedNotificationViewHolder>() {
 
@@ -41,28 +41,28 @@ class CreateNotificationAdapter(
         )
 
     override fun onBindViewHolder(holder: CreatedNotificationViewHolder, position: Int) {
-        val notification = notifications[position]
+        val notificationGroup = notificationGroups[position]
 
-        holder.category.text = when(notification.category) {
+        holder.category.text = when(notificationGroup.category) {
             GarbageType.RECYCLABLE -> holder.itemView.context.getString(R.string.create_notification_item_chip_text_recyclable)
             GarbageType.REGULAR -> holder.itemView.context.getString(R.string.create_notification_item_chip_text_regular)
         }
-        when (notification.category) {
+        when (notificationGroup.category) {
             GarbageType.RECYCLABLE -> holder.category.setChipBackgroundColorResource(R.color.recyclable_notification_label)
             GarbageType.REGULAR -> holder.category.setChipBackgroundColorResource(R.color.regular_notification_label)
         }
 
         holder.time.text = holder.itemView.context?.getString(
             R.string.create_notification_time_format,
-            notification.hours,
-            notification.minutes,
+            notificationGroup.hours,
+            notificationGroup.minutes,
         )
 
-        holder.switch.isChecked = notification.isActive
+        holder.switch.isChecked = notificationGroup.isActive
 
-        holder.weekdays.text = weekdaysToAbbreviationString(holder.itemView.context, notification.weekdays)
+        holder.weekdays.text = weekdaysToAbbreviationString(holder.itemView.context, notificationGroup.getWeekDays())
 
-        holder.switch.setOnCheckedChangeListener { _, checked -> onEnabledSwitchChange(notification.id, checked)}
+        holder.switch.setOnCheckedChangeListener { _, checked -> onEnabledSwitchChange(notificationGroup.id, checked)}
 
         holder.menu.setOnClickListener {
             val popup = PopupMenu(it.context, it)
@@ -71,11 +71,11 @@ class CreateNotificationAdapter(
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.notification_menu_edit -> {
-                        onEditNotificationClicked(notification)
+                        onEditNotificationClicked(notificationGroup)
                         true
                     }
                     R.id.notification_menu_delete -> {
-                        onDeleteNotificationClicked(notification.id)
+                        onDeleteNotificationClicked(notificationGroup.id)
                         true
                     }
                     else -> false
@@ -86,7 +86,7 @@ class CreateNotificationAdapter(
         }
     }
 
-    override fun getItemCount(): Int = notifications.size
+    override fun getItemCount(): Int = notificationGroups.size
 
-    override fun getItemId(position: Int): Long = notifications[position].id
+    override fun getItemId(position: Int): Long = notificationGroups[position].id
 }

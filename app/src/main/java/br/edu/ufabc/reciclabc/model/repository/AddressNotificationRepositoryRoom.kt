@@ -4,9 +4,11 @@ import android.app.Application
 import androidx.room.Room
 import androidx.room.withTransaction
 import br.edu.ufabc.reciclabc.model.Address
+import br.edu.ufabc.reciclabc.model.NotificationGroup
 import br.edu.ufabc.reciclabc.model.room.AppDatabase
 import br.edu.ufabc.reciclabc.model.room.entities.AddressEntity
 import br.edu.ufabc.reciclabc.model.room.entities.NotificationEntity
+import br.edu.ufabc.reciclabc.model.room.entities.NotificationGroupEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -25,8 +27,11 @@ class AddressNotificationRepositoryRoom(application: Application) {
     suspend fun add(address: Address) = withContext(Dispatchers.IO) {
         db.withTransaction {
             val addressId = db.AddressDao().insert(AddressEntity.fromAddressNotification(address))
-            address.notifications.forEach {
-                db.NotificationDao().insert(NotificationEntity.fromNotification(it, addressId))
+            address.notifications.forEach { notificationGroup ->
+                val groupId = db.NotificationGroupDao().insert(NotificationGroupEntity.fromNotificationGroup(notificationGroup, addressId))
+                notificationGroup.notifications.forEach { notification ->
+                    db.NotificationDao().insert(NotificationEntity.fromNotification(notification, groupId))
+                }
             }
         }
     }
@@ -36,30 +41,49 @@ class AddressNotificationRepositoryRoom(application: Application) {
         val dbNotificationsIds = dbAddress.notifications.map { it.id }.toSet()
         val notificationIds = address.notifications.map { it.id }.toSet()
 
-        val deleteNotificationIds = dbNotificationsIds.minus(notificationIds)
+        val deleteNotificationGroupIds = dbNotificationsIds.minus(notificationIds)
 
         db.withTransaction {
             db.AddressDao().update(AddressEntity.fromAddressNotification(address))
             address.notifications.forEach {
-                db.NotificationDao().upsert(NotificationEntity.fromNotification(it, dbAddress.id))
+                val notificationGroupId = db.NotificationGroupDao().upsert(NotificationGroupEntity.fromNotificationGroup(it, dbAddress.id))
+                upsertNotifications(it, notificationGroupId)
             }
 
-            deleteNotificationIds.forEach {
-                dbAddress.notifications.find { n -> n.id == it }?.let {
-                    db.NotificationDao().delete(NotificationEntity.fromNotification(it, dbAddress.id))
+            deleteNotificationGroupIds.forEach {
+                dbAddress.notifications.find { ng -> ng.id == it }?.let {
+                    db.NotificationGroupDao().delete(NotificationGroupEntity.fromNotificationGroup(it, dbAddress.id))
                 }
             }
         }
     }
 
-    suspend fun delete(addressId: Long) = withContext(Dispatchers.IO) {
-        val address = db.AddressDao().getById(addressId).toAddressNotification()
-        db.withTransaction {
-            db.AddressDao().delete(AddressEntity.fromAddressNotification(address))
+    private fun upsertNotifications(notificationGroup: NotificationGroup, notificationGroupId: Long) {
+        notificationGroup.notifications.forEach {
+            db.NotificationDao().insert(NotificationEntity.fromNotification(it, notificationGroupId))
+        }
+
+//        If the group is new, there is nothing to delete
+        if (notificationGroup.id == 0L) return
+
+        val dbNotificationGroup = db.NotificationGroupDao().getById(notificationGroup.id).toNotificationGroup()
+        val dbNotificationsIds = dbNotificationGroup.notifications.map { it.id }.toSet()
+        val notificationIds = notificationGroup.notifications.map { it.id }.toSet()
+
+        val deleteNotificationIds = dbNotificationsIds.minus(notificationIds)
+
+        deleteNotificationIds.forEach {
+            val notification = dbNotificationGroup.notifications.find { n -> n.id == it }
+            db.NotificationDao().delete(NotificationEntity.fromNotification(notification!!, dbNotificationGroup.id))
         }
     }
 
-    suspend fun toggleNotification(notificationId: Long, isActive: Boolean) = withContext(Dispatchers.IO) {
-            db.NotificationDao().toggleActive(notificationId, isActive)
+    suspend fun delete(addressId: Long) = withContext(Dispatchers.IO) {
+        val address = db.AddressDao().getById(addressId).toAddressNotification()
+        db.AddressDao().delete(AddressEntity.fromAddressNotification(address))
+    }
+
+    suspend fun toggleNotification(notificationGroupId: Long, isActive: Boolean) = withContext(Dispatchers.IO) {
+        db.NotificationGroupDao().toggleActive(notificationGroupId, isActive)
     }
 }

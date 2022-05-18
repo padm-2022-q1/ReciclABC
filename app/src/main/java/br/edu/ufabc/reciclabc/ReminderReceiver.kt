@@ -8,10 +8,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import br.edu.ufabc.reciclabc.model.Notification
+import br.edu.ufabc.reciclabc.model.NotificationGroup
 import java.util.*
 
 class ReminderReceiver : BroadcastReceiver() {
@@ -34,12 +33,12 @@ class ReminderReceiver : BroadcastReceiver() {
     }
 
     fun setAlarm(context: Context,
-                 notification: Notification,
+                 notificationGroup: NotificationGroup,
                  weekday: Int,
                  pendingIntent: PendingIntent) {
 
         val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val scheduleDateMillis = calculateNextTriggerDateInMillis(weekday, notification.hours, notification.minutes)
+        val scheduleDateMillis = calculateNextTriggerDateInMillis(weekday, notificationGroup.hours, notificationGroup.minutes)
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
