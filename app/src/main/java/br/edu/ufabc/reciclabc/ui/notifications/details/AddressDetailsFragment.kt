@@ -82,8 +82,8 @@ class AddressDetailsFragment : Fragment() {
             binding.edittextAddress.editText?.setSelection(it.length)
         }
 
-        binding.edittextAddress.editText?.doOnTextChanged { _, start, before, count ->
-            if (count == 0 && start == 0 && before > 0) {
+        binding.edittextAddress.editText?.doOnTextChanged { text, start, before, _ ->
+            if ((start > 0 || before > 0) && text?.trim().isNullOrEmpty()) {
                 binding.edittextAddress.error = getString(R.string.notifications_required_address)
             } else {
                 binding.edittextAddress.error = null
