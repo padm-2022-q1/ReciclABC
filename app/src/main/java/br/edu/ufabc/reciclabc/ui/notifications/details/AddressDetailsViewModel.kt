@@ -9,8 +9,8 @@ import br.edu.ufabc.reciclabc.model.Address
 import br.edu.ufabc.reciclabc.model.GarbageType
 import br.edu.ufabc.reciclabc.model.Notification
 import br.edu.ufabc.reciclabc.model.Weekday
-import br.edu.ufabc.reciclabc.ui.shared.Status
 import br.edu.ufabc.reciclabc.ui.shared.Result
+import br.edu.ufabc.reciclabc.ui.shared.Status
 
 class AddressDetailsViewModel(application: Application) : AndroidViewModel(application) {
     private val addressNotificationRepository = (application as App).addressNotificationRepository
