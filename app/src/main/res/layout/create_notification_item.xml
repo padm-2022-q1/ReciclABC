@@ -16,8 +16,10 @@
             android:id="@+id/create_notification_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="@string/create_notification_item_chip_text_recyclable"
             android:textSize="11sp"
+            android:textStyle="bold"
             app:ensureMinTouchTargetSize="false"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
