@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentCollectionPointsBinding
 import br.edu.ufabc.reciclabc.model.CollectionPoint
@@ -71,6 +72,7 @@ class CollectionPointsFragment : Fragment() {
             root.isClickable = true
 
             cpDetailsMapButton.setOnClickListener { handleCardMapButtonClick() }
+            cpDetailsNotificationButton.setOnClickListener { handleCardNotificationButtonClick() }
         }
 
         viewModel.collectionPoints.observe(viewLifecycleOwner) { collectionPoints ->
@@ -137,6 +139,18 @@ class CollectionPointsFragment : Fragment() {
                 val mapIntentUri = Uri.parse("geo:${cp.lat},${cp.lng}?q=${Uri.encode(cp.name)}")
                 val mapIntent = Intent(Intent.ACTION_VIEW, mapIntentUri)
                 startActivity(mapIntent)
+            }
+        }
+    }
+
+    private fun handleCardNotificationButtonClick() {
+        viewModel.selectedMarker.value?.let { id ->
+            viewModel.getCollectionPointById(id)?.let { cp ->
+                CollectionPointsFragmentDirections.createFilledAddressNotificationAction(
+                    address = cp.address
+                ).let {
+                    findNavController().navigate(it)
+                }
             }
         }
     }

@@ -4,17 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_notifications"
-    app:startDestination="@+id/notification_group_details_screen">
+    app:startDestination="@+id/address_details_screen">
 
     <fragment
-        android:id="@+id/notification_group_details_screen"
+        android:id="@+id/address_details_screen"
         android:name="br.edu.ufabc.reciclabc.ui.notifications.details.AddressDetailsFragment"
         android:label="@string/fragment_label_create_notification"
         tools:layout="@layout/fragment_notification_group_details">
         <argument
-            android:name="notificationGroupId"
+            android:name="addressId"
             android:defaultValue="0L"
             app:argType="long" />
+        <argument
+            android:name="address"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/create_notification_action"
             app:destination="@id/create_notification_screen" />

@@ -54,9 +54,9 @@ class AddressDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (args.notificationGroupId > 0) {
+        if (args.addressId > 0) {
             if (viewModel.currentAddressId.value == null) {
-                viewModel.loadAddress(args.notificationGroupId).observe(viewLifecycleOwner) {
+                viewModel.loadAddress(args.addressId).observe(viewLifecycleOwner) {
                     if (it.status is Status.Error) {
                         Snackbar.make(
                             binding.root,
@@ -67,6 +67,7 @@ class AddressDetailsFragment : Fragment() {
                 }
             }
         }
+        else args.address?.let { address -> viewModel.currentAddressName.value = address }
         setupFields()
         setupHandlers()
     }

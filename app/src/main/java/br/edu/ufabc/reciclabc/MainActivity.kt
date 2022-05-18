@@ -59,10 +59,10 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                R.id.notification_group_details_screen -> {
+                R.id.address_details_screen -> {
                     navView.visibility = View.GONE
                     args?.apply {
-                        if (AddressDetailsFragmentArgs.fromBundle(this).notificationGroupId < 0) {
+                        if (AddressDetailsFragmentArgs.fromBundle(this).addressId < 0) {
                             destination.label = getString(R.string.notifications_add_address)
                         } else {
                             destination.label = getString(R.string.notifications_edit_address)
