@@ -113,7 +113,7 @@ class NotificationsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             R.id.add_address_notification -> {
-                val action = NotificationsFragmentDirections.notificationGroupDetailsAction(-1)
+                val action = NotificationsFragmentDirections.notificationGroupDetailsAction()
                 view?.findNavController()?.navigate(action)
                 true
             }

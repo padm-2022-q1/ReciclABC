@@ -25,6 +25,8 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
     var currentNotificationMinute = MutableLiveData<Int?>(null)
     var currentNotificationGarbageType = MutableLiveData(GarbageType.REGULAR)
 
+    var generatedId = 0L
+
     fun loadAddress(id: Long) = liveData {
         if (currentAddressId.value == null) {
             try {
@@ -78,7 +80,7 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     fun saveNotification() = liveData {
         val notification = Notification(
-            currentNotificationId.value ?: 0,
+            currentNotificationId.value ?: --generatedId,
             currentNotificationGarbageType.value ?: GarbageType.REGULAR,
             currentNotificationWeekdays.value?.toList() ?: emptyList(),
             currentNotificationHour.value ?: 0,

@@ -34,7 +34,7 @@ class NotificationDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (args.notificationId > 0) {
+        if (args.notificationId != 0L) {
             if (viewModel.currentNotificationId.value == null) {
                 viewModel.loadNotification(args.notificationId).observe(viewLifecycleOwner) {
                     if (it.status is Status.Error) {

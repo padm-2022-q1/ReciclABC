@@ -13,6 +13,7 @@
         tools:layout="@layout/fragment_notification_group_details">
         <argument
             android:name="notificationGroupId"
+            android:defaultValue="0L"
             app:argType="long" />
         <action
             android:id="@+id/create_notification_action"
@@ -26,6 +27,7 @@
         tools:layout="@layout/fragment_create_notification">
         <argument
             android:name="notificationId"
+            android:defaultValue="0L"
             app:argType="long" />
     </fragment>
 </navigation>

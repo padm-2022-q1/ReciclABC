@@ -27,6 +27,7 @@
             app:destination="@id/navigation_notifications">
             <argument
                 android:name="notificationGroupId"
+                android:defaultValue="0L"
                 app:argType="long" />
         </action>
     </fragment>

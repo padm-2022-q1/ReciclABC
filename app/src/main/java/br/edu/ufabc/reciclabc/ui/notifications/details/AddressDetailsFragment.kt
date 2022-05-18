@@ -115,7 +115,7 @@ class AddressDetailsFragment : Fragment() {
     }
 
     private fun handleAddNotificationClick() {
-        val action = AddressDetailsFragmentDirections.createNotificationAction(-1)
+        val action = AddressDetailsFragmentDirections.createNotificationAction()
         viewModel.clearCurrentNotification()
         findNavController().navigate(action)
     }
