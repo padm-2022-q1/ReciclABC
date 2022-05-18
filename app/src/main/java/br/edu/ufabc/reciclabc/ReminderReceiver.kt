@@ -96,4 +96,15 @@ class ReminderReceiver : BroadcastReceiver() {
 
         return scheduledDate.timeInMillis
     }
+
+    fun createPendingIntent(context: Context,
+                            intent: Intent,
+                            alarmId: Int,
+                            garbageType: String,
+                            addressId: Int): PendingIntent {
+        return PendingIntent.getBroadcast(context,
+            alarmId,
+            intent.putExtra("garbageType",garbageType).putExtra("addressId", addressId),
+            PendingIntent.FLAG_IMMUTABLE)
+    }
 }
