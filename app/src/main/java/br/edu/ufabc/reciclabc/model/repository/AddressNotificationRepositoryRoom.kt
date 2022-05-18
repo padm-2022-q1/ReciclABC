@@ -66,9 +66,7 @@ class AddressNotificationRepositoryRoom(application: Application) {
         }
     }
 
-    suspend fun toggleNotification(notificationId: Long, isActive: Boolean) {
-        db.withTransaction {
+    suspend fun toggleNotification(notificationId: Long, isActive: Boolean) = withContext(Dispatchers.IO) {
             db.NotificationDao().toggleActive(notificationId, isActive)
-        }
     }
 }
