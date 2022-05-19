@@ -66,7 +66,7 @@
     <string name="filter_button_description">Filtrar</string>
     <string name="my_location_button_description">Minha localização</string>
     <string name="broadcast_receiver_notification_title">Seu lembrete de retirar o lixo!</string>
-    <string name="broadcast_receiver_notification_content">O horário da coleta de lixo %1$s está próximo.</string>
+    <string name="broadcast_receiver_notification_content">O horário da coleta de lixo %1$s está próximo de %2$s.</string>
     <string name="notification_channel_name">Notificação ReciclABC</string>
     <string name="notification_channel_description">Lembrete de coleta de lixo</string>
     <string name="add_notification_menu_add_notification">Adicionar notificação</string>
@@ -78,4 +78,6 @@
     <string name="cp_details_notification_button_description">Nova Notificação</string>
     <string name="cp_details_map_button_description">Abrir endereço</string>
     <string name="exit_without_saving_confirmation_text">Tem certeza que deseja sair sem salvar as alterações?</string>
+    <string name="garbage_regular">comum</string>
+    <string name="garbage_recyclabe">reciclável</string>
 </resources>
