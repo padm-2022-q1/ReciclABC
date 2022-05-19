@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -13,6 +14,7 @@ import br.edu.ufabc.reciclabc.databinding.FragmentCreateNotificationBinding
 import br.edu.ufabc.reciclabc.model.GarbageType
 import br.edu.ufabc.reciclabc.model.Weekday
 import br.edu.ufabc.reciclabc.ui.shared.Status
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -22,6 +24,17 @@ class NotificationDetailsFragment : Fragment() {
     private lateinit var binding: FragmentCreateNotificationBinding
     private val viewModel: AddressDetailsViewModel by navGraphViewModels(R.id.navigation_notifications)
     private val args: NotificationDetailsFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.exit_without_saving_confirmation_text))
+                .setNegativeButton("Não") { _, _ -> }
+                .setPositiveButton("Sim") { _, _ -> findNavController().navigateUp() }
+                .show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,9 +60,12 @@ class NotificationDetailsFragment : Fragment() {
                     }
                 }
             }
+            binding.createNotificationButton.text = getString(R.string.menu_edit_text)
         } else {
             viewModel.currentNotificationGroupId.value = null
         }
+
+        addBackButtonPressedDispatcher()
         setupFields()
         setupHandlers()
     }
@@ -187,6 +203,20 @@ class NotificationDetailsFragment : Fragment() {
                     getString(R.string.notifications_error_save_notification),
                     Snackbar.LENGTH_LONG
                 ).show()
+            }
+        }
+    }
+
+    private fun addBackButtonPressedDispatcher() {
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            if (viewModel.notificationHasChanged())  {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.exit_without_saving_confirmation_text))
+                    .setNegativeButton("Não") { _, _ -> }
+                    .setPositiveButton("Sim") { _, _ -> findNavController().navigateUp() }
+                    .show()
+            } else {
+                findNavController().navigateUp()
             }
         }
     }

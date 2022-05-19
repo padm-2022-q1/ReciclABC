@@ -12,6 +12,8 @@ import br.edu.ufabc.reciclabc.ui.shared.Status
 class AddressDetailsViewModel(application: Application) : AndroidViewModel(application) {
     private val addressNotificationRepository = (application as App).addressNotificationRepository
 
+    private var loadedAddress : Address? = null
+
     var currentAddressId = MutableLiveData<Long?>(null)
     var currentAddressName = MutableLiveData("")
     var currentNotificationGroupList = MutableLiveData<MutableList<NotificationGroup>>(mutableListOf())
@@ -28,10 +30,10 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
     fun loadAddress(id: Long) = liveData {
         if (currentAddressId.value == null) {
             try {
-                val address = addressNotificationRepository.getById(id)
-                currentAddressId.value = address.id
-                currentAddressName.value = address.name
-                currentNotificationGroupList.value = address.notifications.toMutableList()
+                loadedAddress = addressNotificationRepository.getById(id)
+                currentAddressId.value = loadedAddress!!.id
+                currentAddressName.value = loadedAddress!!.name
+                currentNotificationGroupList.value = loadedAddress!!.notifications.toMutableList()
                 emit(Result(Unit, Status.Success))
             } catch (e: Exception) {
                 emit(Result(Unit, Status.Error(Exception("failed to load address notification"))))
@@ -127,5 +129,29 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
         currentNotificationGroupHour.value = null
         currentNotificationGroupMinute.value = null
         currentNotificationGroupGarbageType.value = GarbageType.REGULAR
+    }
+
+    fun addressHasChanged(address: String?): Boolean =
+        if (loadedAddress == null) {
+            !address.isNullOrEmpty() || !currentNotificationGroupList.value.isNullOrEmpty()
+        } else {
+            loadedAddress?.name != address || loadedAddress?.notifications != currentNotificationGroupList.value
+        }
+
+    fun notificationHasChanged(): Boolean {
+        val notification = currentNotificationGroupList.value?.find { it.id == currentNotificationGroupId.value }
+
+        return if (notification == null) {
+            currentNotificationGroupWeekdays.value?.isNotEmpty() ?: false ||
+                    currentNotificationGroupHour.value != null ||
+                    currentNotificationGroupMinute.value != null ||
+                    currentNotificationGroupGarbageType.value != GarbageType.REGULAR
+        } else {
+            notification.hours != currentNotificationGroupHour.value ||
+                    notification.minutes != currentNotificationGroupMinute.value ||
+                    notification.category != currentNotificationGroupGarbageType.value ||
+                    notification.notifications != currentNotificationGroupNotifications.value ||
+                    notification.getWeekDays() != currentNotificationGroupWeekdays.value?.toList()
+        }
     }
 }
