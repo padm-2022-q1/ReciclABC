@@ -1,8 +1,13 @@
 package br.edu.ufabc.reciclabc.model.repository
 
 import android.app.Application
+import android.app.PendingIntent
+import android.content.Intent
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.room.Room
 import androidx.room.withTransaction
+import br.edu.ufabc.reciclabc.ReminderReceiver
 import br.edu.ufabc.reciclabc.model.Address
 import br.edu.ufabc.reciclabc.model.NotificationGroup
 import br.edu.ufabc.reciclabc.model.room.AppDatabase
@@ -12,7 +17,7 @@ import br.edu.ufabc.reciclabc.model.room.entities.NotificationGroupEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class AddressNotificationRepositoryRoom(application: Application) {
+class AddressNotificationRepositoryRoom(application: Application): AndroidViewModel(application) {
     private val db: AppDatabase by lazy {
         Room.databaseBuilder(application, AppDatabase::class.java, "ReciclABC").build()
     }
@@ -30,7 +35,19 @@ class AddressNotificationRepositoryRoom(application: Application) {
             address.notifications.forEach { notificationGroup ->
                 val groupId = db.NotificationGroupDao().insert(NotificationGroupEntity.fromNotificationGroup(notificationGroup, addressId))
                 notificationGroup.notifications.forEach { notification ->
-                    db.NotificationDao().insert(NotificationEntity.fromNotification(notification, groupId))
+                    db.NotificationDao().insert(NotificationEntity.fromNotification(notification, groupId)).let {
+                        val context = getApplication<Application?>().applicationContext
+                        val intent = Intent(context, ReminderReceiver::class.java)
+                        intent.putExtra("addressId", notificationGroup.id)
+                        intent.putExtra("addressId", notificationGroup.category)
+
+                        val pendingIntent = PendingIntent.getBroadcast(context,
+                            it.toInt(),
+                            intent,
+                            PendingIntent.FLAG_IMMUTABLE
+                        )
+                        ReminderReceiver().setAlarm(context, notificationGroup, (notification.weekday.ordinal%7)+1, pendingIntent)
+                    }
                 }
             }
         }

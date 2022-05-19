@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import br.edu.ufabc.reciclabc.model.NotificationGroup
@@ -78,7 +79,7 @@ class ReminderReceiver : BroadcastReceiver() {
         if (scheduledDate.get(Calendar.DAY_OF_WEEK) != weekday) {
             scheduledDate.add(
                 Calendar.DAY_OF_MONTH,
-                (weekday - scheduledDate.get(Calendar.DAY_OF_WEEK)) % 7
+                (weekday + 7 - scheduledDate.get(Calendar.DAY_OF_WEEK)) % 7
             )
 
         } else {
