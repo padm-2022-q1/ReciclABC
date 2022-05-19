@@ -60,6 +60,7 @@ class NotificationDetailsFragment : Fragment() {
                     }
                 }
             }
+            binding.createNotificationButton.text = getString(R.string.menu_edit_text)
         } else {
             viewModel.currentNotificationGroupId.value = null
         }
