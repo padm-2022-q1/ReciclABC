@@ -21,17 +21,17 @@
             app:argType="string"
             app:nullable="true" />
         <action
-            android:id="@+id/create_notification_action"
-            app:destination="@id/create_notification_screen" />
+            android:id="@+id/create_notification_group_action"
+            app:destination="@id/create_notification_group_screen" />
     </fragment>
 
     <fragment
-        android:id="@+id/create_notification_screen"
+        android:id="@+id/create_notification_group_screen"
         android:name="br.edu.ufabc.reciclabc.ui.notifications.details.NotificationDetailsFragment"
         android:label="@string/fragment_label_create_notification"
         tools:layout="@layout/fragment_create_notification">
         <argument
-            android:name="notificationId"
+            android:name="notificationGroupId"
             android:defaultValue="0L"
             app:argType="long" />
     </fragment>

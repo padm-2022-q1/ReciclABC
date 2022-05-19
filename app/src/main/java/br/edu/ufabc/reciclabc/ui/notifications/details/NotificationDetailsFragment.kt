@@ -47,9 +47,9 @@ class NotificationDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (args.notificationId != 0L) {
-            if (viewModel.currentNotificationId.value == null) {
-                viewModel.loadNotification(args.notificationId).observe(viewLifecycleOwner) {
+        if (args.notificationGroupId != 0L) {
+            if (viewModel.currentNotificationGroupId.value == null) {
+                viewModel.loadNotificationGroup(args.notificationGroupId).observe(viewLifecycleOwner) {
                     if (it.status is Status.Error) {
                         Snackbar.make(
                             binding.root,
@@ -61,7 +61,7 @@ class NotificationDetailsFragment : Fragment() {
                 }
             }
         } else {
-            viewModel.currentNotificationId.value = null
+            viewModel.currentNotificationGroupId.value = null
         }
 
         addBackButtonPressedDispatcher()
@@ -75,14 +75,14 @@ class NotificationDetailsFragment : Fragment() {
 
             val picker = MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_24H)
-                .setHour(viewModel.currentNotificationHour.value ?: c.get(Calendar.HOUR))
-                .setMinute(viewModel.currentNotificationMinute.value ?: c.get(Calendar.MINUTE))
+                .setHour(viewModel.currentNotificationGroupHour.value ?: c.get(Calendar.HOUR))
+                .setMinute(viewModel.currentNotificationGroupMinute.value ?: c.get(Calendar.MINUTE))
                 .setTitleText(getString(R.string.notifications_pick_hour))
                 .build()
 
             picker.addOnPositiveButtonClickListener {
-                viewModel.currentNotificationHour.value = picker.hour
-                viewModel.currentNotificationMinute.value = picker.minute
+                viewModel.currentNotificationGroupHour.value = picker.hour
+                viewModel.currentNotificationGroupMinute.value = picker.minute
                 fillTimeField()
             }
 
@@ -91,9 +91,9 @@ class NotificationDetailsFragment : Fragment() {
 
         binding.createNotificationRecyclableCategoryRadioGroup.setOnCheckedChangeListener { _, id ->
             when (id) {
-                binding.createNotificationRegularGarbage.id -> viewModel.currentNotificationGarbageType.value =
+                binding.createNotificationRegularGarbage.id -> viewModel.currentNotificationGroupGarbageType.value =
                     GarbageType.REGULAR
-                binding.createNotificationRecyclableGarbage.id -> viewModel.currentNotificationGarbageType.value =
+                binding.createNotificationRecyclableGarbage.id -> viewModel.currentNotificationGroupGarbageType.value =
                     GarbageType.RECYCLABLE
             }
         }
@@ -104,16 +104,16 @@ class NotificationDetailsFragment : Fragment() {
     }
 
     private fun setupFields() {
-        if (viewModel.currentNotificationId.value != null) {
+        if (viewModel.currentNotificationGroupId.value != null) {
             binding.createNotificationButton.text =
                 getString(R.string.edit_notification_button_text)
         }
 
-        viewModel.currentNotificationWeekdays.observe(viewLifecycleOwner) {
+        viewModel.currentNotificationGroupWeekdays.observe(viewLifecycleOwner) {
             setCheckedWeekdays(it.toList())
         }
 
-        viewModel.currentNotificationGarbageType.observe(viewLifecycleOwner) {
+        viewModel.currentNotificationGroupGarbageType.observe(viewLifecycleOwner) {
             when (it) {
                 GarbageType.REGULAR -> binding.createNotificationRegularGarbage.isChecked = true
                 GarbageType.RECYCLABLE -> binding.createNotificationRecyclableGarbage.isChecked =
@@ -122,19 +122,19 @@ class NotificationDetailsFragment : Fragment() {
             }
         }
 
-        viewModel.currentNotificationHour.observe(viewLifecycleOwner) { fillTimeField() }
-        viewModel.currentNotificationMinute.observe(viewLifecycleOwner) { fillTimeField() }
+        viewModel.currentNotificationGroupHour.observe(viewLifecycleOwner) { fillTimeField() }
+        viewModel.currentNotificationGroupMinute.observe(viewLifecycleOwner) { fillTimeField() }
     }
 
     private fun fillTimeField() {
-        if (viewModel.currentNotificationHour.value == null || viewModel.currentNotificationMinute.value == null) {
+        if (viewModel.currentNotificationGroupHour.value == null || viewModel.currentNotificationGroupMinute.value == null) {
             return
         }
         binding.createNotificationTime.editText?.setText(
             getString(
                 R.string.create_notification_time_format,
-                viewModel.currentNotificationHour.value,
-                viewModel.currentNotificationMinute.value,
+                viewModel.currentNotificationGroupHour.value,
+                viewModel.currentNotificationGroupMinute.value,
             )
         )
     }
@@ -174,16 +174,16 @@ class NotificationDetailsFragment : Fragment() {
     }
 
     private fun weekdayChanged(isChecked: Boolean, weekday: Weekday) {
-        if (isChecked) viewModel.currentNotificationWeekdays.value?.add(weekday)
-        else viewModel.currentNotificationWeekdays.value?.remove(weekday)
+        if (isChecked) viewModel.currentNotificationGroupWeekdays.value?.add(weekday)
+        else viewModel.currentNotificationGroupWeekdays.value?.remove(weekday)
         // notify observers
-        viewModel.currentNotificationWeekdays.value = viewModel.currentNotificationWeekdays.value
+        viewModel.currentNotificationGroupWeekdays.value = viewModel.currentNotificationGroupWeekdays.value
     }
 
     private fun validate(): Boolean {
-        if (viewModel.currentNotificationHour.value == null
-            || viewModel.currentNotificationMinute.value == null
-            || viewModel.currentNotificationWeekdays.value?.isEmpty() == true
+        if (viewModel.currentNotificationGroupHour.value == null
+            || viewModel.currentNotificationGroupMinute.value == null
+            || viewModel.currentNotificationGroupWeekdays.value?.isEmpty() == true
         ) {
             Snackbar.make(binding.root, getString(R.string.notifications_missing_fields), Snackbar.LENGTH_LONG).show()
             return false
@@ -193,7 +193,7 @@ class NotificationDetailsFragment : Fragment() {
 
     private fun handleSaveClick() {
         validate() || return
-        viewModel.saveNotification().observe(viewLifecycleOwner) {
+        viewModel.saveNotificationGroup().observe(viewLifecycleOwner) {
             if (it.status == Status.Success) {
                 findNavController().navigateUp()
             } else {

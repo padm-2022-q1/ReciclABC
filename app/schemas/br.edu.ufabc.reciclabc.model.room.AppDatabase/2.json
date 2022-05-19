@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
-    "identityHash": "619bdd923cd5ea8d1eb2db119610a38f",
+    "version": 2,
+    "identityHash": "97bb9ad292018628b110aa5c4886ec0b",
     "entities": [
       {
         "tableName": "AddressEntity",
@@ -31,8 +31,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "NotificationEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `addressId` INTEGER NOT NULL, `category` TEXT NOT NULL, `weekdays` TEXT NOT NULL, `hours` INTEGER NOT NULL, `minutes` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, FOREIGN KEY(`addressId`) REFERENCES `AddressEntity`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "tableName": "NotificationGroupEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `addressId` INTEGER NOT NULL, `category` TEXT NOT NULL, `hours` INTEGER NOT NULL, `minutes` INTEGER NOT NULL, `isActive` INTEGER NOT NULL, FOREIGN KEY(`addressId`) REFERENCES `AddressEntity`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -49,12 +49,6 @@
           {
             "fieldPath": "category",
             "columnName": "category",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "weekdays",
-            "columnName": "weekdays",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -88,9 +82,53 @@
           {
             "table": "AddressEntity",
             "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
+            "onUpdate": "CASCADE",
             "columns": [
               "addressId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "NotificationEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `groupId` INTEGER NOT NULL, `weekday` TEXT NOT NULL, FOREIGN KEY(`groupId`) REFERENCES `NotificationGroupEntity`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "groupId",
+            "columnName": "groupId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weekday",
+            "columnName": "weekday",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "NotificationGroupEntity",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "groupId"
             ],
             "referencedColumns": [
               "id"
@@ -102,7 +140,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '619bdd923cd5ea8d1eb2db119610a38f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '97bb9ad292018628b110aa5c4886ec0b')"
     ]
   }
 }

@@ -7,14 +7,15 @@ import br.edu.ufabc.reciclabc.model.Address
 data class AddressWithNotifications(
     @Embedded val addressEntity: AddressEntity,
     @Relation(
+        entity = NotificationGroupEntity::class,
         parentColumn = "id",
         entityColumn = "addressId"
     )
-    val notificationEntities: List<NotificationEntity>,
+    val notifications: List<Notifications>,
 ) {
     fun toAddressNotification() = Address(
         addressEntity.id,
         addressEntity.address,
-        notificationEntities.map { it.toNotification() }
+        notifications.map { it.toNotificationGroup() }
     )
 }

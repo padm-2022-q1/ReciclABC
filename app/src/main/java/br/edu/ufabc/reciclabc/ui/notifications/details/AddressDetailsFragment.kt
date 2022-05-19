@@ -13,7 +13,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentNotificationGroupDetailsBinding
-import br.edu.ufabc.reciclabc.model.Notification
+import br.edu.ufabc.reciclabc.model.NotificationGroup
 import br.edu.ufabc.reciclabc.ui.shared.Status
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -77,10 +77,10 @@ class AddressDetailsFragment : Fragment() {
             }
         }
 
-        viewModel.currentNotificationList.observe(viewLifecycleOwner) { notifications ->
+        viewModel.currentNotificationGroupList.observe(viewLifecycleOwner) { notificationGroups ->
             binding.recyclerviewNotifications.apply {
                 adapter = CreateNotificationAdapter(
-                    notifications,
+                    notificationGroups,
                     { handleEditNotificationClick(it) },
                     { handleDeleteNotificationClick(it) },
                     { id, isActive -> viewModel.toggleNotification(id, isActive) }
@@ -102,26 +102,26 @@ class AddressDetailsFragment : Fragment() {
     }
 
     private fun handleAddNotificationClick() {
-        val action = AddressDetailsFragmentDirections.createNotificationAction()
-        viewModel.clearCurrentNotification()
+        val action = AddressDetailsFragmentDirections.createNotificationGroupAction()
+        viewModel.clearCurrentNotificationGroup()
         findNavController().navigate(action)
     }
 
-    private fun handleEditNotificationClick(notification: Notification) {
-        val action = AddressDetailsFragmentDirections.createNotificationAction(
-            notification.id
+    private fun handleEditNotificationClick(notificationGroup: NotificationGroup) {
+        val action = AddressDetailsFragmentDirections.createNotificationGroupAction(
+            notificationGroup.id
         )
-        viewModel.clearCurrentNotification()
+        viewModel.clearCurrentNotificationGroup()
         this.findNavController().navigate(action)
     }
 
-    private fun handleDeleteNotificationClick(notificationId: Long) {
-        viewModel.deleteNotification(notificationId)
+    private fun handleDeleteNotificationClick(notificationGroupId: Long) {
+        viewModel.deleteNotificationGroup(notificationGroupId)
     }
 
     private fun validate(): Boolean {
         if (binding.edittextAddress.editText?.text?.trim()?.isEmpty() != false
-            || viewModel.currentNotificationList.value?.size == 0
+            || viewModel.currentNotificationGroupList.value?.size == 0
         ) {
             Snackbar.make(binding.root, getString(R.string.notifications_missing_fields), Snackbar.LENGTH_LONG).show()
             return false

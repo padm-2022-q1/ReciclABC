@@ -48,10 +48,10 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, args ->
             closeKeyboard()
             when (destination.id) {
-                R.id.create_notification_screen -> {
+                R.id.create_notification_group_screen -> {
                     navView.visibility = View.GONE
                     args?.apply {
-                        if (NotificationDetailsFragmentArgs.fromBundle(this).notificationId > 0) {
+                        if (NotificationDetailsFragmentArgs.fromBundle(this).notificationGroupId > 0) {
                             destination.label = getString(R.string.fragment_label_edit_notification)
                         } else {
                             destination.label =
