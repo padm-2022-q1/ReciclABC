@@ -8,38 +8,26 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import br.edu.ufabc.reciclabc.model.GarbageType
 import br.edu.ufabc.reciclabc.model.NotificationGroup
-import br.edu.ufabc.reciclabc.utils.garbageTypeToString
 import java.util.*
 
 class ReminderReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent) {
         context?.let {
-            var garbageType: GarbageType? = null
-            intent.getStringExtra("garbageType")?.let{ garbage ->
-                garbageType = GarbageType.valueOf(garbage)
-            }
-
+            val garbageType = intent.getStringExtra("garbageType")
             val addressId = intent.getIntExtra("addressId", -1)
-            val addressName = intent.getStringExtra("addressName")
-            if (addressId == -1 || garbageType == null || addressName == null) {
-                return
-            }
 
             val builder = NotificationCompat.Builder(it, NOTIFICATIONCHANNELID)
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setContentTitle(it.getString(R.string.broadcast_receiver_notification_title))
-                .setContentText(it.getString(R.string.broadcast_receiver_notification_content,
-                    garbageTypeToString(context, garbageType!!),
-                    addressName))
+                .setContentText(it.getString(R.string.broadcast_receiver_notification_content, garbageType.toString()))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
 
             val notificationManager = NotificationManagerCompat.from(it)
-
 
             notificationManager.notify(addressId, builder.build())
         }
@@ -51,7 +39,7 @@ class ReminderReceiver : BroadcastReceiver() {
                  pendingIntent: PendingIntent) {
 
         val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val scheduleDateMillis = calculateNextTriggerDateInMillis(((weekday + 1).mod(7)), notificationGroup.hours, notificationGroup.minutes)
+        val scheduleDateMillis = calculateNextTriggerDateInMillis(weekday, notificationGroup.hours, notificationGroup.minutes)
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
@@ -91,7 +79,7 @@ class ReminderReceiver : BroadcastReceiver() {
         if (scheduledDate.get(Calendar.DAY_OF_WEEK) != weekday) {
             scheduledDate.add(
                 Calendar.DAY_OF_MONTH,
-                (weekday + 7 - scheduledDate.get(Calendar.DAY_OF_WEEK)).mod(7)
+                (weekday + 7 - scheduledDate.get(Calendar.DAY_OF_WEEK)) % 7
             )
 
         } else {
@@ -108,5 +96,15 @@ class ReminderReceiver : BroadcastReceiver() {
 
         return scheduledDate.timeInMillis
     }
-}
 
+    fun createPendingIntent(context: Context,
+                            intent: Intent,
+                            alarmId: Int,
+                            garbageType: String,
+                            addressId: Int): PendingIntent {
+        return PendingIntent.getBroadcast(context,
+            alarmId,
+            intent.putExtra("garbageType",garbageType).putExtra("addressId", addressId),
+            PendingIntent.FLAG_IMMUTABLE)
+    }
+}
