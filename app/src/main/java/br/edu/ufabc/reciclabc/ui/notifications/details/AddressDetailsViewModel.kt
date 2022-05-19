@@ -133,4 +133,20 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
         } else {
             loadedAddress?.name != address || loadedAddress?.notifications != currentNotificationList.value
         }
+
+    fun notificationHasChanged(): Boolean {
+        val notification = currentNotificationList.value?.find { it.id == currentNotificationId.value }
+
+        return if (notification == null) {
+            currentNotificationWeekdays.value?.isNotEmpty() ?: false ||
+                    currentNotificationHour.value != null ||
+                    currentNotificationMinute.value != null ||
+                    currentNotificationGarbageType.value != GarbageType.REGULAR
+        } else {
+            notification.hours != currentNotificationHour.value ||
+                    notification.minutes != currentNotificationMinute.value ||
+                    notification.category != currentNotificationGarbageType.value ||
+                    notification.weekdays.toMutableSet() != currentNotificationWeekdays.value
+        }
+    }
 }
