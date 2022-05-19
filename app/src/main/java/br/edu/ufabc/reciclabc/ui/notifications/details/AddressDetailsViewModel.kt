@@ -15,6 +15,8 @@ import br.edu.ufabc.reciclabc.ui.shared.Status
 class AddressDetailsViewModel(application: Application) : AndroidViewModel(application) {
     private val addressNotificationRepository = (application as App).addressNotificationRepository
 
+    var loadedAddress : Address? = null
+
     var currentAddressId = MutableLiveData<Long?>(null)
     var currentAddressName = MutableLiveData("")
     var currentNotificationList = MutableLiveData<MutableList<Notification>>(mutableListOf())
@@ -30,10 +32,10 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
     fun loadAddress(id: Long) = liveData {
         if (currentAddressId.value == null) {
             try {
-                val address = addressNotificationRepository.getById(id)
-                currentAddressId.value = address.id
-                currentAddressName.value = address.name
-                currentNotificationList.value = address.notifications.toMutableList()
+                loadedAddress = addressNotificationRepository.getById(id)
+                currentAddressId.value = loadedAddress!!.id
+                currentAddressName.value = loadedAddress!!.name
+                currentNotificationList.value = loadedAddress!!.notifications.toMutableList()
                 emit(Result(Unit, Status.Success))
             } catch (e: Exception) {
                 emit(Result(Unit, Status.Error(Exception("failed to load address notification"))))
@@ -124,4 +126,11 @@ class AddressDetailsViewModel(application: Application) : AndroidViewModel(appli
         currentNotificationMinute.value = null
         currentNotificationGarbageType.value = GarbageType.REGULAR
     }
+
+    fun addressHasChanged(address: String?): Boolean =
+        if (loadedAddress == null) {
+            !address.isNullOrEmpty() || !currentNotificationList.value.isNullOrEmpty()
+        } else {
+            loadedAddress?.name != address || loadedAddress?.notifications != currentNotificationList.value
+        }
 }

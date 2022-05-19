@@ -51,21 +51,21 @@ class MainActivity : AppCompatActivity() {
                 R.id.create_notification_screen -> {
                     navView.visibility = View.GONE
                     args?.apply {
-                        if (NotificationDetailsFragmentArgs.fromBundle(this).notificationId < 0) {
+                        if (NotificationDetailsFragmentArgs.fromBundle(this).notificationId > 0) {
+                            destination.label = getString(R.string.fragment_label_edit_notification)
+                        } else {
                             destination.label =
                                 getString(R.string.fragment_label_create_notification)
-                        } else {
-                            destination.label = getString(R.string.fragment_label_edit_notification)
                         }
                     }
                 }
                 R.id.address_details_screen -> {
                     navView.visibility = View.GONE
                     args?.apply {
-                        if (AddressDetailsFragmentArgs.fromBundle(this).addressId < 0) {
-                            destination.label = getString(R.string.notifications_add_address)
-                        } else {
+                        if (AddressDetailsFragmentArgs.fromBundle(this).addressId > 0) {
                             destination.label = getString(R.string.notifications_edit_address)
+                        } else {
+                            destination.label = getString(R.string.notifications_add_address)
                         }
                     }
                 }
@@ -77,7 +77,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        onBackPressedDispatcher.onBackPressed()
+        return super.onSupportNavigateUp()
     }
 
     private fun closeKeyboard() {

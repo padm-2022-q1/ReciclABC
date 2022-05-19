@@ -1,9 +1,11 @@
 package br.edu.ufabc.reciclabc.ui.notifications.details
 
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.addCallback
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -13,6 +15,7 @@ import br.edu.ufabc.reciclabc.R
 import br.edu.ufabc.reciclabc.databinding.FragmentNotificationGroupDetailsBinding
 import br.edu.ufabc.reciclabc.model.Notification
 import br.edu.ufabc.reciclabc.ui.shared.Status
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 class AddressDetailsFragment : Fragment() {
@@ -23,25 +26,6 @@ class AddressDetailsFragment : Fragment() {
      * The viewModel is scoped to the navigation graph.
      */
     private val viewModel: AddressDetailsViewModel by navGraphViewModels(R.id.navigation_notifications)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // TODO: Dialog para confirmar sair da tela sem salvar
-//        requireActivity().onBackPressedDispatcher.addCallback(this) {
-//            isEnabled = true
-//            MaterialAlertDialogBuilder(requireContext())
-//                .setTitle("Tem certeza que deseja sair sem salvar as alterações?")
-//                .setNegativeButton("Não") { dialog, which ->
-//                    val hasChange = viewModel
-//                    isEnabled = false
-//                }
-//                .setPositiveButton("Sim") { dialog, which ->
-//                    isEnabled = false
-//                    handleOnBackPressed()
-//                }
-//                .show()
-//        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,6 +52,8 @@ class AddressDetailsFragment : Fragment() {
             }
         }
         else args.address?.let { address -> viewModel.currentAddressName.value = address }
+
+        addBackButtonPressedDispatcher()
         setupFields()
         setupHandlers()
     }
@@ -159,6 +145,20 @@ class AddressDetailsFragment : Fragment() {
                 is Status.Success -> {
                     findNavController().navigateUp()
                 }
+            }
+        }
+    }
+
+    private fun addBackButtonPressedDispatcher() {
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            if (viewModel.addressHasChanged(binding.edittextAddress.editText?.text.toString()))  {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.exit_without_saving_confirmation_text))
+                    .setNegativeButton("Não") { _, _ -> }
+                    .setPositiveButton("Sim") { _, _ -> findNavController().navigateUp() }
+                    .show()
+            } else {
+                findNavController().navigateUp()
             }
         }
     }
