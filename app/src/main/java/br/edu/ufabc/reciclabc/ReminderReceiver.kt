@@ -13,7 +13,8 @@ import androidx.core.app.NotificationManagerCompat
 import br.edu.ufabc.reciclabc.model.GarbageType
 import br.edu.ufabc.reciclabc.model.NotificationGroup
 import br.edu.ufabc.reciclabc.utils.garbageTypeToString
-import java.util.*
+import java.util.Calendar
+import java.util.TimeZone
 
 class ReminderReceiver : BroadcastReceiver() {
 
@@ -24,9 +25,9 @@ class ReminderReceiver : BroadcastReceiver() {
                 garbageType = GarbageType.valueOf(garbage)
             }
 
-            val addressId = intent.getIntExtra("addressId", -1)
+            val addressId = intent.getLongExtra("addressId", -1L)
             val addressName = intent.getStringExtra("addressName")
-            if (addressId == -1 || garbageType == null || addressName == null) {
+            if (addressId == -1L || garbageType == null || addressName == null) {
                 return
             }
 
@@ -41,7 +42,7 @@ class ReminderReceiver : BroadcastReceiver() {
             val notificationManager = NotificationManagerCompat.from(it)
 
 
-            notificationManager.notify(addressId, builder.build())
+            notificationManager.notify(addressId.toInt(), builder.build())
         }
     }
 
@@ -104,7 +105,7 @@ class ReminderReceiver : BroadcastReceiver() {
         }
         scheduledDate.set(Calendar.HOUR_OF_DAY, hour)
         scheduledDate.set(Calendar.MINUTE, minutes)
-        scheduledDate.timeZone.rawOffset
+//        scheduledDate.timeZone.rawOffset
 
         return scheduledDate.timeInMillis
     }

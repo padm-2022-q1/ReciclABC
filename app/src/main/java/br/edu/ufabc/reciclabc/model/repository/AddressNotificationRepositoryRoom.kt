@@ -39,7 +39,7 @@ class AddressNotificationRepositoryRoom(application: Application): AndroidViewMo
                         val intent = Intent(context, ReminderReceiver::class.java)
                         intent.putExtra("addressId", addressId)
                         intent.putExtra("addressName", address.name)
-                        intent.putExtra("garbageType", notificationGroup.category)
+                        intent.putExtra("garbageType", notificationGroup.category.toString())
 
                         val pendingIntent = PendingIntent.getBroadcast(context,
                             it.toInt(),
@@ -96,14 +96,19 @@ class AddressNotificationRepositoryRoom(application: Application): AndroidViewMo
                 val intent = Intent(context, ReminderReceiver::class.java)
                 intent.putExtra("addressId", address.id)
                 intent.putExtra("addressName", address.name)
-                intent.putExtra("garbageType", notificationGroup.category)
+                intent.putExtra("garbageType", notificationGroup.category.toString())
 
+                val notificationId = if (notificationEntityId == -1L) it.id else notificationEntityId
                 val pendingIntent = PendingIntent.getBroadcast(context,
-                    notificationEntityId.toInt(),
+                    notificationId.toInt(),
                     intent,
                     PendingIntent.FLAG_IMMUTABLE
                 )
-                ReminderReceiver().setAlarm(context, notificationGroup, it.weekday.ordinal%7, pendingIntent)
+                if (notificationGroup.isActive) {
+                    ReminderReceiver().setAlarm(context, notificationGroup, it.weekday.ordinal%7, pendingIntent)
+                } else {
+                    ReminderReceiver().cancelAlarm(context, pendingIntent)
+                }
             }
 
         }
@@ -162,7 +167,7 @@ class AddressNotificationRepositoryRoom(application: Application): AndroidViewMo
             val intent = Intent(context, ReminderReceiver::class.java)
             intent.putExtra("addressId", address.id)
             intent.putExtra("addressName", address.name)
-            intent.putExtra("garbageType", dbNotificationGroup.category)
+            intent.putExtra("garbageType", dbNotificationGroup.category.toString())
             val pendingIntent = PendingIntent.getBroadcast(context,
                 it.id.toInt(),
                 intent,
