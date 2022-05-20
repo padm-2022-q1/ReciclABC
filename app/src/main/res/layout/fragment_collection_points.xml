@@ -74,4 +74,16 @@
         app:layout_constraintTop_toBottomOf="@id/collection_points_filter_button"
         app:srcCompat="@drawable/ic_my_location_24" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/collection_points_add_notification_button"
+        style="@style/Widget.Material3.FloatingActionButton.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/add_notification_for_place_button_description"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@drawable/ic_baseline_add_alert_24" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

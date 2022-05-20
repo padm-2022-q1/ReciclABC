@@ -79,5 +79,6 @@
     <string name="cp_details_map_button_description">Abrir endereço</string>
     <string name="exit_without_saving_confirmation_text">Tem certeza que deseja sair sem salvar as alterações?</string>
     <string name="garbage_regular">comum</string>
-    <string name="garbage_recyclabe">reciclável</string>
+    <string name="garbage_recyclable">reciclável</string>
+    <string name="add_notification_for_place_button_description">Adicionar notificação para este local</string>
 </resources>

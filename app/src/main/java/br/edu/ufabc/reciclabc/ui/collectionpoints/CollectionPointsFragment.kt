@@ -87,9 +87,14 @@ class CollectionPointsFragment : Fragment() {
             }
         }
         viewModel.selectedMarker.observe(viewLifecycleOwner) { handleSelectedMarkerChange(it) }
+        viewModel.placeFromSearchSelected.observe(viewLifecycleOwner) { showButton ->
+            binding.collectionPointsAddNotificationButton.visibility =
+                if (showButton) View.VISIBLE else View.INVISIBLE
+        }
         binding.collectionPointsSearchButton.setOnClickListener { mapManager.openPlaceSearch() }
         binding.collectionPointsFilterButton.setOnClickListener { handleFilterButtonClick() }
         binding.collectionPointsMyLocationButton.setOnClickListener { mapManager.goToCurrentLocation() }
+        binding.collectionPointsAddNotificationButton.setOnClickListener { handleAddNotificationButtonClick() }
     }
 
     private val handleMapReady = OnMapReadyCallback { googleMap ->
@@ -125,7 +130,8 @@ class CollectionPointsFragment : Fragment() {
             cpDetailsTitle.text = collectionPoint.name
             cpDetailsAddress.text = collectionPoint.address
             root.visibility = View.VISIBLE
-            recyclerviewMaterials.adapter = MaterialTypeChipsAdapter(collectionPoint.materials.toList())
+            recyclerviewMaterials.adapter =
+                MaterialTypeChipsAdapter(collectionPoint.materials.toList())
         }
     }
 
@@ -160,7 +166,9 @@ class CollectionPointsFragment : Fragment() {
             val materials =
                 MaterialType.values().associateBy { materialTypeToString(ctx, it) }
             val materialsKeys = materials.keys.toTypedArray()
-            val selectedFilters = materials.values.map { viewModel.materialFilter.value?.contains(it) ?: false }.toBooleanArray()
+            val selectedFilters =
+                materials.values.map { viewModel.materialFilter.value?.contains(it) ?: false }
+                    .toBooleanArray()
 
             MaterialAlertDialogBuilder(ctx)
                 .setTitle(getString(R.string.filter_by_material))
@@ -189,6 +197,14 @@ class CollectionPointsFragment : Fragment() {
                     }
                 }
                 .show()
+        }
+    }
+
+    private fun handleAddNotificationButtonClick() {
+        viewModel.placeFromSearch.value?.address?.let { address ->
+            CollectionPointsFragmentDirections.createFilledAddressNotificationAction(address).let {
+                findNavController().navigate(it)
+            }
         }
     }
 

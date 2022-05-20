@@ -10,11 +10,11 @@ import androidx.lifecycle.MutableLiveData
 import br.edu.ufabc.reciclabc.App
 import br.edu.ufabc.reciclabc.model.CollectionPoint
 import br.edu.ufabc.reciclabc.model.MaterialType
-import br.edu.ufabc.reciclabc.model.repository.CollectionPointsRepository
 
 class CollectionPointsViewModel(application: Application) : AndroidViewModel(application) {
     val selectedMarker = MutableLiveData<Int?>(null)
     val placeFromSearch = MutableLiveData<PlaceFromSearch?>(null)
+    val placeFromSearchSelected = MutableLiveData(false)
     var lastKnownLocation: Location? = null
     private val repository = (application as App).collectionPointsRepository
 
