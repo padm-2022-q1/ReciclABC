@@ -105,7 +105,6 @@ class ReminderReceiver : BroadcastReceiver() {
         }
         scheduledDate.set(Calendar.HOUR_OF_DAY, hour)
         scheduledDate.set(Calendar.MINUTE, minutes)
-//        scheduledDate.timeZone.rawOffset
 
         return scheduledDate.timeInMillis
     }
