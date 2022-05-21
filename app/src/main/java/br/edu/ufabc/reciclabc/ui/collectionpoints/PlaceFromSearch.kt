@@ -13,10 +13,17 @@ class PlaceFromSearch(val name: String, val address: String, val latLng: LatLng)
             MarkerOptions().position(latLng).title(name).icon(
                 BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
             ).zIndex(1f)
-        )?.let { newMarker -> marker = newMarker }
+        )?.let { newMarker ->
+            newMarker.tag = MARKER_TAG
+            marker = newMarker
+        }
     }
 
     fun removeMarker() {
         marker?.remove()
+    }
+
+    companion object {
+        const val MARKER_TAG = "PLACE_MARKER_TAG"
     }
 }

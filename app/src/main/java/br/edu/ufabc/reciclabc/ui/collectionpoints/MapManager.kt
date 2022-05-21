@@ -211,12 +211,21 @@ class MapManager(
         ).title(collectionPoint.name)
 
     private val handleMarkerClick = GoogleMap.OnMarkerClickListener {
-        val markerId = it.tag
-        if (markerId is Int) {
-            Log.d("MapManager", "Selected marker with id $markerId")
-            viewModel.selectedMarker.value = markerId
-        } else {
-            viewModel.selectedMarker.value = null
+        when(val markerTag = it.tag) {
+            is Int -> {
+                Log.d("MapManager", "Selected marker with tag $markerTag")
+                viewModel.selectedMarker.value = markerTag
+                viewModel.placeFromSearchSelected.value = false
+            }
+            PlaceFromSearch.MARKER_TAG -> {
+                Log.d("MapManager", "Selected place from search")
+                viewModel.selectedMarker.value = null
+                viewModel.placeFromSearchSelected.value = true
+            }
+            else -> {
+                viewModel.selectedMarker.value = null
+                viewModel.placeFromSearchSelected.value = false
+            }
         }
 
         /*
@@ -229,6 +238,7 @@ class MapManager(
     private val handleMapClick = GoogleMap.OnMapClickListener {
         Log.d("MapManager", "Cleared selected marker")
         viewModel.selectedMarker.value = null
+        viewModel.placeFromSearchSelected.value = false
     }
 
     private fun placeAutocompleteSearchCallback(result: ActivityResult) {
