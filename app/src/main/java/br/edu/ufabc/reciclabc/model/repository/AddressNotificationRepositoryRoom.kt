@@ -97,24 +97,22 @@ class AddressNotificationRepositoryRoom(application: Application) {
 
         notificationGroup.notifications.forEach {
             db.NotificationDao().insert(NotificationEntity.fromNotification(it, notificationGroupId)).let { notificationEntityId ->
-                if (notificationGroup.isActive) {
-                    val context = mApplication.applicationContext
-                    val intent = Intent(context, ReminderReceiver::class.java)
-                    intent.putExtra("addressId", address.id)
-                    intent.putExtra("addressName", address.name)
-                    intent.putExtra("garbageType", notificationGroup.category.toString())
+                val context = mApplication.applicationContext
+                val intent = Intent(context, ReminderReceiver::class.java)
+                intent.putExtra("addressId", address.id)
+                intent.putExtra("addressName", address.name)
+                intent.putExtra("garbageType", notificationGroup.category.toString())
 
-                    val notificationId = if (notificationEntityId == -1L) it.id else notificationEntityId
-                    val pendingIntent = PendingIntent.getBroadcast(context,
-                        notificationId.toInt(),
-                        intent,
-                        PendingIntent.FLAG_IMMUTABLE
-                    )
-                    if (notificationGroup.isActive) {
-                        ReminderReceiver().setAlarm(context, notificationGroup, it.weekday.toNumeric(), pendingIntent)
-                    } else {
-                        ReminderReceiver().cancelAlarm(context, pendingIntent)
-                    }
+                val notificationId = if (notificationEntityId == -1L) it.id else notificationEntityId
+                val pendingIntent = PendingIntent.getBroadcast(context,
+                    notificationId.toInt(),
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+                if (notificationGroup.isActive) {
+                    ReminderReceiver().setAlarm(context, notificationGroup, it.weekday.toNumeric(), pendingIntent)
+                } else {
+                    ReminderReceiver().cancelAlarm(context, pendingIntent)
                 }
             }
 
