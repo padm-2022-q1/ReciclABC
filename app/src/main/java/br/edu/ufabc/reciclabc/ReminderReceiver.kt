@@ -41,7 +41,6 @@ class ReminderReceiver : BroadcastReceiver() {
 
             val notificationManager = NotificationManagerCompat.from(it)
 
-
             notificationManager.notify(addressId.toInt(), builder.build())
         }
     }
@@ -52,7 +51,7 @@ class ReminderReceiver : BroadcastReceiver() {
                  pendingIntent: PendingIntent) {
 
         val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val scheduleDateMillis = calculateNextTriggerDateInMillis(((weekday + 1).mod(7)), notificationGroup.hours, notificationGroup.minutes)
+        val scheduleDateMillis = calculateNextTriggerDateInMillis(weekday, notificationGroup.hours, notificationGroup.minutes)
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
@@ -92,7 +91,7 @@ class ReminderReceiver : BroadcastReceiver() {
         if (scheduledDate.get(Calendar.DAY_OF_WEEK) != weekday) {
             scheduledDate.add(
                 Calendar.DAY_OF_MONTH,
-                (weekday + 7 - scheduledDate.get(Calendar.DAY_OF_WEEK)).mod(7)
+                (weekday - scheduledDate.get(Calendar.DAY_OF_WEEK)).mod(7)
             )
 
         } else {
@@ -105,9 +104,7 @@ class ReminderReceiver : BroadcastReceiver() {
         }
         scheduledDate.set(Calendar.HOUR_OF_DAY, hour)
         scheduledDate.set(Calendar.MINUTE, minutes)
-//        scheduledDate.timeZone.rawOffset
 
         return scheduledDate.timeInMillis
     }
 }
-
