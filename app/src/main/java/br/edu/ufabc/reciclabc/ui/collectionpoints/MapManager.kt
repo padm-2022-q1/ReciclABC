@@ -211,11 +211,10 @@ class MapManager(
         ).title(collectionPoint.name)
 
     private val handleMarkerClick = GoogleMap.OnMarkerClickListener {
-        Log.d("MapManager", "selected ${it.tag}")
-        when(val markerId = it.tag) {
+        when(val markerTag = it.tag) {
             is Int -> {
-                Log.d("MapManager", "Selected marker with id $markerId")
-                viewModel.selectedMarker.value = markerId
+                Log.d("MapManager", "Selected marker with tag $markerTag")
+                viewModel.selectedMarker.value = markerTag
                 viewModel.placeFromSearchSelected.value = false
             }
             PlaceFromSearch.MARKER_TAG -> {
