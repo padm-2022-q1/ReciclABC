@@ -1,12 +1,8 @@
 package br.edu.ufabc.reciclabc.model.repository
 
 import android.app.Application
-import android.app.PendingIntent
-import android.content.Intent
-import android.util.Log
 import androidx.room.Room
 import androidx.room.withTransaction
-import br.edu.ufabc.reciclabc.ReminderReceiver
 import br.edu.ufabc.reciclabc.ReminderReceiver.Companion.handleNotificationSchedule
 import br.edu.ufabc.reciclabc.model.Address
 import br.edu.ufabc.reciclabc.model.NotificationGroup
@@ -116,7 +112,6 @@ class AddressNotificationRepositoryRoom(application: Application) {
         val address = db.AddressDao().getById(notificationGroupEntity.notificationGroupEntity.addressId).toAddressNotification()
 
         dbNotificationGroup.notifications.forEach {
-            Log.d("DEBUG",dbNotificationGroup.isActive.toString())
             handleNotificationSchedule(mApplication.applicationContext, address, dbNotificationGroup, it, false)
         }
     }

@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import br.edu.ufabc.reciclabc.model.Address
@@ -57,7 +56,6 @@ class ReminderReceiver : BroadcastReceiver() {
             AlarmManager.RTC_WAKEUP,
             scheduleDateMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent
         )
-        Log.d("DEBUG", "Scheduled for: $scheduleDateMillis")
     }
 
     fun cancelAlarm(context: Context, pendingIntent: PendingIntent) {
@@ -105,7 +103,6 @@ class ReminderReceiver : BroadcastReceiver() {
                 ReminderReceiver().setAlarm(context, notificationGroup,
                     notification.weekday.toNumeric(), pendingIntent)
             } else {
-                Log.d("DEBUG", "Alarm cancelled")
                 ReminderReceiver().cancelAlarm(context, pendingIntent)
             }
         }
