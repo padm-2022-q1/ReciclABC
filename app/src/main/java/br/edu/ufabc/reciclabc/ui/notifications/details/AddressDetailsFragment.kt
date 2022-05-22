@@ -154,8 +154,8 @@ class AddressDetailsFragment : Fragment() {
             if (viewModel.addressHasChanged(binding.edittextAddress.editText?.text.toString()))  {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.exit_without_saving_confirmation_text))
-                    .setNegativeButton("Não") { _, _ -> }
-                    .setPositiveButton("Sim") { _, _ -> findNavController().navigateUp() }
+                    .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                    .setPositiveButton(getString(R.string.yes)) { _, _ -> findNavController().navigateUp() }
                     .show()
             } else {
                 findNavController().navigateUp()

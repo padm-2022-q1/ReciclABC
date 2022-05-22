@@ -30,8 +30,8 @@ class NotificationDetailsFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.exit_without_saving_confirmation_text))
-                .setNegativeButton("Não") { _, _ -> }
-                .setPositiveButton("Sim") { _, _ -> findNavController().navigateUp() }
+                .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                .setPositiveButton(getString(R.string.yes)) { _, _ -> findNavController().navigateUp() }
                 .show()
         }
     }
@@ -212,8 +212,8 @@ class NotificationDetailsFragment : Fragment() {
             if (viewModel.notificationHasChanged())  {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.exit_without_saving_confirmation_text))
-                    .setNegativeButton("Não") { _, _ -> }
-                    .setPositiveButton("Sim") { _, _ -> findNavController().navigateUp() }
+                    .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                    .setPositiveButton(getString(R.string.yes)) { _, _ -> findNavController().navigateUp() }
                     .show()
             } else {
                 findNavController().navigateUp()
