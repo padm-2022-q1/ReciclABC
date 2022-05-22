@@ -3,9 +3,11 @@ package br.edu.ufabc.reciclabc.model.repository
 import android.app.Application
 import android.app.PendingIntent
 import android.content.Intent
+import android.util.Log
 import androidx.room.Room
 import androidx.room.withTransaction
 import br.edu.ufabc.reciclabc.ReminderReceiver
+import br.edu.ufabc.reciclabc.ReminderReceiver.Companion.handleNotificationSchedule
 import br.edu.ufabc.reciclabc.model.Address
 import br.edu.ufabc.reciclabc.model.NotificationGroup
 import br.edu.ufabc.reciclabc.model.room.AppDatabase
@@ -37,21 +39,7 @@ class AddressNotificationRepositoryRoom(application: Application) {
                 val groupId = db.NotificationGroupDao().insert(NotificationGroupEntity.fromNotificationGroup(notificationGroup, addressId))
                 notificationGroup.notifications.forEach { notification ->
                     db.NotificationDao().insert(NotificationEntity.fromNotification(notification, groupId)).let {
-                        if (notificationGroup.isActive) {
-                            val context = mApplication.applicationContext
-                            val intent = Intent(context, ReminderReceiver::class.java)
-                            intent.putExtra("addressId", addressId)
-                            intent.putExtra("addressName", address.name)
-                            intent.putExtra("garbageType", notificationGroup.category.toString())
-
-                            val pendingIntent = PendingIntent.getBroadcast(context,
-                                it.toInt(),
-                                intent,
-                                PendingIntent.FLAG_IMMUTABLE
-                            )
-
-                            ReminderReceiver().setAlarm(context, notificationGroup, notification.weekday.toNumeric(), pendingIntent)
-                        }
+                        handleNotificationSchedule(mApplication.applicationContext, address, notificationGroup, notification, false)
                     }
                 }
             }
@@ -76,14 +64,7 @@ class AddressNotificationRepositoryRoom(application: Application) {
                 dbAddress.notifications.find { ng -> ng.id == it }?.let {
                     db.NotificationGroupDao().delete(NotificationGroupEntity.fromNotificationGroup(it, dbAddress.id))
                     it.notifications.forEach { notification ->
-                        val context = mApplication.applicationContext
-                        val intent = Intent(context, ReminderReceiver::class.java)
-                        val pendingIntent = PendingIntent.getBroadcast(context,
-                            notification.id.toInt(),
-                            intent,
-                            PendingIntent.FLAG_IMMUTABLE
-                        )
-                        ReminderReceiver().cancelAlarm(context, pendingIntent)
+                        handleNotificationSchedule(mApplication.applicationContext, address, it, notification, true)
                     }
                 }
             }
@@ -97,23 +78,7 @@ class AddressNotificationRepositoryRoom(application: Application) {
 
         notificationGroup.notifications.forEach {
             db.NotificationDao().insert(NotificationEntity.fromNotification(it, notificationGroupId)).let { notificationEntityId ->
-                val context = mApplication.applicationContext
-                val intent = Intent(context, ReminderReceiver::class.java)
-                intent.putExtra("addressId", address.id)
-                intent.putExtra("addressName", address.name)
-                intent.putExtra("garbageType", notificationGroup.category.toString())
-
-                val notificationId = if (notificationEntityId == -1L) it.id else notificationEntityId
-                val pendingIntent = PendingIntent.getBroadcast(context,
-                    notificationId.toInt(),
-                    intent,
-                    PendingIntent.FLAG_IMMUTABLE
-                )
-                if (notificationGroup.isActive) {
-                    ReminderReceiver().setAlarm(context, notificationGroup, it.weekday.toNumeric(), pendingIntent)
-                } else {
-                    ReminderReceiver().cancelAlarm(context, pendingIntent)
-                }
+                handleNotificationSchedule(mApplication.applicationContext, address, notificationGroup, it, false)
             }
 
         }
@@ -129,16 +94,7 @@ class AddressNotificationRepositoryRoom(application: Application) {
         deleteNotificationIds.forEach {
             val notification = dbNotificationGroup.notifications.find { n -> n.id == it }
             db.NotificationDao().delete(NotificationEntity.fromNotification(notification!!, dbNotificationGroup.id))
-
-            val context = mApplication.applicationContext
-            val intent = Intent(context, ReminderReceiver::class.java)
-
-            val pendingIntent = PendingIntent.getBroadcast(context,
-                it.toInt(),
-                intent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
-            ReminderReceiver().cancelAlarm(context, pendingIntent)
+            handleNotificationSchedule(mApplication.applicationContext, address, notificationGroup, notification, true)
         }
     }
 
@@ -146,14 +102,7 @@ class AddressNotificationRepositoryRoom(application: Application) {
         val address = db.AddressDao().getById(addressId).toAddressNotification()
         address.notifications.forEach { notificationGroup ->
             notificationGroup.notifications.forEach { notification ->
-                val context = mApplication.applicationContext
-                val intent = Intent(context, ReminderReceiver::class.java)
-                val pendingIntent = PendingIntent.getBroadcast(context,
-                    notification.id.toInt(),
-                    intent,
-                    PendingIntent.FLAG_IMMUTABLE
-                )
-                ReminderReceiver().cancelAlarm(context, pendingIntent)
+                handleNotificationSchedule(mApplication.applicationContext, address, notificationGroup, notification, true)
             }
         }
         db.AddressDao().delete(AddressEntity.fromAddressNotification(address))
@@ -165,24 +114,10 @@ class AddressNotificationRepositoryRoom(application: Application) {
         val notificationGroupEntity = db.NotificationGroupDao().getById(notificationGroupId)
         val dbNotificationGroup = notificationGroupEntity.toNotificationGroup()
         val address = db.AddressDao().getById(notificationGroupEntity.notificationGroupEntity.addressId).toAddressNotification()
-        val context = mApplication.applicationContext
 
         dbNotificationGroup.notifications.forEach {
-            val intent = Intent(context, ReminderReceiver::class.java)
-            intent.putExtra("addressId", address.id)
-            intent.putExtra("addressName", address.name)
-            intent.putExtra("garbageType", dbNotificationGroup.category.toString())
-            val pendingIntent = PendingIntent.getBroadcast(context,
-                it.id.toInt(),
-                intent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
-
-            if (isActive) {
-                ReminderReceiver().setAlarm(context, dbNotificationGroup, it.weekday.toNumeric(), pendingIntent)
-            } else {
-                ReminderReceiver().cancelAlarm(context, pendingIntent)
-            }
+            Log.d("DEBUG",dbNotificationGroup.isActive.toString())
+            handleNotificationSchedule(mApplication.applicationContext, address, dbNotificationGroup, it, false)
         }
     }
 }

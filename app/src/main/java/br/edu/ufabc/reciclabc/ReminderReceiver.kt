@@ -1,16 +1,16 @@
 package br.edu.ufabc.reciclabc
 
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import br.edu.ufabc.reciclabc.model.Address
 import br.edu.ufabc.reciclabc.model.GarbageType
+import br.edu.ufabc.reciclabc.model.Notification
 import br.edu.ufabc.reciclabc.model.NotificationGroup
 import br.edu.ufabc.reciclabc.utils.garbageTypeToString
 import java.util.Calendar
@@ -57,6 +57,7 @@ class ReminderReceiver : BroadcastReceiver() {
             AlarmManager.RTC_WAKEUP,
             scheduleDateMillis, AlarmManager.INTERVAL_DAY * 7, pendingIntent
         )
+        Log.d("DEBUG", "Scheduled for: $scheduleDateMillis")
     }
 
     fun cancelAlarm(context: Context, pendingIntent: PendingIntent) {
@@ -84,6 +85,31 @@ class ReminderReceiver : BroadcastReceiver() {
                 notificationManager.createNotificationChannel(channel)
             }
         }
+
+        fun handleNotificationSchedule(context: Context,
+                                       address: Address,
+                                       notificationGroup: NotificationGroup,
+                                       notification: Notification,
+                                       deleteOperation: Boolean) {
+            val intent = Intent(context, ReminderReceiver::class.java)
+            intent.putExtra("addressId", address.id)
+            intent.putExtra("addressName", address.name)
+            intent.putExtra("garbageType", notificationGroup.category.toString())
+
+            val pendingIntent = PendingIntent.getBroadcast(context,
+                notification.id.toInt(),
+                intent,
+                PendingIntent.FLAG_IMMUTABLE)
+
+            if (notificationGroup.isActive && !deleteOperation) {
+                ReminderReceiver().setAlarm(context, notificationGroup,
+                    notification.weekday.toNumeric(), pendingIntent)
+            } else {
+                Log.d("DEBUG", "Alarm cancelled")
+                ReminderReceiver().cancelAlarm(context, pendingIntent)
+            }
+        }
+
     }
 
     private fun calculateNextTriggerDateInMillis(weekday: Int, hour: Int, minutes: Int): Long {
