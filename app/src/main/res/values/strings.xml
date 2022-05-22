@@ -81,4 +81,6 @@
     <string name="garbage_regular">comum</string>
     <string name="garbage_recyclable">reciclável</string>
     <string name="add_notification_for_place_button_description">Adicionar notificação para este local</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
 </resources>

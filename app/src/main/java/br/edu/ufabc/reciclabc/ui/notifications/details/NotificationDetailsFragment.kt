@@ -25,17 +25,6 @@ class NotificationDetailsFragment : Fragment() {
     private val viewModel: AddressDetailsViewModel by navGraphViewModels(R.id.navigation_notifications)
     private val args: NotificationDetailsFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.exit_without_saving_confirmation_text))
-                .setNegativeButton("Não") { _, _ -> }
-                .setPositiveButton("Sim") { _, _ -> findNavController().navigateUp() }
-                .show()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -212,8 +201,8 @@ class NotificationDetailsFragment : Fragment() {
             if (viewModel.notificationHasChanged())  {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.exit_without_saving_confirmation_text))
-                    .setNegativeButton("Não") { _, _ -> }
-                    .setPositiveButton("Sim") { _, _ -> findNavController().navigateUp() }
+                    .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                    .setPositiveButton(getString(R.string.yes)) { _, _ -> findNavController().navigateUp() }
                     .show()
             } else {
                 findNavController().navigateUp()
