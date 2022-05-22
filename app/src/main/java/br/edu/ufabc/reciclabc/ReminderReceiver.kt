@@ -1,19 +1,19 @@
 package br.edu.ufabc.reciclabc
 
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import br.edu.ufabc.reciclabc.model.Address
 import br.edu.ufabc.reciclabc.model.GarbageType
+import br.edu.ufabc.reciclabc.model.Notification
 import br.edu.ufabc.reciclabc.model.NotificationGroup
 import br.edu.ufabc.reciclabc.utils.garbageTypeToString
-import java.util.*
+import java.util.Calendar
+import java.util.TimeZone
 
 class ReminderReceiver : BroadcastReceiver() {
 
@@ -24,9 +24,9 @@ class ReminderReceiver : BroadcastReceiver() {
                 garbageType = GarbageType.valueOf(garbage)
             }
 
-            val addressId = intent.getIntExtra("addressId", -1)
+            val addressId = intent.getLongExtra("addressId", -1L)
             val addressName = intent.getStringExtra("addressName")
-            if (addressId == -1 || garbageType == null || addressName == null) {
+            if (addressId == -1L || garbageType == null || addressName == null) {
                 return
             }
 
@@ -40,8 +40,7 @@ class ReminderReceiver : BroadcastReceiver() {
 
             val notificationManager = NotificationManagerCompat.from(it)
 
-
-            notificationManager.notify(addressId, builder.build())
+            notificationManager.notify(addressId.toInt(), builder.build())
         }
     }
 
@@ -51,7 +50,7 @@ class ReminderReceiver : BroadcastReceiver() {
                  pendingIntent: PendingIntent) {
 
         val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val scheduleDateMillis = calculateNextTriggerDateInMillis(((weekday + 1).mod(7)), notificationGroup.hours, notificationGroup.minutes)
+        val scheduleDateMillis = calculateNextTriggerDateInMillis(weekday, notificationGroup.hours, notificationGroup.minutes)
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
@@ -84,6 +83,30 @@ class ReminderReceiver : BroadcastReceiver() {
                 notificationManager.createNotificationChannel(channel)
             }
         }
+
+        fun handleNotificationSchedule(context: Context,
+                                       address: Address,
+                                       notificationGroup: NotificationGroup,
+                                       notification: Notification,
+                                       deleteOperation: Boolean) {
+            val intent = Intent(context, ReminderReceiver::class.java)
+            intent.putExtra("addressId", address.id)
+            intent.putExtra("addressName", address.name)
+            intent.putExtra("garbageType", notificationGroup.category.toString())
+
+            val pendingIntent = PendingIntent.getBroadcast(context,
+                notification.id.toInt(),
+                intent,
+                PendingIntent.FLAG_IMMUTABLE)
+
+            if (notificationGroup.isActive && !deleteOperation) {
+                ReminderReceiver().setAlarm(context, notificationGroup,
+                    notification.weekday.toNumeric(), pendingIntent)
+            } else {
+                ReminderReceiver().cancelAlarm(context, pendingIntent)
+            }
+        }
+
     }
 
     private fun calculateNextTriggerDateInMillis(weekday: Int, hour: Int, minutes: Int): Long {
@@ -91,7 +114,7 @@ class ReminderReceiver : BroadcastReceiver() {
         if (scheduledDate.get(Calendar.DAY_OF_WEEK) != weekday) {
             scheduledDate.add(
                 Calendar.DAY_OF_MONTH,
-                (weekday + 7 - scheduledDate.get(Calendar.DAY_OF_WEEK)).mod(7)
+                (weekday - scheduledDate.get(Calendar.DAY_OF_WEEK)).mod(7)
             )
 
         } else {
@@ -104,9 +127,7 @@ class ReminderReceiver : BroadcastReceiver() {
         }
         scheduledDate.set(Calendar.HOUR_OF_DAY, hour)
         scheduledDate.set(Calendar.MINUTE, minutes)
-        scheduledDate.timeZone.rawOffset
 
         return scheduledDate.timeInMillis
     }
 }
-
